@@ -1,0 +1,68 @@
+You are an autonomous coding agent. Your job is to complete the task below.
+
+## Task: auth-service-review
+**[REVIEW] auth-service**
+
+**Pipeline:** `auth-service` | **Phase:** `review`
+
+## Description
+1. Analyze the below requirement
+	1. Create fastapi application with login, registration endpoints
+	2. centralized logging system
+	3. centralized exception handling
+	4. implement circuit breaker
+	5. swagger for all endpoints
+2. Design the application
+	1. Sequence Diagrams and flow diagrams in platuml
+	2. design and create the db schema/tables
+3. code implementation with proper testcases
+4. execute testcases
+5. review and optimize if any issues.
+
+## Phase: review
+Review all code changes for quality, security, and correctness. Read all prior artifacts. Write review findings to artifacts/{task_id}/review.md.
+
+**Note:** This task depended on: auth-service-test. Those are now merged into main.
+
+## File Constraints
+You may ONLY modify these files (other files are locked by other agents working in parallel):
+  (no file restrictions — you may modify any file)
+
+If you need to create new files, place them under the directories implied by the locked file paths.
+Do NOT modify files outside your assigned scope — doing so will cause merge conflicts.
+
+## Phase Role: Code Review
+You are the **review agent**. Your job is to review all changes for quality, security, and correctness.
+
+### Prior Work
+Read all prior phase artifacts:
+- Analysis: `artifacts/auth-service-analysis/analysis.md`
+- Design: `artifacts/auth-service-design/design.md`
+- Implementation: `artifacts/auth-service-implement/implementation.md`
+- Test results: `artifacts/auth-service-test/test-results.md`
+
+### What to do
+1. Read all prior artifacts to understand the full context
+2. Review every code change for correctness and clarity
+3. Check for security vulnerabilities (injection, XSS, auth issues, etc.)
+4. Verify error handling and edge cases
+5. Ensure code follows project conventions
+6. Run the full test suite one final time
+7. Fix any issues you find — you are authorized to make changes
+
+### Output
+Write your review to `artifacts/auth-service-review/review.md` with these sections:
+- **Summary**: Overall assessment (approve / request changes)
+- **Issues Found**: Any problems discovered, with severity
+- **Fixes Applied**: Changes you made during review
+- **Final Verdict**: Whether this is ready to merge
+
+
+## Quality Requirements
+- Write tests for any new functionality
+- Do not break existing tests
+- Follow the project's coding standards (see below)
+- Keep changes minimal and focused on the task
+
+## Project Standards
+(No CLAUDE.md found — follow existing patterns in the codebase.)
