@@ -47,3 +47,12 @@ class RefreshTokenRequest(BaseModel):
     """Refresh token request schema."""
 
     refresh_token: str
+
+
+class ErrorResponse(BaseModel):
+    """Standard error response format."""
+
+    detail: str
+    error_code: str
+    timestamp: datetime
+    request_id: str
