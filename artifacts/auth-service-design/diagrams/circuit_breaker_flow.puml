@@ -1,0 +1,126 @@
+@startuml Circuit Breaker Flow Diagram
+!theme cerulean-outline
+
+title Circuit Breaker State Management and Flow
+
+[*] --> Closed : Initial State
+
+state Closed {
+    Closed : Success Count: 0
+    Closed : Failure Count: 0
+    Closed : State: CLOSED
+    Closed : Allow all requests
+}
+
+state Open {
+    Open : Failure Count: >= threshold
+    Open : State: OPEN
+    Open : Reject all requests
+    Open : Return fallback response
+}
+
+state HalfOpen {
+    HalfOpen : State: HALF_OPEN
+    HalfOpen : Allow limited requests
+    HalfOpen : Test if service recovered
+}
+
+Closed --> Open : Failure threshold exceeded\n(e.g., 5 failures in 10 seconds)
+Open --> HalfOpen : Timeout expired\n(e.g., 30 seconds)
+HalfOpen --> Closed : Test request successful\n(Service recovered)
+HalfOpen --> Open : Test request failed\n(Service still down)
+
+note right of Closed
+    **Normal Operation:**
+    - All requests pass through
+    - Monitor success/failure rates
+    - Reset counters periodically
+    - Log successful operations
+end note
+
+note right of Open
+    **Fault Protection:**
+    - Fast-fail all requests
+    - Return cached data if available
+    - Return default/fallback response
+    - Prevent cascade failures
+    - Log circuit breaker activation
+end note
+
+note right of HalfOpen
+    **Recovery Testing:**
+    - Allow single test request
+    - Monitor response carefully
+    - Quick decision on state change
+    - Gradual traffic increase
+end note
+
+@enduml
+
+@startuml Circuit Breaker Request Flow
+!theme cerulean-outline
+
+title Circuit Breaker Request Processing Flow
+
+start
+
+:Request arrives;
+
+if (Circuit Breaker State?) then (CLOSED)
+    :Execute request;
+    if (Request successful?) then (yes)
+        :Increment success counter;
+        :Reset failure counter;
+        :Return response;
+        stop
+    else (no)
+        :Increment failure counter;
+        :Log failure;
+        if (Failure threshold exceeded?) then (yes)
+            :Change state to OPEN;
+            :Start timeout timer;
+            :Return error response;
+            stop
+        else (no)
+            :Return error response;
+            stop
+        endif
+    endif
+
+elseif (Circuit Breaker State?) then (OPEN)
+    if (Timeout expired?) then (yes)
+        :Change state to HALF_OPEN;
+        :Execute test request;
+        if (Test successful?) then (yes)
+            :Change state to CLOSED;
+            :Reset counters;
+            :Return response;
+            stop
+        else (no)
+            :Change state to OPEN;
+            :Reset timeout;
+            :Return fallback response;
+            stop
+        endif
+    else (no)
+        :Return fallback response;
+        :Log rejected request;
+        stop
+    endif
+
+else (HALF_OPEN)
+    :Execute request;
+    if (Request successful?) then (yes)
+        :Change state to CLOSED;
+        :Reset counters;
+        :Return response;
+        stop
+    else (no)
+        :Change state to OPEN;
+        :Reset timeout;
+        :Return fallback response;
+        stop
+    endif
+endif
+
+@enduml
