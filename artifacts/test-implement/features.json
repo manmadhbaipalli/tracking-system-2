@@ -31,7 +31,7 @@
     "id": "circuit_breaker",
     "file": "app/utils/circuit_breaker.py",
     "description": "Circuit breaker pattern implementation for resilience to failures",
-    "acceptance_criteria": "State transitions work (Closed→Open→Half-Open), failure threshold enforced",
+    "acceptance_criteria": "State transitions work (Closed->Open->Half-Open), failure threshold enforced",
     "status": "done"
   },
   {
