@@ -1,0 +1,109 @@
+@startuml Circuit Breaker Flow
+title Circuit Breaker Pattern Implementation
+
+participant "API Request" as Request
+participant "Circuit Breaker" as CB
+participant "Database Service" as DB
+participant "Fallback Service" as Fallback
+participant "Monitoring" as Monitor
+
+== Normal Operation (Circuit Closed) ==
+
+Request -> CB: execute_with_circuit_breaker(db_operation)
+CB -> CB: check_circuit_state() == CLOSED
+CB -> DB: execute_database_operation()
+
+alt Successful Operation
+    DB -> CB: Return success result
+    CB -> CB: reset_failure_count()
+    CB -> Monitor: record_success_metric()
+    CB -> Request: Return success result
+else Operation Failure
+    DB -> CB: Raise DatabaseException
+    CB -> CB: increment_failure_count()
+    CB -> Monitor: record_failure_metric()
+    CB -> CB: check_failure_threshold()
+
+    alt Failure Count < Threshold
+        CB -> Request: Re-raise DatabaseException
+    else Failure Count >= Threshold
+        CB -> CB: set_state(OPEN)
+        CB -> CB: set_next_attempt_time(now + timeout)
+        CB -> Monitor: record_circuit_open_event()
+        CB -> Request: Re-raise DatabaseException
+    end
+end
+
+== Circuit Open State ==
+
+Request -> CB: execute_with_circuit_breaker(db_operation)
+CB -> CB: check_circuit_state() == OPEN
+CB -> CB: check_time() < next_attempt_time
+
+alt Within Timeout Period
+    CB -> Monitor: record_rejected_request()
+    CB -> Request: Raise CircuitBreakerOpenException
+    Request -> Fallback: execute_fallback_logic()
+    Fallback -> Request: Return fallback result
+else Timeout Period Expired
+    CB -> CB: set_state(HALF_OPEN)
+    CB -> Monitor: record_circuit_half_open_event()
+    CB -> DB: execute_database_operation()
+
+    alt Test Request Successful
+        DB -> CB: Return success result
+        CB -> CB: set_state(CLOSED)
+        CB -> CB: reset_failure_count()
+        CB -> Monitor: record_circuit_closed_event()
+        CB -> Request: Return success result
+    else Test Request Failed
+        DB -> CB: Raise DatabaseException
+        CB -> CB: set_state(OPEN)
+        CB -> CB: set_next_attempt_time(now + timeout)
+        CB -> Monitor: record_circuit_open_event()
+        CB -> Request: Raise CircuitBreakerOpenException
+    end
+end
+
+== Half-Open State (Testing) ==
+
+Request -> CB: execute_with_circuit_breaker(db_operation)
+CB -> CB: check_circuit_state() == HALF_OPEN
+
+alt First Request (Test Request)
+    CB -> DB: execute_database_operation()
+
+    alt Test Successful
+        DB -> CB: Return success result
+        CB -> CB: set_state(CLOSED)
+        CB -> CB: reset_failure_count()
+        CB -> Monitor: record_circuit_closed_event()
+        CB -> Request: Return success result
+    else Test Failed
+        DB -> CB: Raise DatabaseException
+        CB -> CB: set_state(OPEN)
+        CB -> CB: set_next_attempt_time(now + timeout)
+        CB -> Monitor: record_circuit_open_event()
+        CB -> Request: Raise CircuitBreakerOpenException
+    end
+else Additional Requests During Test
+    CB -> Monitor: record_rejected_request()
+    CB -> Request: Raise CircuitBreakerOpenException
+end
+
+== Circuit Breaker Configuration ==
+
+note over CB
+**Configuration Parameters:**
+- failure_threshold: 5 failures
+- timeout_duration: 60 seconds
+- success_threshold: 2 successes (in half-open)
+- monitoring_window: 120 seconds
+
+**States:**
+- CLOSED: Normal operation, requests pass through
+- OPEN: Circuit tripped, requests fail fast
+- HALF_OPEN: Testing if service recovered
+end note
+
+@enduml
