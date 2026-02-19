@@ -1,0 +1,282 @@
+[
+  {
+    "id": "config-settings",
+    "file": "app/config.py",
+    "description": "Configuration and environment variables management",
+    "acceptance_criteria": "Module imports without error, all required settings present, environment variables load from .env",
+    "status": "pending"
+  },
+  {
+    "id": "db-connection",
+    "file": "app/database/connection.py",
+    "description": "Database engine setup, session factory, and SQLAlchemy base class",
+    "acceptance_criteria": "Can create async engine, session factory works, Base class usable for models",
+    "status": "pending"
+  },
+  {
+    "id": "user-model",
+    "file": "app/models/user.py",
+    "description": "SQLAlchemy User and LoginAttempts ORM models",
+    "acceptance_criteria": "Models define all required fields, relationships work, can be used with async sessions",
+    "status": "pending"
+  },
+  {
+    "id": "user-schemas",
+    "file": "app/schemas/user.py",
+    "description": "Pydantic schemas for request/response validation",
+    "acceptance_criteria": "RegisterRequest validates username/email/password, LoginRequest validates credentials, all schemas serialize to JSON",
+    "status": "pending"
+  },
+  {
+    "id": "security-utils",
+    "file": "app/utils/security.py",
+    "description": "Password hashing, JWT token generation and validation utilities",
+    "acceptance_criteria": "Hash password with bcrypt cost 12, generate JWT tokens, verify passwords, decode tokens with expiry",
+    "status": "pending"
+  },
+  {
+    "id": "custom-exceptions",
+    "file": "app/handlers/exceptions.py",
+    "description": "Custom exception classes and global exception handlers",
+    "acceptance_criteria": "All exception types defined (ValidationError, AuthenticationError, etc.), handlers return consistent error format with status codes",
+    "status": "pending"
+  },
+  {
+    "id": "auth-service",
+    "file": "app/services/auth_service.py",
+    "description": "Authentication business logic - registration, login, validation, rate limiting",
+    "acceptance_criteria": "Register users with validation, authenticate with rate limiting, track login attempts, lock accounts after failures",
+    "status": "pending"
+  },
+  {
+    "id": "circuit-breaker",
+    "file": "app/services/circuit_breaker.py",
+    "description": "Circuit breaker pattern implementation with CLOSED, OPEN, HALF_OPEN states",
+    "acceptance_criteria": "State transitions work correctly, calls blocked in OPEN state, recovery timeout works, thread-safe",
+    "status": "pending"
+  },
+  {
+    "id": "logging-middleware",
+    "file": "app/middleware/logging.py",
+    "description": "Request/response logging middleware with correlation IDs and sensitive data filtering",
+    "acceptance_criteria": "Generate correlation ID per request, log method/path/status/duration, filter passwords/tokens, include correlation ID in response headers",
+    "status": "pending"
+  },
+  {
+    "id": "auth-router",
+    "file": "app/routers/auth.py",
+    "description": "FastAPI router for /register and /login endpoints",
+    "acceptance_criteria": "POST /api/v1/auth/register returns 201 with token, POST /api/v1/auth/login returns 200 with token, proper status codes for errors",
+    "status": "pending"
+  },
+  {
+    "id": "fastapi-app",
+    "file": "app/main.py",
+    "description": "FastAPI application initialization, middleware registration, exception handlers setup",
+    "acceptance_criteria": "App initializes, middleware registered, exception handlers registered, Swagger UI available at /docs, all routers included",
+    "status": "pending"
+  },
+  {
+    "id": "db-init-files",
+    "file": "app/database/__init__.py",
+    "description": "Database package init file",
+    "acceptance_criteria": "File exists and is importable",
+    "status": "pending"
+  },
+  {
+    "id": "models-init-files",
+    "file": "app/models/__init__.py",
+    "description": "Models package init file with exports",
+    "acceptance_criteria": "Can import User and LoginAttempts models from app.models",
+    "status": "pending"
+  },
+  {
+    "id": "schemas-init-files",
+    "file": "app/schemas/__init__.py",
+    "description": "Schemas package init file with exports",
+    "acceptance_criteria": "Can import schema classes from app.schemas",
+    "status": "pending"
+  },
+  {
+    "id": "services-init-files",
+    "file": "app/services/__init__.py",
+    "description": "Services package init file with exports",
+    "acceptance_criteria": "Can import AuthService and CircuitBreaker from app.services",
+    "status": "pending"
+  },
+  {
+    "id": "routers-init-files",
+    "file": "app/routers/__init__.py",
+    "description": "Routers package init file",
+    "acceptance_criteria": "File exists and is importable",
+    "status": "pending"
+  },
+  {
+    "id": "handlers-init-files",
+    "file": "app/handlers/__init__.py",
+    "description": "Handlers package init file with exports",
+    "acceptance_criteria": "Can import custom exceptions from app.handlers",
+    "status": "pending"
+  },
+  {
+    "id": "middleware-init-files",
+    "file": "app/middleware/__init__.py",
+    "description": "Middleware package init file",
+    "acceptance_criteria": "File exists and is importable",
+    "status": "pending"
+  },
+  {
+    "id": "utils-init-files",
+    "file": "app/utils/__init__.py",
+    "description": "Utils package init file",
+    "acceptance_criteria": "File exists and is importable",
+    "status": "pending"
+  },
+  {
+    "id": "app-init-file",
+    "file": "app/__init__.py",
+    "description": "App package init file",
+    "acceptance_criteria": "File exists and is importable",
+    "status": "pending"
+  },
+  {
+    "id": "requirements-txt",
+    "file": "requirements.txt",
+    "description": "Python dependencies for FastAPI, SQLAlchemy, PostgreSQL, JWT, bcrypt, testing, etc.",
+    "acceptance_criteria": "All required packages listed with versions, can install with pip install -r requirements.txt",
+    "status": "pending"
+  },
+  {
+    "id": "env-example",
+    "file": ".env.example",
+    "description": "Example environment variables template",
+    "acceptance_criteria": "Contains all required env vars with example values, includes DATABASE_URL, SECRET_KEY, etc.",
+    "status": "pending"
+  },
+  {
+    "id": "gitignore",
+    "file": ".gitignore",
+    "description": "Git ignore rules for Python project",
+    "acceptance_criteria": "Ignores __pycache__, .env, venv/, .pytest_cache/, etc.",
+    "status": "pending"
+  },
+  {
+    "id": "pytest-config",
+    "file": "pytest.ini",
+    "description": "Pytest configuration with asyncio mode, coverage settings, markers",
+    "acceptance_criteria": "asyncio_mode set to auto, coverage configured for 80% threshold, test discovery working",
+    "status": "pending"
+  },
+  {
+    "id": "conftest-fixtures",
+    "file": "tests/conftest.py",
+    "description": "Pytest configuration and fixtures for database, client, test users",
+    "acceptance_criteria": "Database fixtures work, client fixture available, test_user fixtures provide valid test data",
+    "status": "pending"
+  },
+  {
+    "id": "alembic-init",
+    "file": "migrations/alembic.ini",
+    "description": "Alembic configuration for database migrations",
+    "acceptance_criteria": "Config file present, database URL configurable, can run migrations",
+    "status": "pending"
+  },
+  {
+    "id": "alembic-env",
+    "file": "migrations/env.py",
+    "description": "Alembic environment setup with SQLAlchemy configuration",
+    "acceptance_criteria": "Can connect to database, auto-generate migrations, apply migrations to test databases",
+    "status": "pending"
+  },
+  {
+    "id": "initial-migration",
+    "file": "migrations/versions/001_create_users_table.py",
+    "description": "Alembic migration to create users and login_attempts tables",
+    "acceptance_criteria": "Tables created with correct schema, indexes present, can upgrade and downgrade",
+    "status": "pending"
+  },
+  {
+    "id": "readme-documentation",
+    "file": "README.md",
+    "description": "Project documentation with setup, running, and testing instructions",
+    "acceptance_criteria": "Contains setup instructions, running app instructions, testing commands, API documentation links",
+    "status": "pending"
+  },
+  {
+    "id": "design-diagrams",
+    "file": "artifacts/test-design/diagrams/",
+    "description": "PlantUML diagrams for architecture, sequence flows, and state machines",
+    "acceptance_criteria": "Diagrams include: system architecture, registration sequence, login sequence, circuit breaker states",
+    "status": "pending"
+  },
+  {
+    "id": "database-schema-sql",
+    "file": "artifacts/test-design/database-schema.sql",
+    "description": "SQL schema definition with users and login_attempts tables",
+    "acceptance_criteria": "SQL defines correct schema, indexes, constraints, matches ORM models",
+    "status": "pending"
+  },
+  {
+    "id": "test-auth-endpoints",
+    "file": "tests/test_auth_endpoints.py",
+    "description": "Integration tests for registration and login endpoints",
+    "acceptance_criteria": "Test registration success, validation errors, duplicate users, login success, rate limiting, account locking",
+    "status": "pending"
+  },
+  {
+    "id": "test-auth-service",
+    "file": "tests/test_auth_service.py",
+    "description": "Unit tests for AuthService class",
+    "acceptance_criteria": "Test password validation, registration logic, authentication logic, rate limiting calculations",
+    "status": "pending"
+  },
+  {
+    "id": "test-circuit-breaker",
+    "file": "tests/test_circuit_breaker.py",
+    "description": "Unit tests for CircuitBreaker state transitions and behavior",
+    "acceptance_criteria": "Test CLOSED state, OPEN state, HALF_OPEN state, transitions, recovery timeout",
+    "status": "pending"
+  },
+  {
+    "id": "test-exceptions",
+    "file": "tests/test_exceptions.py",
+    "description": "Unit tests for custom exceptions and exception handlers",
+    "acceptance_criteria": "Test exception creation, error format consistency, status code mapping",
+    "status": "pending"
+  },
+  {
+    "id": "test-logging",
+    "file": "tests/test_logging.py",
+    "description": "Unit tests for logging middleware and correlation ID functionality",
+    "acceptance_criteria": "Test correlation ID generation, request/response logging, sensitive data filtering",
+    "status": "pending"
+  },
+  {
+    "id": "test-security",
+    "file": "tests/test_security.py",
+    "description": "Unit tests for security utilities (password hashing, JWT)",
+    "acceptance_criteria": "Test password hashing/verification, JWT token generation/validation, expiry handling",
+    "status": "pending"
+  },
+  {
+    "id": "test-models",
+    "file": "tests/test_models.py",
+    "description": "Unit tests for ORM models",
+    "acceptance_criteria": "Test User model fields, LoginAttempts model, relationships, constraints",
+    "status": "pending"
+  },
+  {
+    "id": "test-schemas",
+    "file": "tests/test_schemas.py",
+    "description": "Unit tests for Pydantic schemas",
+    "acceptance_criteria": "Test schema validation, serialization, error messages",
+    "status": "pending"
+  },
+  {
+    "id": "test-database",
+    "file": "tests/test_database.py",
+    "description": "Integration tests for database operations",
+    "acceptance_criteria": "Test user creation, retrieval, updates, login attempts tracking",
+    "status": "pending"
+  }
+]

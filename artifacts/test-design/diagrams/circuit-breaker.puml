@@ -1,0 +1,94 @@
+@startuml Circuit Breaker State Machine
+
+[*] --> CLOSED
+
+CLOSED --> CLOSED: Successful call\n(failure_count = 0)
+
+CLOSED --> CLOSED: Failed call\n(failure_count < threshold)
+note on link
+    Increment failure counter
+    Request still passes through
+end note
+
+CLOSED --> OPEN: Failed call\n(failure_count >= threshold)
+note on link
+    Threshold typically 5
+    Record timestamp (last_failure_time)
+    Stop passing requests through
+end note
+
+OPEN --> OPEN: Any call attempt\n(within timeout)
+note on link
+    Raise CircuitBreakerError immediately
+    Don't call underlying service
+    Fail fast
+end note
+
+OPEN --> HALF_OPEN: Timeout elapsed\n(now - last_failure_time >= timeout)
+note on link
+    Timeout typically 60 seconds
+    Enter testing phase
+    Allow limited requests
+end note
+
+HALF_OPEN --> CLOSED: Successful call\nwhile HALF_OPEN
+note on link
+    Reset failure_count = 0
+    Return to normal operation
+    Service recovered
+end note
+
+HALF_OPEN --> OPEN: Failed call\nwhile HALF_OPEN
+note on link
+    Failure during recovery test
+    Reset timeout timer
+    Circuit opens again
+end note
+
+HALF_OPEN --> HALF_OPEN: Additional calls\nwhile HALF_OPEN
+note on link
+    May allow multiple test calls
+    or single call then wait
+    Depends on configuration
+end note
+
+note bottom of CLOSED
+    State: CLOSED (Normal Operation)
+    - All requests pass through
+    - Monitor for failures
+    - Increment counter on each failure
+    - Transition to OPEN at threshold
+
+    Key variables:
+    - failure_count: current count
+    - threshold: failure limit (5)
+    - last_failure_time: when last failure occurred
+end note
+
+note bottom of OPEN
+    State: OPEN (Circuit Broken)
+    - All requests are rejected immediately
+    - Raise CircuitBreakerError
+    - Fast fail to prevent cascading
+    - Wait for recovery timeout
+
+    Key variables:
+    - last_failure_time: when circuit opened
+    - timeout: recovery wait time (60s)
+    - Timestamp checked on each call
+end note
+
+note bottom of HALF_OPEN
+    State: HALF_OPEN (Testing Recovery)
+    - Limited requests allowed
+    - Test if service recovered
+    - If success: return to CLOSED
+    - If failure: return to OPEN
+
+    Key variables:
+    - Allow single request or count
+    - Monitor result carefully
+    - Reset timer if failure
+end note
+
+@enduml
