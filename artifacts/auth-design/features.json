@@ -1,0 +1,170 @@
+[
+  {
+    "id": "config-setup",
+    "file": "app/config.py",
+    "description": "Configuration management using Pydantic settings with support for development, testing, and production environments",
+    "acceptance_criteria": "Config loads from .env file, provides defaults, has DATABASE_URL, JWT_SECRET_KEY, JWT_ALGORITHM, token expiration settings, and logging configuration"
+  },
+  {
+    "id": "database-engine",
+    "file": "app/database.py",
+    "description": "Database connection management with async SQLAlchemy engine and session factory",
+    "acceptance_criteria": "Async engine created successfully, session context manager works, Base class exported for models"
+  },
+  {
+    "id": "user-model",
+    "file": "app/models/user.py",
+    "description": "SQLAlchemy User ORM model with id, username, email, hashed_password, is_active, created_at, updated_at, last_login fields",
+    "acceptance_criteria": "Model has correct fields with constraints (UNIQUE email/username), imports without errors, properly inherits from Base"
+  },
+  {
+    "id": "user-schemas",
+    "file": "app/models/schemas.py",
+    "description": "Pydantic schemas for API requests/responses (UserRegister, UserLogin, UserResponse, TokenResponse)",
+    "acceptance_criteria": "All schemas defined with proper field validation, UserRegister requires email/username/password, UserLogin requires email/password"
+  },
+  {
+    "id": "jwt-utils",
+    "file": "app/utils/jwt.py",
+    "description": "JWT token creation and validation utilities with support for access and refresh tokens",
+    "acceptance_criteria": "create_access_token() works, create_refresh_token() works, decode_token() validates and returns payload, handles expired tokens"
+  },
+  {
+    "id": "password-utils",
+    "file": "app/utils/password.py",
+    "description": "Password hashing and verification using passlib with bcrypt algorithm",
+    "acceptance_criteria": "hash_password() creates bcrypt hash, verify_password() validates correctly, wrong password returns False"
+  },
+  {
+    "id": "logger-setup",
+    "file": "app/utils/logger.py",
+    "description": "Centralized structured logging configuration using Python logging with JSON formatter",
+    "acceptance_criteria": "get_logger() returns configured logger, outputs JSON format, includes request_id field, never logs passwords/tokens"
+  },
+  {
+    "id": "circuit-breaker",
+    "file": "app/utils/circuit_breaker.py",
+    "description": "Circuit breaker implementation with three states (Closed, Open, Half-Open) for fault tolerance",
+    "acceptance_criteria": "CircuitBreaker class works as decorator, tracks failures, opens after threshold, half-opens after timeout, raises CircuitBreakerOpenException"
+  },
+  {
+    "id": "custom-exceptions",
+    "file": "app/exceptions.py",
+    "description": "Custom exception hierarchy for authentication, validation, database, and circuit breaker errors",
+    "acceptance_criteria": "All exception classes defined, inherit from appropriate base, have error_code attribute"
+  },
+  {
+    "id": "request-id-middleware",
+    "file": "app/middleware/logging.py",
+    "description": "Middleware to add unique request ID to all requests and include in logs",
+    "acceptance_criteria": "Generates UUID for each request, adds to context, logs request method/path/status"
+  },
+  {
+    "id": "exception-handler-middleware",
+    "file": "app/middleware/exception.py",
+    "description": "Global exception handler middleware that catches all exceptions and returns consistent error response",
+    "acceptance_criteria": "Catches all exceptions, returns JSON with detail/error_code/status_code/timestamp/request_id, no stack traces to client"
+  },
+  {
+    "id": "dependencies",
+    "file": "app/dependencies.py",
+    "description": "Dependency injection utilities: get_db(), get_current_user(), get_logger()",
+    "acceptance_criteria": "get_db() yields async session, get_current_user() validates JWT and returns User, get_logger() returns logger with request_id"
+  },
+  {
+    "id": "user-service",
+    "file": "app/services/user_service.py",
+    "description": "User management service with operations: create_user, get_user_by_email, get_user_by_id, get_user_by_username",
+    "acceptance_criteria": "All methods are async, return User objects, raise appropriate exceptions for errors"
+  },
+  {
+    "id": "auth-service",
+    "file": "app/services/auth_service.py",
+    "description": "Authentication business logic: register_user, login_user, refresh_access_token with validation and token generation",
+    "acceptance_criteria": "register validates inputs, hashes password, creates user, generates tokens; login validates credentials, updates last_login; refresh generates new access token"
+  },
+  {
+    "id": "health-route",
+    "file": "app/routes/health.py",
+    "description": "Health check endpoint for service availability verification",
+    "acceptance_criteria": "GET /health returns 200 with status message"
+  },
+  {
+    "id": "auth-routes",
+    "file": "app/routes/auth.py",
+    "description": "Authentication endpoints: POST /api/auth/register, POST /api/auth/login, POST /api/auth/refresh",
+    "acceptance_criteria": "Register endpoint creates user and returns tokens, Login endpoint validates and returns tokens, Refresh endpoint returns new access token, all with proper status codes and error handling"
+  },
+  {
+    "id": "fastapi-app",
+    "file": "app/main.py",
+    "description": "FastAPI application initialization with middleware setup, route registration, and OpenAPI/Swagger configuration",
+    "acceptance_criteria": "App initializes, middleware registered in correct order (request_id -> logging -> exception), routes included, Swagger docs at /docs"
+  },
+  {
+    "id": "test-conftest",
+    "file": "tests/conftest.py",
+    "description": "Pytest configuration and fixtures for testing (test database, test user, test tokens, async client)",
+    "acceptance_criteria": "Fixtures work with pytest-asyncio, test database isolated per test, async client available"
+  },
+  {
+    "id": "test-auth-service",
+    "file": "tests/unit/test_auth_service.py",
+    "description": "Unit tests for AuthService: register, login, token validation, error cases",
+    "acceptance_criteria": "Tests cover successful registration/login, duplicate email/username, invalid password, weak passwords, token expiration"
+  },
+  {
+    "id": "test-user-service",
+    "file": "tests/unit/test_user_service.py",
+    "description": "Unit tests for UserService: create_user, get_user_by_email/id/username, error cases",
+    "acceptance_criteria": "Tests cover user creation, lookups, non-existent users, duplicate handling"
+  },
+  {
+    "id": "test-jwt-utils",
+    "file": "tests/unit/test_jwt_utils.py",
+    "description": "Unit tests for JWT utilities: token creation, validation, expiration, invalid tokens",
+    "acceptance_criteria": "Tests cover valid token creation/validation, expired tokens, invalid signatures, malformed tokens"
+  },
+  {
+    "id": "test-password-utils",
+    "file": "tests/unit/test_password_utils.py",
+    "description": "Unit tests for password utilities: hashing and verification",
+    "acceptance_criteria": "Tests cover correct password verification, wrong password rejection, different hashes for same password"
+  },
+  {
+    "id": "test-auth-routes",
+    "file": "tests/integration/test_auth_routes.py",
+    "description": "Integration tests for auth endpoints: register, login, refresh, error cases",
+    "acceptance_criteria": "Tests cover successful register/login, invalid inputs, duplicate users, invalid credentials, token refresh"
+  },
+  {
+    "id": "test-protected-routes",
+    "file": "tests/integration/test_protected_routes.py",
+    "description": "Integration tests for protected endpoints with valid/invalid tokens",
+    "acceptance_criteria": "Tests cover access with valid token, missing token, invalid token, expired token"
+  },
+  {
+    "id": "requirements-file",
+    "file": "requirements.txt",
+    "description": "Python package dependencies for the project",
+    "acceptance_criteria": "File contains all required packages with compatible versions"
+  },
+  {
+    "id": "env-example",
+    "file": ".env.example",
+    "description": "Template file showing required environment variables",
+    "acceptance_criteria": "Contains DATABASE_URL, JWT_SECRET_KEY, JWT_ALGORITHM, token expiration, environment, and log level"
+  },
+  {
+    "id": "pytest-config",
+    "file": "pytest.ini",
+    "description": "Pytest configuration with asyncio mode and test discovery settings",
+    "acceptance_criteria": "File defines asyncio_mode, testpaths, and coverage settings"
+  },
+  {
+    "id": "database-schema-migrations",
+    "file": "alembic/versions/001_create_users_table.py",
+    "description": "Alembic migration to create users table schema",
+    "acceptance_criteria": "Migration creates users table with all required columns, constraints, and indexes"
+  }
+]
