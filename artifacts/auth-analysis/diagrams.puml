@@ -1,0 +1,525 @@
+@startuml system_architecture
+!define AWSPUML https://raw.githubusercontent.com/awslabs/aws-icons-for-plantuml/v14.0/dist
+skinparam linetype ortho
+
+package "FastAPI Auth System" {
+    component [FastAPI App] as app
+    component [Routes] as routes
+    component [Middleware] as middleware
+    component [Services] as services
+    component [Database] as db
+    component [Utils] as utils
+}
+
+package "Middleware Chain" {
+    component [Request ID] as req_id
+    component [Logging] as logging
+    component [Exception Handler] as exc_handler
+    component [CORS] as cors
+}
+
+package "Services" {
+    component [AuthService] as auth_svc
+    component [UserService] as user_svc
+}
+
+package "Utils" {
+    component [JWT Utils] as jwt_util
+    component [Password Utils] as pwd_util
+    component [Logger] as logger
+    component [Circuit Breaker] as cb
+}
+
+package "Models & Schemas" {
+    component [SQLAlchemy User Model] as user_model
+    component [Pydantic Schemas] as schemas
+}
+
+package "Database" {
+    database "SQLite/PostgreSQL" as database_icon
+}
+
+app --> routes
+app --> middleware
+routes --> services
+middleware --> logging
+middleware --> exc_handler
+services --> auth_svc
+services --> user_svc
+auth_svc --> jwt_util
+auth_svc --> pwd_util
+auth_svc --> db
+user_svc --> db
+db --> user_model
+db --> database_icon
+logging --> logger
+
+@enduml
+
+@startuml registration_flow
+participant Client
+participant FastAPI as FastAPI
+participant AuthService as AuthSvc
+participant Database as DB
+participant PWDUtil
+participant JWTUtil
+
+Client -> FastAPI: POST /api/auth/register\n{email, password, username}
+note over FastAPI: Validate input schema
+
+FastAPI -> AuthSvc: register(email, password, username)
+activate AuthSvc
+
+AuthSvc -> DB: find_user_by_email(email)
+activate DB
+DB --> AuthSvc: None (not found - good!)
+deactivate DB
+
+AuthSvc -> DB: find_user_by_username(username)
+activate DB
+DB --> AuthSvc: None (not found - good!)
+deactivate DB
+
+AuthSvc -> PWDUtil: hash_password(password)
+activate PWDUtil
+PWDUtil --> AuthSvc: hashed_password
+deactivate PWDUtil
+
+AuthSvc -> DB: create_user(email, username, hashed_password)
+activate DB
+DB --> AuthSvc: User(id=1, email, username, created_at)
+deactivate DB
+
+AuthSvc -> JWTUtil: create_access_token(user_id=1)
+activate JWTUtil
+JWTUtil --> AuthSvc: access_token_jwt
+deactivate JWTUtil
+
+AuthSvc -> JWTUtil: create_refresh_token(user_id=1)
+activate JWTUtil
+JWTUtil --> AuthSvc: refresh_token_jwt
+deactivate JWTUtil
+
+AuthSvc --> FastAPI: RegisterResponse(user, access_token, refresh_token)
+deactivate AuthSvc
+
+FastAPI --> Client: 201 Created\n{id, email, username, access_token, refresh_token}
+
+@enduml
+
+@startuml login_flow
+participant Client
+participant FastAPI as FastAPI
+participant AuthService as AuthSvc
+participant Database as DB
+participant PWDUtil
+participant JWTUtil
+
+Client -> FastAPI: POST /api/auth/login\n{email, password}
+note over FastAPI: Validate input schema
+
+FastAPI -> AuthSvc: login(email, password)
+activate AuthSvc
+
+AuthSvc -> DB: find_user_by_email(email)
+activate DB
+DB --> AuthSvc: User(id=1, email, hashed_password)
+deactivate DB
+
+alt User found
+    AuthSvc -> PWDUtil: verify_password(password, hashed_password)
+    activate PWDUtil
+    PWDUtil --> AuthSvc: True/False
+    deactivate PWDUtil
+
+    alt Password valid
+        AuthSvc -> JWTUtil: create_access_token(user_id=1)
+        activate JWTUtil
+        JWTUtil --> AuthSvc: access_token_jwt
+        deactivate JWTUtil
+
+        AuthSvc -> JWTUtil: create_refresh_token(user_id=1)
+        activate JWTUtil
+        JWTUtil --> AuthSvc: refresh_token_jwt
+        deactivate JWTUtil
+
+        AuthSvc -> DB: update_last_login(user_id=1)
+        activate DB
+        DB --> AuthSvc: Updated
+        deactivate DB
+
+        AuthSvc --> FastAPI: LoginResponse(access_token, refresh_token, user)
+    else Password invalid
+        AuthSvc --> FastAPI: raise InvalidCredentialsException
+    end
+else User not found
+    AuthSvc --> FastAPI: raise InvalidCredentialsException
+end
+
+deactivate AuthSvc
+
+FastAPI --> Client: 200 OK\n{access_token, refresh_token, user} OR\n401 Unauthorized
+
+@enduml
+
+@startuml protected_route_flow
+participant Client
+participant FastAPI as FastAPI
+participant Middleware as Middleware
+participant Dependency as GetCurrentUser
+participant JWTUtil
+participant Database as DB
+
+Client -> FastAPI: GET /api/user/profile\nAuthorization: Bearer {access_token}
+
+note over Middleware: RequestID middleware - add request ID
+
+note over Middleware: Logging middleware - log request
+
+Middleware -> GetCurrentUser: Extract token from Authorization header
+activate GetCurrentUser
+
+GetCurrentUser -> JWTUtil: decode_token(access_token)
+activate JWTUtil
+alt Token valid and not expired
+    JWTUtil --> GetCurrentUser: {user_id=1, exp, iat}
+else Token expired
+    JWTUtil --> GetCurrentUser: raise TokenExpiredException
+else Token invalid
+    JWTUtil --> GetCurrentUser: raise TokenInvalidException
+end
+deactivate JWTUtil
+
+GetCurrentUser -> DB: find_user_by_id(user_id=1)
+activate DB
+DB --> GetCurrentUser: User(id=1, email, username)
+deactivate DB
+
+GetCurrentUser --> FastAPI: User object (injected into route)
+deactivate GetCurrentUser
+
+FastAPI -> FastAPI: Route handler executes with user context
+
+FastAPI --> Client: 200 OK\n{profile data with user info}
+
+note over Middleware: Logging middleware - log response (200, duration)
+
+@enduml
+
+@startuml token_refresh_flow
+participant Client
+participant FastAPI as FastAPI
+participant AuthService as AuthSvc
+participant JWTUtil
+participant Database as DB
+
+Client -> FastAPI: POST /api/auth/refresh\n{refresh_token}
+
+FastAPI -> AuthSvc: refresh_access_token(refresh_token)
+activate AuthSvc
+
+AuthSvc -> JWTUtil: decode_token(refresh_token)
+activate JWTUtil
+alt Token valid
+    JWTUtil --> AuthSvc: {user_id=1, token_type='refresh'}
+else Token invalid/expired
+    JWTUtil --> AuthSvc: raise TokenInvalidException
+end
+deactivate JWTUtil
+
+alt Token is refresh type
+    AuthSvc -> DB: find_user_by_id(user_id=1)
+    activate DB
+    DB --> AuthSvc: User found
+    deactivate DB
+
+    AuthSvc -> JWTUtil: create_access_token(user_id=1)
+    activate JWTUtil
+    JWTUtil --> AuthSvc: new_access_token
+    deactivate JWTUtil
+
+    AuthSvc --> FastAPI: {access_token: new_access_token}
+else Token is access type
+    AuthSvc --> FastAPI: raise InvalidTokenTypeException
+end
+
+deactivate AuthSvc
+
+FastAPI --> Client: 200 OK\n{access_token}
+
+@enduml
+
+@startuml circuit_breaker_states
+state CBClosed {
+    state "Closed State" as closed
+    closed --> counting: Error occurs
+}
+
+state CBOpen {
+    state "Open State" as open
+    open --> halfopen: Timeout expires
+}
+
+state CBHalfOpen {
+    state "Half-Open State" as halfopen
+    halfopen --> open: Test fails
+    halfopen --> closed: Test succeeds
+}
+
+closed --> open: Threshold exceeded\n(e.g., 5 errors)
+open --> halfopen: Recovery timeout\n(e.g., 60 seconds)
+halfopen --> closed: Successful test call
+halfopen --> open: Failed test call
+
+note right of closed
+  Normal operation
+  All calls pass through
+  Failures counted
+end note
+
+note right of open
+  Fail fast state
+  Reject calls immediately
+  Prevent cascading failures
+end note
+
+note right of halfopen
+  Recovery test state
+  Limited calls allowed
+  Test system recovery
+end note
+
+@enduml
+
+@startuml exception_hierarchy
+interface "Exception" as base_exception
+
+class "AuthException" as auth_exc
+class "InvalidCredentialsException" as invalid_creds
+class "TokenExpiredException" as token_expired
+class "TokenInvalidException" as token_invalid
+class "UserNotFoundException" as user_not_found
+
+class "ValidationException" as validation_exc
+class "DuplicateEmailException" as dup_email
+class "DuplicateUsernameException" as dup_username
+class "WeakPasswordException" as weak_pwd
+class "InvalidEmailException" as invalid_email
+
+class "DatabaseException" as db_exc
+class "DatabaseConnectionException" as db_conn
+class "TransactionException" as transaction_exc
+
+class "CircuitBreakerOpenException" as cb_open
+
+base_exception <|-- auth_exc
+auth_exc <|-- invalid_creds
+auth_exc <|-- token_expired
+auth_exc <|-- token_invalid
+auth_exc <|-- user_not_found
+
+base_exception <|-- validation_exc
+validation_exc <|-- dup_email
+validation_exc <|-- dup_username
+validation_exc <|-- weak_pwd
+validation_exc <|-- invalid_email
+
+base_exception <|-- db_exc
+db_exc <|-- db_conn
+db_exc <|-- transaction_exc
+
+base_exception <|-- cb_open
+
+@enduml
+
+@startuml database_schema
+entity "users" {
+    * id : INTEGER <<PK>>
+    --
+    * username : VARCHAR(50) <<UK>>
+    * email : VARCHAR(100) <<UK>>
+    * hashed_password : VARCHAR(255)
+    * is_active : BOOLEAN
+    * created_at : TIMESTAMP
+    * updated_at : TIMESTAMP
+    * last_login : TIMESTAMP (nullable)
+}
+
+entity "refresh_tokens" {
+    * id : INTEGER <<PK>>
+    --
+    * user_id : INTEGER <<FK>>
+    * token_hash : VARCHAR(255) <<UK>>
+    * expires_at : TIMESTAMP
+    * is_revoked : BOOLEAN
+    * created_at : TIMESTAMP
+}
+
+entity "audit_logs" {
+    * id : INTEGER <<PK>>
+    --
+    * user_id : INTEGER <<FK>> (nullable)
+    * action : VARCHAR(50)
+    * resource : VARCHAR(100)
+    * details : JSON
+    * ip_address : VARCHAR(45)
+    * user_agent : TEXT
+    * created_at : TIMESTAMP
+}
+
+users ||--o{ refresh_tokens : "has"
+users ||--o{ audit_logs : "triggers"
+
+@enduml
+
+@startuml middleware_chain_execution
+participant Request
+participant "RequestID\nMiddleware" as req_id
+participant "Logging\nMiddleware" as logging
+participant "Exception\nHandler" as exc_handler
+participant "CORS\nMiddleware" as cors
+participant "Route\nHandler" as route
+participant Response
+
+Request -> req_id: incoming request
+activate req_id
+req_id -> req_id: generate request ID
+req_id -> logging: next()
+deactivate req_id
+
+activate logging
+logging -> logging: log request (method, path, body)
+logging -> exc_handler: next()
+deactivate logging
+
+activate exc_handler
+exc_handler -> cors: next()
+deactivate exc_handler
+
+activate cors
+cors -> cors: check CORS headers
+cors -> route: next()
+deactivate cors
+
+activate route
+alt Success
+    route -> route: process request
+    route --> Response: return 200 OK
+else Exception raised
+    route --> exc_handler: exception
+    deactivate route
+    exc_handler -> exc_handler: catch and format
+    exc_handler --> Response: return error (4xx/5xx)
+    activate exc_handler
+    deactivate exc_handler
+end
+
+activate logging
+logging -> logging: log response (status, duration)
+deactivate logging
+
+@enduml
+
+@startuml logging_structure
+rectangle "Structured Logging - JSON Format" {
+    note
+    Every log entry contains:
+    - timestamp (ISO 8601)
+    - level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+    - request_id (unique for each request)
+    - service (app name)
+    - message (what happened)
+    - context (relevant data)
+
+    Sensitive data REDACTED:
+    - passwords
+    - tokens
+    - API keys
+    - credit cards
+    end note
+}
+
+json "Example: Registration Request" as log1
+{
+  "timestamp": "2026-02-19T10:30:45.123Z",
+  "level": "INFO",
+  "request_id": "abc123-def456",
+  "service": "auth-api",
+  "message": "User registration attempt",
+  "event": "user.register",
+  "email": "user@example.com",
+  "username": "john_doe",
+  "ip_address": "192.168.1.1"
+}
+
+json "Example: Login Success" as log2
+{
+  "timestamp": "2026-02-19T10:31:12.456Z",
+  "level": "INFO",
+  "request_id": "xyz789-uvw012",
+  "service": "auth-api",
+  "message": "User login successful",
+  "event": "user.login",
+  "user_id": 123,
+  "email": "user@example.com",
+  "ip_address": "192.168.1.1",
+  "duration_ms": 245
+}
+
+json "Example: Authentication Error" as log3
+{
+  "timestamp": "2026-02-19T10:32:01.789Z",
+  "level": "WARNING",
+  "request_id": "rst456-ijk789",
+  "service": "auth-api",
+  "message": "Failed login attempt",
+  "event": "user.login_failed",
+  "email": "user@example.com",
+  "reason": "invalid_credentials",
+  "ip_address": "192.168.1.1",
+  "attempt_count": 3
+}
+
+json "Example: Server Error" as log4
+{
+  "timestamp": "2026-02-19T10:33:45.012Z",
+  "level": "ERROR",
+  "request_id": "def789-abc012",
+  "service": "auth-api",
+  "message": "Database connection failed",
+  "event": "db.connection_error",
+  "error_type": "DatabaseConnectionException",
+  "error_code": "DB_CONN_FAILED",
+  "stack_trace": "[redacted in production]",
+  "duration_ms": 1200
+}
+
+@enduml
+
+@startuml error_response_flow
+participant Client
+participant Route
+participant ExceptionMiddleware
+participant ErrorFormatter
+
+Client -> Route: Invalid request data
+Route -> Route: Validation fails
+Route -> ExceptionMiddleware: ValidationException("Invalid email format")
+activate ExceptionMiddleware
+
+ExceptionMiddleware -> ErrorFormatter: format(exception)
+activate ErrorFormatter
+
+ErrorFormatter -> ErrorFormatter: Extract error info
+ErrorFormatter -> ErrorFormatter: Generate error code
+ErrorFormatter -> ErrorFormatter: Build response object
+ErrorFormatter --> ExceptionMiddleware: formatted_response
+
+deactivate ErrorFormatter
+
+ExceptionMiddleware -> ExceptionMiddleware: Log error
+ExceptionMiddleware --> Client: 400 Bad Request\n{\n  "detail": "Invalid email format",\n  "error_code": "INVALID_EMAIL",\n  "status_code": 400,\n  "timestamp": "2026-02-19T10:30:45Z",\n  "request_id": "abc-123"\n}
+
+deactivate ExceptionMiddleware
+
+@enduml
