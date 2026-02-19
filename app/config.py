@@ -4,8 +4,8 @@ from pydantic_settings import BaseSettings
 class Settings(BaseSettings):
     """Application configuration loaded from environment variables."""
 
-    DATABASE_URL: str = "sqlite:///./test.db"
-    JWT_SECRET_KEY: str
+    DATABASE_URL: str = "sqlite+aiosqlite:///./test.db"
+    JWT_SECRET_KEY: str = "your-secret-key-change-in-production"
     JWT_ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
     REFRESH_TOKEN_EXPIRE_DAYS: int = 7
@@ -15,6 +15,8 @@ class Settings(BaseSettings):
     CIRCUIT_BREAKER_THRESHOLD: int = 5
     CIRCUIT_BREAKER_TIMEOUT: int = 60
     CIRCUIT_BREAKER_HALF_OPEN_MAX_CALLS: int = 1
+    CORS_ORIGINS: list = ["http://localhost:3000", "http://localhost:8000"]
+    SECRET_KEY: str = "your-secret-key-change-in-production"
 
     class Config:
         env_file = ".env"
