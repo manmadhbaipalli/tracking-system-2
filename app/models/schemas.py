@@ -1,7 +1,7 @@
 from datetime import datetime
 from typing import Optional
 
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, ConfigDict
 
 
 class UserRegister(BaseModel):
@@ -23,15 +23,14 @@ class UserLogin(BaseModel):
 class UserResponse(BaseModel):
     """User response schema for API responses."""
 
+    model_config = ConfigDict(from_attributes=True)
+
     id: int
     email: str
     username: str
     is_active: bool
     created_at: datetime
     last_login: Optional[datetime] = None
-
-    class Config:
-        from_attributes = True
 
 
 class TokenResponse(BaseModel):

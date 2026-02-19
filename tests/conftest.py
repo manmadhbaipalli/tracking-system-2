@@ -73,17 +73,31 @@ def event_loop():
 
 @pytest.fixture
 async def test_db_session():
-    """Create test database session."""
-    global _TestAsyncSession
+    """Create test database session with clean database."""
+    global _test_engine, _TestAsyncSession
+
+    # Clear all tables before each test
+    async with _test_engine.begin() as conn:
+        await conn.run_sync(Base.metadata.drop_all)
+        await conn.run_sync(Base.metadata.create_all)
+
     async with _TestAsyncSession() as session:
         yield session
 
 
 @pytest.fixture
 def test_client():
-    """Create test client for FastAPI."""
+    """Create test client for FastAPI with clean database."""
     from app import dependencies
-    global _TestAsyncSession
+    global _test_engine, _TestAsyncSession
+
+    # Clear all tables before each test
+    async def reset_db():
+        async with _test_engine.begin() as conn:
+            await conn.run_sync(Base.metadata.drop_all)
+            await conn.run_sync(Base.metadata.create_all)
+
+    asyncio.run(reset_db())
 
     async def override_get_db_session():
         async with _TestAsyncSession() as session:
