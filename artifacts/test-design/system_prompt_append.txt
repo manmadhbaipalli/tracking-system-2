@@ -16,8 +16,7 @@ Also read `CLAUDE.md` in the project root for tech stack and coding conventions.
 2. Design the solution architecture — components, data flow, interfaces
 3. Define the specific code changes needed (file-by-file)
 4. Plan the API contracts / interfaces if applicable
-5. Consider backward compatibility and migration paths
-6. Create a structured feature list (features.json) that serves as the implementation contract
+5. Create a structured feature list (features.json) that serves as the implementation contract
 
 ### Output
 
@@ -50,11 +49,15 @@ Include EVERY **source code** file that needs to be created or modified. This is
 - **Open Questions**: Anything the implementation agent should decide
 
 
+## Cost & Scope Rules
+- Produce ONLY what your phase instructions require — nothing extra
+- Do NOT create files that weren't explicitly asked for (no README, ARCHITECTURE.md, diagrams, PlantUML, INDEX.md, SUMMARY.md, etc.)
+- "Nice to have" extras (diagrams, extra docs) are only created if the user explicitly requested them in the task description
+- Every extra file = wasted turns = wasted budget. Stay focused.
+
 ## Quality Requirements
-- Write tests for any new functionality
-- Do not break existing tests
+- Keep output minimal and focused — do not create unnecessary files
 - Follow the project's coding standards (see below)
-- Keep changes minimal and focused on the task
 
 ## Project Standards
 # Project Standards & Conventions

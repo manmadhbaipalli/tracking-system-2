@@ -1,0 +1,107 @@
+@startuml architecture
+
+!define COMPONENT_COLOR #dddddd
+!define MIDDLEWARE_COLOR #ffffaa
+!define SERVICE_COLOR #ccddff
+!define UTIL_COLOR #ffcccc
+
+title FastAPI Authentication Service Architecture
+
+package "Client Layer" {
+    component [HTTP Client] as client
+    component [Swagger UI] as swagger
+}
+
+package "FastAPI Application" {
+    component [FastAPI App] as app
+
+    package "Middleware Stack" {
+        component [CORS Middleware] as cors <<MIDDLEWARE_COLOR>>
+        component [Logging Middleware\n(Request ID, Timing)] as logging <<MIDDLEWARE_COLOR>>
+        component [Exception Handler\n(Global)] as exception_handler <<MIDDLEWARE_COLOR>>
+    }
+
+    package "Routes Layer" {
+        component [Auth Routes\n(register, login, refresh)] as auth_routes <<COMPONENT_COLOR>>
+        component [Health Routes\n(health check)] as health_routes <<COMPONENT_COLOR>>
+    }
+
+    package "Services Layer" {
+        component [AuthService\n(registration, login logic)] as auth_service <<SERVICE_COLOR>>
+        component [UserService\n(CRUD operations)] as user_service <<SERVICE_COLOR>>
+    }
+
+    package "Dependencies" {
+        component [Dependency Injection\n(get_db, get_current_user)] as dependencies <<COMPONENT_COLOR>>
+    }
+
+    package "Utils Layer" {
+        component [JWT Utils\n(token generation/validation)] as jwt_util <<UTIL_COLOR>>
+        component [Password Utils\n(hash/verify)] as pwd_util <<UTIL_COLOR>>
+        component [Logger Utils\n(structured JSON)] as logger_util <<UTIL_COLOR>>
+        component [Exception Classes\n(custom hierarchy)] as exception_util <<UTIL_COLOR>>
+        component [Circuit Breaker\n(resilience)] as circuit_breaker <<UTIL_COLOR>>
+    }
+}
+
+package "Data Layer" {
+    component [SQLAlchemy ORM\n(async)] as orm <<COMPONENT_COLOR>>
+    component [Pydantic Schemas\n(validation)] as schemas <<COMPONENT_COLOR>>
+    component [User Model\n(SQLAlchemy)] as user_model <<COMPONENT_COLOR>>
+}
+
+database "SQLite/PostgreSQL" as db {
+    folder "users table" {
+        card "id" as id
+        card "username (unique)" as username
+        card "email (unique)" as email
+        card "hashed_password" as password
+        card "is_active" as active
+        card "created_at, updated_at" as timestamps
+    }
+}
+
+' HTTP Flow
+client --> app: HTTP Request
+swagger --> app: API Exploration
+app --> client: HTTP Response
+
+' Middleware Stack
+app --> cors
+cors --> logging
+logging --> exception_handler
+
+' Route Selection
+exception_handler --> auth_routes
+exception_handler --> health_routes
+
+' Service Integration
+auth_routes --> dependencies
+health_routes --> dependencies
+dependencies --> auth_service
+dependencies --> user_service
+auth_routes --> auth_service
+user_service --> jwt_util
+auth_service --> user_service
+
+' Utility Usage
+auth_service --> jwt_util
+auth_service --> pwd_util
+auth_service --> logger_util
+user_service --> logger_util
+exception_handler --> logger_util
+exception_handler --> exception_util
+auth_service --> exception_util
+user_service --> exception_util
+logging --> logger_util
+
+' Database Access
+user_service --> orm
+orm --> schemas
+orm --> user_model
+user_model --> db
+
+' Circuit Breaker (for external services)
+service --> circuit_breaker: (future integration)
+
+@enduml
