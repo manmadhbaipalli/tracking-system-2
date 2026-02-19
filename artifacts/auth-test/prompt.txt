@@ -1,0 +1,30 @@
+## Task: auth-test
+**[TEST] auth**
+
+**Pipeline:** `auth` | **Phase:** `test`
+
+## Description
+1. Analyze the below requirement
+	1. Create fastapi application with login, registration endpoints
+	2. centralized logging system
+	3. centralized exception handling
+	4. implement circuit breaker
+	5. swagger for all endpoints
+2. Design the application
+	1. Sequence Diagrams and flow diagrams in platuml
+	2. design and create the db schema/tables
+3. code implementation with proper testcases
+4. execute testcases
+5. review and optimize if any issues.
+
+## Phase: test
+Write tests and validate the implementation. Read the implementation from the previous phase. Run tests and document results in artifacts/{task_id}/test-results.md.
+
+**Note:** This task depended on: auth-implement. Those are now merged into main.
+
+## File Constraints
+You may ONLY modify these files (other files are locked by other agents working in parallel):
+  (no file restrictions — you may modify any file)
+
+If you need to create new files, place them under the directories implied by the locked file paths.
+Do NOT modify files outside your assigned scope — doing so will cause merge conflicts.
