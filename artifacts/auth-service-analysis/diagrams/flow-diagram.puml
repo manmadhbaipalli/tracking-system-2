@@ -1,0 +1,327 @@
+@startuml auth-service-architecture
+
+!define RECTANGLE(name, color) rectangle name #color
+
+title Auth Service - Architecture and Data Flow Diagrams
+
+== System Architecture ==
+
+skinparam linetype ortho
+skinparam ranksep 50
+skinparam nodesep 30
+
+package "Client Layer" {
+    component WebClient ["Web Application\n(Browser)"] as WEB
+    component MobileClient ["Mobile App\n(iOS/Android)"] as MOBILE
+}
+
+package "API Gateway Layer" {
+    component API ["FastAPI Application\n(uvicorn)"] as API_APP
+}
+
+package "Middleware & Cross-Cutting Concerns" {
+    component Logging ["Request Logging\nMiddleware"]
+    component CORS ["CORS\nMiddleware"]
+    component ErrorHandler ["Exception\nHandler"]
+}
+
+package "Route Layer" {
+    component AuthRouter ["/auth routes\n- POST /register\n- POST /login"]
+}
+
+package "Service Layer" {
+    component AuthService ["Auth Service\n- register_user()\n- authenticate_user()\n- verify_token()"]
+    component SecurityUtils ["Security Utils\n- hash_password()\n- verify_password()\n- create_jwt()\n- decode_jwt()"]
+    component RateLimiter ["Rate Limiter\n- check_attempts()\n- record_attempt()\n- lock_account()"]
+    component CircuitBreaker ["Circuit Breaker\n- call()\n- check_state()"]
+}
+
+package "Data Layer" {
+    component ORM ["SQLAlchemy\nORM"]
+    component Models ["Models\n- User\n- LoginAttempt\n- RefreshToken"]
+}
+
+package "Database" {
+    database PostgreSQL ["PostgreSQL\nDatabase"]
+}
+
+package "External Services (Future)" {
+    component EmailService ["Email\nService"]
+    component BreachChecker ["Breach\nChecker API"]
+}
+
+' Client to API
+WEB --> API_APP
+MOBILE --> API_APP
+
+' API to Middleware
+API_APP --> Logging
+API_APP --> CORS
+API_APP --> ErrorHandler
+
+' API to Router
+API_APP --> AuthRouter
+
+' Router to Service
+AuthRouter --> AuthService
+AuthRouter --> RateLimiter
+
+' Service dependencies
+AuthService --> SecurityUtils
+AuthService --> RateLimiter
+AuthService --> ORM
+
+' Rate limiter to Models
+RateLimiter --> Models
+
+' ORM to Database
+ORM --> Models
+Models --> PostgreSQL
+
+' Circuit breaker for external services
+CircuitBreaker --> EmailService
+CircuitBreaker --> BreachChecker
+
+== User Registration Data Flow ==
+
+start
+:Client submits\nregistration form;
+
+:POST /api/v1/auth/register
+{username, email, password};
+
+:Validate input format\n(CORS, Content-Type);
+
+:Check username format\n(3-32 chars, alphanumeric+_);
+
+if (Valid username?) then (No)
+  :Return 422\nUnprocessable Entity;
+  end
+else (Yes)
+  :Check email format\nand uniqueness;
+endif
+
+if (Email valid & unique?) then (No)
+  :Return 422 or 409\nConflict;
+  end
+else (Yes)
+  :Validate password strength\n(8+ chars, uppercase, lowercase,\ndigit, special char);
+endif
+
+if (Password strong?) then (No)
+  :Return 422\nPassword too weak;
+  end
+else (Yes)
+  :Hash password\nwith bcrypt(cost=12);
+endif
+
+:Generate password_hash\n(60 characters);
+
+:Create user in database\nINSERT into users table;
+
+if (Email already exists?) then (Yes)
+  :Return 409\nEmail conflict;
+  end
+else (No)
+  :User created\nid, username, email;
+endif
+
+:Generate JWT token\nExpiry: 30 minutes;
+
+:Log successful\nregistration\n(request_id, user_id,\ntimestamp, ip_address);
+
+:Return 201 Created\n{user_id, username, email,\naccess_token, expires_in};
+
+stop
+
+== User Login Data Flow ==
+
+start
+:Client submits\nlogin credentials;
+
+:POST /api/v1/auth/login
+{username, password};
+
+:Normalize username\n(lowercase);
+
+:Check recent failed attempts\nLast 15 minutes;
+
+if (Failed attempts >= 5?) then (Yes)
+  :Check locked_until\ntimestamp;
+  if (Still locked?) then (Yes)
+    :Return 403\nAccount locked;
+    end
+  else (Expired)
+    :Unlock account\nreset counters;
+  endif
+else (No)
+  :Continue;
+endif
+
+:Query database\nSELECT user\nWHERE username = ?;
+
+if (User exists?) then (No)
+  :Increment failed attempt\nfor non-existent user;
+  :Log failed attempt\n(reason: user_not_found);
+  :Return 401\nInvalid credentials;
+  end
+else (Yes)
+  :Load user object\nincluding password_hash;
+endif
+
+:Verify password\nbcrypt.verify(password,\npassword_hash);
+
+if (Password matches?) then (No)
+  :Increment failed_login_attempts\ncount;
+  if (Count >= 5?) then (Yes)
+    :Lock account\nlocked_until = now + 30min;
+  endif
+  :Log failed attempt\n(reason: wrong_password);
+  :Return 401\nInvalid credentials;
+  end
+else (Yes)
+  :Reset failed_login_attempts\nto 0;
+  :Update last_login_at\nto current timestamp;
+  :Log successful attempt;
+endif
+
+:Generate JWT token\nsub: user_id\nexp: now + 30min\niat: now;
+
+:Generate refresh token\n(for future use);
+
+:Return 200 OK\n{access_token, token_type,\nexpires_in, user{id, username}};
+
+stop
+
+== Error Handling Flow ==
+
+start
+:Exception thrown\nin application;
+
+:Caught by\nException Handler\nMiddleware;
+
+if (Exception type?) then (ValidationError)
+  :Format error response\nstatus_code: 422\nerror_code: VALIDATION_XXX;
+  :Log validation error\n(request_id, details);
+  :Return error response;
+  end
+endif
+
+if (Exception type?) then (AuthenticationError)
+  :Format error response\nstatus_code: 401\nerror_code: AUTH_XXX;
+  :Log auth error\n(request_id, username, ip);
+  :Return error response;
+  end
+endif
+
+if (Exception type?) then (Duplicate User)
+  :Format error response\nstatus_code: 409\nerror_code: CONFLICT_XXX;
+  :Log conflict error\n(request_id, email);
+  :Return error response;
+  end
+endif
+
+if (Exception type?) then (Database Error)
+  :Format error response\nstatus_code: 500\nerror_code: DB_XXX;
+  :Log database error\n(request_id, query, stack trace);
+  :Return error response;
+  end
+endif
+
+if (Exception type?) then (Unknown)
+  :Format generic response\nstatus_code: 500\nerror_code: INTERNAL_ERROR;
+  :Log full stack trace\n(request_id, exception);
+  :Return error response;
+  end
+endif
+
+:All responses include:\n- error_code\n- detail\n- timestamp\n- request_id;
+
+stop
+
+== Circuit Breaker State Machine ==
+
+start
+:Service starts\nstate = CLOSED;
+
+:Attempt external\nservice call;
+
+if (Call succeeds?) then (Yes)
+  :Reset failure counter\nto 0;
+  :Return result\nto client;
+else (No - Failure)
+  :Increment failure counter;
+endif
+
+if (Failures >= threshold\n(5 failures)?) then (Yes)
+  :Set state = OPEN;
+  :Set recovery_timeout\n= now + 60 seconds;
+  :Return CircuitBreakerOpen\nError immediately;
+else (No)
+  :State remains CLOSED;
+  :Return failure to client;
+endif
+
+:Wait for recovery_timeout\nto expire;
+
+if (Recovery timeout\nreached?) then (Yes)
+  :Set state = HALF_OPEN;
+  :Attempt single test call\nto service;
+else (No)
+  :Reject all requests\nwith CircuitBreakerOpen;
+  :Repeat timeout wait;
+endif
+
+if (Test call succeeds?) then (Yes)
+  :Increment success counter;
+  if (Success count >= 2?) then (Yes)
+    :Set state = CLOSED;
+    :Reset all counters;
+  else (No)
+    :Keep state = HALF_OPEN;
+  endif
+else (No)
+  :Increment failure counter;
+  if (Failure count >= 1?) then (Yes)
+    :Set state = OPEN;
+    :Reset recovery_timeout;
+    :Repeat failure flow;
+  endif
+endif
+
+stop
+
+== Logging Flow ==
+
+start
+:Request received\nat middleware;
+
+:Generate unique\nrequest_id\n(UUID);
+
+:Extract context\n- ip_address\n- user_agent\n- timestamp\n- endpoint;
+
+:Attach to request\ncontext for logging;
+
+:Route processes request;
+
+:Log at each stage\n- Input validation\n- Database query\n- Service call\n- Response generation;
+
+note right
+Each log includes:
+- request_id (correlation)
+- timestamp (ISO 8601)
+- level (INFO/WARNING/ERROR)
+- message (structured)
+- context (key-value pairs)
+- duration (milliseconds)
+end note
+
+:Format as JSON\nfor aggregation;
+
+:Send to logging\naggregate system\n(files, ELK, etc);
+
+:Include response metadata\n- status_code\n- duration_ms\n- user_id\n- error_code (if error);
+
+stop
+
+@enduml
