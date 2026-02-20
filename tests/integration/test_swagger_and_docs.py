@@ -10,7 +10,7 @@ class TestSwaggerDocs:
         """Test Swagger UI is available at /docs."""
         response = test_client.get("/docs")
         assert response.status_code == 200
-        assert "application/json" in response.headers.get("content-type", "")
+        assert "text/html" in response.headers.get("content-type", "")
 
     def test_openapi_schema_available(self, test_client: TestClient):
         """Test OpenAPI schema is available."""
