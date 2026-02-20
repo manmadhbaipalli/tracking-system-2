@@ -1,0 +1,142 @@
+[
+  {
+    "id": "project-dependencies",
+    "file": "requirements.txt",
+    "description": "Production dependencies for FastAPI, SQLAlchemy, JWT, and authentication",
+    "acceptance_criteria": "File exists with all required production packages",
+    "status": "pending"
+  },
+  {
+    "id": "dev-dependencies",
+    "file": "requirements-dev.txt",
+    "description": "Development dependencies for testing, linting, and formatting",
+    "acceptance_criteria": "File exists with pytest, black, isort, flake8, and coverage tools",
+    "status": "pending"
+  },
+  {
+    "id": "app-config",
+    "file": "app/config.py",
+    "description": "Application configuration using pydantic-settings for environment variables",
+    "acceptance_criteria": "Config class with database URL, JWT secret, and other settings",
+    "status": "pending"
+  },
+  {
+    "id": "database-setup",
+    "file": "app/database.py",
+    "description": "SQLAlchemy database connection and session management with async support",
+    "acceptance_criteria": "Database engine, session factory, and dependency injection setup",
+    "status": "pending"
+  },
+  {
+    "id": "user-model",
+    "file": "app/models/user.py",
+    "description": "User SQLAlchemy model with password hashing and validation",
+    "acceptance_criteria": "User model with id, email, username, hashed_password, and timestamps",
+    "status": "pending"
+  },
+  {
+    "id": "user-schemas",
+    "file": "app/schemas/user.py",
+    "description": "Pydantic schemas for user-related requests and responses",
+    "acceptance_criteria": "UserCreate, UserResponse, and UserUpdate schemas with validation",
+    "status": "pending"
+  },
+  {
+    "id": "auth-schemas",
+    "file": "app/schemas/auth.py",
+    "description": "Pydantic schemas for authentication requests and responses",
+    "acceptance_criteria": "LoginRequest, TokenResponse, and RegisterRequest schemas",
+    "status": "pending"
+  },
+  {
+    "id": "security-core",
+    "file": "app/core/security.py",
+    "description": "JWT token creation/validation and password hashing utilities",
+    "acceptance_criteria": "Functions for password hashing, JWT creation, and token validation",
+    "status": "pending"
+  },
+  {
+    "id": "logging-core",
+    "file": "app/core/logging.py",
+    "description": "Centralized logging configuration with structured JSON format",
+    "acceptance_criteria": "Logging setup with JSON formatter and correlation ID support",
+    "status": "pending"
+  },
+  {
+    "id": "exceptions-core",
+    "file": "app/core/exceptions.py",
+    "description": "Custom exceptions and global exception handlers for FastAPI",
+    "acceptance_criteria": "Custom exceptions with HTTP status codes and error handlers",
+    "status": "pending"
+  },
+  {
+    "id": "circuit-breaker-core",
+    "file": "app/core/circuit_breaker.py",
+    "description": "Circuit breaker utilities for external calls and unstable operations",
+    "acceptance_criteria": "Circuit breaker decorator and configuration for fault tolerance",
+    "status": "pending"
+  },
+  {
+    "id": "auth-endpoints",
+    "file": "app/api/v1/auth.py",
+    "description": "Authentication endpoints for user registration and login",
+    "acceptance_criteria": "POST /register and /login endpoints with proper validation and responses",
+    "status": "pending"
+  },
+  {
+    "id": "user-endpoints",
+    "file": "app/api/v1/users.py",
+    "description": "User management endpoints for profile operations",
+    "acceptance_criteria": "GET /users/me endpoint with JWT authentication",
+    "status": "pending"
+  },
+  {
+    "id": "api-router",
+    "file": "app/api/v1/__init__.py",
+    "description": "API router setup for version 1 endpoints",
+    "acceptance_criteria": "APIRouter with auth and users endpoints included",
+    "status": "pending"
+  },
+  {
+    "id": "main-app",
+    "file": "app/main.py",
+    "description": "FastAPI application instance with middleware, CORS, and startup configuration",
+    "acceptance_criteria": "FastAPI app with exception handlers, logging, and API routes configured",
+    "status": "pending"
+  },
+  {
+    "id": "alembic-config",
+    "file": "alembic.ini",
+    "description": "Alembic configuration for database migrations",
+    "acceptance_criteria": "Alembic configuration with proper SQLAlchemy URL and migration settings",
+    "status": "pending"
+  },
+  {
+    "id": "alembic-env",
+    "file": "alembic/env.py",
+    "description": "Alembic environment configuration for async database operations",
+    "acceptance_criteria": "Alembic env setup with async support and model metadata",
+    "status": "pending"
+  },
+  {
+    "id": "initial-migration",
+    "file": "alembic/versions/001_create_users.py",
+    "description": "Initial database migration to create users table",
+    "acceptance_criteria": "Migration file with users table creation and proper constraints",
+    "status": "pending"
+  },
+  {
+    "id": "env-example",
+    "file": ".env.example",
+    "description": "Environment variables template with example values",
+    "acceptance_criteria": "Template file with all required environment variables documented",
+    "status": "pending"
+  },
+  {
+    "id": "pytest-config",
+    "file": "pytest.ini",
+    "description": "Pytest configuration for test discovery and coverage",
+    "acceptance_criteria": "Pytest config with asyncio mode and test path configuration",
+    "status": "pending"
+  }
+]
