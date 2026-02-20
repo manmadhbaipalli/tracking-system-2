@@ -1,0 +1,94 @@
+@startuml authentication_flow
+
+title Authentication Flow - Registration & Login
+
+== Registration Flow ==
+
+actor User
+participant "FastAPI App" as API
+participant "AuthService" as Auth
+participant "UserService" as UserSvc
+database "Database" as DB
+
+User -> API: POST /auth/register\n{email, username, password}
+activate API
+
+API -> Auth: register_user()
+activate Auth
+
+Auth -> Auth: Validate input\n(email, username, password)
+Auth -> Auth: Hash password (bcrypt)
+Auth -> UserService: create_user()
+activate UserSvc
+
+UserService -> DB: Check email exists
+UserService -> DB: Check username exists
+UserService -> DB: INSERT user
+activate DB
+DB --> UserService: user_id
+deactivate DB
+
+deactivate UserSvc
+
+Auth -> Auth: create_access_token(user_id)
+Auth -> Auth: create_refresh_token(user_id)
+Auth --> API: TokenResponse\n{access, refresh, user}
+
+deactivate Auth
+
+API --> User: 201 Created\nTokenResponse
+
+deactivate API
+
+== Login Flow ==
+
+User -> API: POST /auth/login\n{email/username, password}
+activate API
+
+API -> Auth: login()
+activate Auth
+
+Auth -> UserService: get_user_by_email()\nOR get_user_by_username()
+activate UserSvc
+UserSvc -> DB: SELECT user
+DB --> UserSvc: user
+deactivate UserSvc
+
+Auth -> Auth: verify_password()\n(bcrypt comparison)
+Auth -> Auth: Check is_active
+Auth -> Auth: create_access_token(user_id)
+Auth -> Auth: create_refresh_token(user_id)
+Auth --> API: TokenResponse
+
+deactivate Auth
+
+API --> User: 200 OK\nTokenResponse
+
+deactivate API
+
+== Token Refresh Flow ==
+
+User -> API: POST /auth/refresh\n{refresh_token}
+activate API
+
+API -> Auth: refresh_access_token()
+activate Auth
+
+Auth -> Auth: verify_token(refresh_token)
+Auth -> Auth: extract_user_id()
+Auth -> UserService: get_user_by_id()
+activate UserSvc
+UserSvc -> DB: SELECT user
+DB --> UserSvc: user
+deactivate UserSvc
+
+Auth -> Auth: create_access_token(user_id)
+Auth --> API: TokenResponse\n(new access, same refresh)
+
+deactivate Auth
+
+API --> User: 200 OK\nTokenResponse
+
+deactivate API
+
+@enduml

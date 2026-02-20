@@ -1,0 +1,313 @@
+@startuml request_flow
+
+title HTTP Request Flow Through Middleware & Application
+
+start
+:HTTP Request;
+:Generate Request ID (UUID);
+:Set in ContextVar;
+note right
+  Used for tracing
+  across async context
+end note
+
+:CORS Middleware;
+if (CORS valid?) then (no)
+  :Return 403 Forbidden;
+  stop
+else (yes)
+endif
+
+:Logging Middleware;
+:Log incoming request;
+note right
+  Log: method, path
+  query_string
+  Start timer
+end note
+
+if (Skip logging path?\n/health, /docs, etc) then (yes)
+  :Skip detailed logging;
+else (no)
+endif
+
+:Route Handler;
+if (Matches /auth/register) then (yes)
+  :Register handler;
+  :Validate input;
+  if (Valid?) then (no)
+    :Raise ValidationException;
+  else (yes)
+    :Create user;
+    :Generate tokens;
+    :Return 201;
+  endif
+else if (Matches /auth/login) then (yes)
+  :Login handler;
+  :Find user;
+  if (User found &\nPassword valid?) then (no)
+    :Raise InvalidCredentialsException;
+  else (yes)
+    :Generate tokens;
+    :Return 200;
+  endif
+else if (Matches /auth/refresh) then (yes)
+  :Refresh handler;
+  :Validate refresh token;
+  if (Valid?) then (no)
+    :Raise TokenExpiredException;
+  else (yes)
+    :Generate new access token;
+    :Return 200;
+  endif
+else if (Matches /health) then (yes)
+  :Return 200;
+else (no match)
+  :Raise HTTPException 404;
+endif
+
+:Exception occurs?;
+if (Exception caught) then (yes)
+  :Exception Handler Middleware;
+  if (AppException?) then (yes)
+    :Extract status_code,\nerror_code, detail;
+  else if (Generic Exception?) then (yes)
+    :Return 500;
+  endif
+  :Log exception;
+  :Build error response;
+  note right
+    Format:
+    {
+      "detail": "...",
+      "error_code": "...",
+      "timestamp": "...",
+      "request_id": "..."
+    }
+  end note
+else (no)
+endif
+
+:Logging Middleware;
+:Calculate duration;
+:Log response;
+note right
+  Log: status_code
+  duration_ms
+end note
+
+:Add X-Request-ID header;
+:Return HTTP Response;
+stop
+
+@enduml
+
+---
+
+@startuml error_handling
+
+title Error Handling Flow
+
+start
+:Code execution;
+
+if (Error occurs?) then (yes)
+  if (AppException?) then (yes)
+    :Extract details:
+    - detail (message)
+    - error_code (code)
+    - status_code (HTTP);
+
+    :Log at WARNING level;
+    :Return JSON response;
+    note right
+      Include:
+      - detail
+      - error_code
+      - timestamp
+      - request_id
+    end note
+  else (Generic Exception)
+    :Log at ERROR level;
+    :Return 500;
+    note right
+      Return generic message
+      "Internal server error"
+      No stack trace
+    end note
+  endif
+else (no)
+  :Success response;
+endif
+
+stop
+
+@enduml
+
+---
+
+@startuml circuit_breaker_states
+
+title Circuit Breaker State Machine
+
+state CLOSED {
+  state "Normal Operation" as closed_op
+  closed_op: Count failures
+  closed_op: Reset on success
+}
+
+state OPEN {
+  state "Failing Fast" as open_op
+  open_op: Reject all calls
+  open_op: Wait for timeout
+}
+
+state HALF_OPEN {
+  state "Testing Recovery" as half_op
+  half_op: Allow single test call
+}
+
+[*] --> CLOSED
+
+CLOSED --> OPEN: Failure count\n>= threshold
+note on link
+  Log state change
+  Track failure time
+end note
+
+OPEN --> HALF_OPEN: Recovery timeout\nexpired
+note on link
+  Ready to test
+end note
+
+HALF_OPEN --> CLOSED: Test call\nsucceeds
+note on link
+  Reset failure count
+end note
+
+HALF_OPEN --> OPEN: Test call\nfails
+note on link
+  Failure continues
+end note
+
+CLOSED --> CLOSED: Call succeeds
+note on link
+  No state change
+end note
+
+@enduml
+
+---
+
+@startuml authentication_decision
+
+title Login/Register Decision Tree
+
+start
+:Request received;
+
+if (Endpoint = /register?) then (yes)
+  :Validate input;
+  if (Email, username,\npassword present?) then (no)
+    :400 Bad Request;
+    stop
+  else (yes)
+  endif
+
+  if (Password length >= 8?) then (no)
+    :400 Bad Request;
+    stop
+  else (yes)
+  endif
+
+  if (Email already\nregistered?) then (yes)
+    :409 Conflict;
+    stop
+  else (no)
+  endif
+
+  if (Username already\ntaken?) then (yes)
+    :409 Conflict;
+    stop
+  else (no)
+  endif
+
+  :Hash password (bcrypt);
+  :Create user;
+  :Generate tokens;
+  :201 Created + Tokens;
+  stop
+else if (Endpoint = /login?) then (yes)
+  :Extract credentials;
+
+  if (Email or username,\npassword provided?) then (no)
+    :400 Bad Request;
+    stop
+  else (yes)
+  endif
+
+  :Query user by email\nOR username;
+
+  if (User found?) then (no)
+    :401 Unauthorized;
+    note right
+      Generic message:
+      "Invalid credentials"
+      (prevents enumeration)
+    end note
+    stop
+  else (yes)
+  endif
+
+  :Verify password;
+
+  if (Password correct?) then (no)
+    :401 Unauthorized;
+    stop
+  else (yes)
+  endif
+
+  if (User is_active?) then (no)
+    :401 Unauthorized;
+    stop
+  else (yes)
+  endif
+
+  :Generate tokens;
+  :200 OK + Tokens;
+  stop
+else if (Endpoint = /refresh?) then (yes)
+  :Extract refresh_token;
+
+  :Validate JWT signature;
+
+  if (Valid?) then (no)
+    :401 Unauthorized;
+    stop
+  else (yes)
+  endif
+
+  if (Not expired?) then (no)
+    :401 Unauthorized;
+    stop
+  else (yes)
+  endif
+
+  :Extract user_id;
+  :Query user;
+
+  if (User exists?) then (no)
+    :401 Unauthorized;
+    stop
+  else (yes)
+  endif
+
+  :Generate new access_token;
+  :200 OK + New Tokens;
+  stop
+else (other)
+  :404 Not Found;
+  stop
+endif
+
+@enduml
