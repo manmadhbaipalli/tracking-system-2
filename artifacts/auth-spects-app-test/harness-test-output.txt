@@ -1,0 +1,54 @@
+
+ImportError while loading conftest 'C:\Manmadh\genai\claude-code-agents\workspace\auth-spects-app-agent-1\tests\conftest.py'.
+tests\conftest.py:10: in <module>
+    from app.main import app
+app\main.py:12: in <module>
+    from app.routes import auth, health
+app\routes\auth.py:6: in <module>
+    from app.models.schemas import UserRegister, UserLogin, TokenResponse, RefreshTokenRequest
+app\models\schemas.py:7: in <module>
+    class UserRegister(BaseModel):
+C:\Users\mdrao\AppData\Local\Programs\Python\Python311\Lib\site-packages\pydantic\_internal\_model_construction.py:226: in __new__
+    complete_model_class(
+C:\Users\mdrao\AppData\Local\Programs\Python\Python311\Lib\site-packages\pydantic\_internal\_model_construction.py:658: in complete_model_class
+    schema = cls.__get_pydantic_core_schema__(cls, handler)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\mdrao\AppData\Local\Programs\Python\Python311\Lib\site-packages\pydantic\main.py:702: in __get_pydantic_core_schema__
+    return handler(source)
+           ^^^^^^^^^^^^^^^
+C:\Users\mdrao\AppData\Local\Programs\Python\Python311\Lib\site-packages\pydantic\_internal\_schema_generation_shared.py:84: in __call__
+    schema = self._handler(source_type)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\mdrao\AppData\Local\Programs\Python\Python311\Lib\site-packages\pydantic\_internal\_generate_schema.py:610: in generate_schema
+    schema = self._generate_schema_inner(obj)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\mdrao\AppData\Local\Programs\Python\Python311\Lib\site-packages\pydantic\_internal\_generate_schema.py:879: in _generate_schema_inner
+    return self._model_schema(obj)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\mdrao\AppData\Local\Programs\Python\Python311\Lib\site-packages\pydantic\_internal\_generate_schema.py:691: in _model_schema
+    {k: self._generate_md_field_schema(k, v, decorators) for k, v in fields.items()},
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\mdrao\AppData\Local\Programs\Python\Python311\Lib\site-packages\pydantic\_internal\_generate_schema.py:691: in <dictcomp>
+    {k: self._generate_md_field_schema(k, v, decorators) for k, v in fields.items()},
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\mdrao\AppData\Local\Programs\Python\Python311\Lib\site-packages\pydantic\_internal\_generate_schema.py:1071: in _generate_md_field_schema
+    common_field = self._common_field_schema(name, field_info, decorators)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\mdrao\AppData\Local\Programs\Python\Python311\Lib\site-packages\pydantic\_internal\_generate_schema.py:1263: in _common_field_schema
+    schema = self._apply_annotations(
+C:\Users\mdrao\AppData\Local\Programs\Python\Python311\Lib\site-packages\pydantic\_internal\_generate_schema.py:2056: in _apply_annotations
+    schema = get_inner_schema(source_type)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\mdrao\AppData\Local\Programs\Python\Python311\Lib\site-packages\pydantic\_internal\_schema_generation_shared.py:84: in __call__
+    schema = self._handler(source_type)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\mdrao\AppData\Local\Programs\Python\Python311\Lib\site-packages\pydantic\_internal\_generate_schema.py:2035: in inner_handler
+    from_property = self._generate_schema_from_property(obj, source_type)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\mdrao\AppData\Local\Programs\Python\Python311\Lib\site-packages\pydantic\_internal\_generate_schema.py:759: in _generate_schema_from_property
+    schema = get_schema(
+C:\Users\mdrao\AppData\Local\Programs\Python\Python311\Lib\site-packages\pydantic\networks.py:935: in __get_pydantic_core_schema__
+    import_email_validator()
+C:\Users\mdrao\AppData\Local\Programs\Python\Python311\Lib\site-packages\pydantic\networks.py:897: in import_email_validator
+    raise ImportError('email-validator is not installed, run `pip install pydantic[email]`') from e
+E   ImportError: email-validator is not installed, run `pip install pydantic[email]`

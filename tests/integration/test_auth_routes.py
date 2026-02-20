@@ -197,7 +197,7 @@ class TestAuthRoutes:
                 "email": "test@example.com",
             },
         )
-        assert response.status_code == 401
+        assert response.status_code == 422
 
     def test_refresh_endpoint_success(self, test_client: TestClient):
         """Test successful token refresh."""

@@ -22,6 +22,16 @@ app = FastAPI(
     docs_url="/docs",
     redoc_url="/redoc",
     openapi_url="/openapi.json",
+    openapi_tags=[
+        {
+            "name": "authentication",
+            "description": "User registration, login, and token management endpoints",
+        },
+        {
+            "name": "health",
+            "description": "Health check endpoint for monitoring",
+        },
+    ],
 )
 
 # Register middleware (order matters!)
