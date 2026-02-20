@@ -1,0 +1,188 @@
+[
+  {
+    "id": "config-setup",
+    "file": "app/config.py",
+    "description": "Configuration management using Pydantic settings with support for development, testing, and production environments",
+    "status": "done"
+  },
+  {
+    "id": "database-engine",
+    "file": "app/database.py",
+    "description": "Database connection management with async SQLAlchemy engine and session factory",
+    "status": "done"
+  },
+  {
+    "id": "user-model",
+    "file": "app/models/user.py",
+    "description": "SQLAlchemy User ORM model with id, username, email, hashed_password, is_active, created_at, updated_at, last_login fields",
+    "status": "done"
+  },
+  {
+    "id": "user-schemas",
+    "file": "app/models/schemas.py",
+    "description": "Pydantic schemas for API requests/responses (UserRegister, UserLogin, UserResponse, TokenResponse)",
+    "status": "done"
+  },
+  {
+    "id": "jwt-utils",
+    "file": "app/utils/jwt.py",
+    "description": "JWT token creation and validation utilities with support for access and refresh tokens",
+    "status": "done"
+  },
+  {
+    "id": "password-utils",
+    "file": "app/utils/password.py",
+    "description": "Password hashing and verification using passlib with bcrypt algorithm",
+    "status": "done"
+  },
+  {
+    "id": "logger-setup",
+    "file": "app/utils/logger.py",
+    "description": "Centralized structured logging configuration using Python logging with JSON formatter",
+    "status": "done"
+  },
+  {
+    "id": "circuit-breaker",
+    "file": "app/utils/circuit_breaker.py",
+    "description": "Circuit breaker implementation with three states (Closed, Open, Half-Open) for fault tolerance",
+    "status": "done"
+  },
+  {
+    "id": "custom-exceptions",
+    "file": "app/utils/exceptions.py",
+    "description": "Custom exception hierarchy for authentication, validation, database, and circuit breaker errors",
+    "status": "done"
+  },
+  {
+    "id": "request-id-middleware",
+    "file": "app/middleware/logging.py",
+    "description": "Middleware to add unique request ID to all requests and include in logs",
+    "status": "done"
+  },
+  {
+    "id": "exception-handler-middleware",
+    "file": "app/middleware/exception.py",
+    "description": "Global exception handler middleware that catches all exceptions and returns consistent error response",
+    "status": "done"
+  },
+  {
+    "id": "dependencies",
+    "file": "app/dependencies.py",
+    "description": "Dependency injection utilities: get_db(), get_current_user(), get_logger()",
+    "status": "done"
+  },
+  {
+    "id": "user-service",
+    "file": "app/services/user_service.py",
+    "description": "User management service with operations: create_user, get_user_by_email, get_user_by_id, get_user_by_username",
+    "status": "done"
+  },
+  {
+    "id": "auth-service",
+    "file": "app/services/auth_service.py",
+    "description": "Authentication business logic: register_user, login_user, refresh_access_token with validation and token generation",
+    "status": "done"
+  },
+  {
+    "id": "health-route",
+    "file": "app/routes/health.py",
+    "description": "Health check endpoint for service availability verification",
+    "status": "done"
+  },
+  {
+    "id": "auth-routes",
+    "file": "app/routes/auth.py",
+    "description": "Authentication endpoints: POST /api/auth/register, POST /api/auth/login, POST /api/auth/refresh",
+    "status": "done"
+  },
+  {
+    "id": "fastapi-app",
+    "file": "app/main.py",
+    "description": "FastAPI application initialization with middleware setup, route registration, and OpenAPI/Swagger configuration",
+    "status": "done"
+  },
+  {
+    "id": "test-conftest",
+    "file": "tests/conftest.py",
+    "description": "Pytest configuration and fixtures for testing (test database, test user, test tokens, async client)",
+    "status": "done"
+  },
+  {
+    "id": "test-auth-service",
+    "file": "tests/unit/test_auth_service.py",
+    "description": "Unit tests for AuthService: register, login, token validation, error cases",
+    "status": "done"
+  },
+  {
+    "id": "test-user-service",
+    "file": "tests/unit/test_user_service.py",
+    "description": "Unit tests for UserService: create_user, get_user_by_email/id/username, error cases",
+    "status": "done"
+  },
+  {
+    "id": "test-jwt-utils",
+    "file": "tests/unit/test_jwt.py",
+    "description": "Unit tests for JWT utilities: token creation, validation, expiration, invalid tokens",
+    "status": "done"
+  },
+  {
+    "id": "test-password-utils",
+    "file": "tests/unit/test_password.py",
+    "description": "Unit tests for password utilities: hashing and verification",
+    "status": "done"
+  },
+  {
+    "id": "test-circuit-breaker",
+    "file": "tests/unit/test_circuit_breaker.py",
+    "description": "Unit tests for circuit breaker: state transitions, failure tracking, recovery",
+    "status": "done"
+  },
+  {
+    "id": "test-exceptions",
+    "file": "tests/unit/test_exceptions.py",
+    "description": "Unit tests for exception classes: proper initialization, error codes, status codes",
+    "status": "done"
+  },
+  {
+    "id": "test-auth-routes",
+    "file": "tests/integration/test_auth_routes.py",
+    "description": "Integration tests for auth endpoints: register, login, refresh, error cases",
+    "status": "done"
+  },
+  {
+    "id": "test-health-route",
+    "file": "tests/integration/test_health_routes.py",
+    "description": "Integration tests for health check endpoint",
+    "status": "done"
+  },
+  {
+    "id": "test-middleware",
+    "file": "tests/integration/test_middleware.py",
+    "description": "Integration tests for middleware: request ID, logging, exception handling, CORS",
+    "status": "done"
+  },
+  {
+    "id": "test-swagger-and-docs",
+    "file": "tests/integration/test_swagger_and_docs.py",
+    "description": "Integration tests for OpenAPI/Swagger documentation availability and content",
+    "status": "done"
+  },
+  {
+    "id": "requirements-file",
+    "file": "requirements.txt",
+    "description": "Python package dependencies for the project",
+    "status": "done"
+  },
+  {
+    "id": "env-example",
+    "file": ".env.example",
+    "description": "Template file showing required environment variables",
+    "status": "done"
+  },
+  {
+    "id": "pytest-config",
+    "file": "pytest.ini",
+    "description": "Pytest configuration with asyncio mode and test discovery settings",
+    "status": "done"
+  }
+]
