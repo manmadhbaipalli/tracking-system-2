@@ -2,110 +2,172 @@
 
 ## Tech Stack
 - **Language**: Python 3.10+
-- **Framework**: FastAPI (async web framework)
-- **Database**: SQLAlchemy with SQLite/PostgreSQL (to be determined during implementation)
-- **Authentication**: JWT (JSON Web Tokens)
+- **Framework**: FastAPI 0.104.1 (async web framework)
+- **Database**: SQLAlchemy 2.0.23 with async support (aiosqlite for SQLite, supports PostgreSQL)
+- **Authentication**: JWT via python-jose (HS256 algorithm)
+- **Password Hashing**: bcrypt via passlib
+- **Testing**: pytest 7.4.3 with pytest-asyncio
 - **Key Libraries**:
-  - `fastapi`: Web framework
-  - `sqlalchemy`: ORM
-  - `pydantic`: Data validation
-  - `python-jose`: JWT implementation
-  - `passlib`: Password hashing
-  - `pytest`: Testing framework
-  - `pytest-asyncio`: Async test support
-  - `pydentic-settings`: Configuration management
-  - `structlog` or `python-logging`: Structured logging
-  - `tenacity`: Circuit breaker/retry patterns
+  - `fastapi`: Web framework with automatic OpenAPI/Swagger docs
+  - `sqlalchemy`: Async ORM with SQLAlchemy 2.0 syntax
+  - `pydantic`: Data validation and serialization (v2.5.0)
+  - `python-jose[cryptography]`: JWT implementation
+  - `passlib[bcrypt]`: Password hashing
+  - `pydantic-settings`: Configuration from environment variables
+  - `httpx`: HTTP client for testing
+  - `email-validator`: Email validation in Pydantic
 
 ## Project Structure
+
 ```
-auth-agent-1/
-├── app/
-│   ├── __init__.py
-│   ├── main.py                 # FastAPI application entry point
-│   ├── config.py               # Configuration settings
-│   ├── dependencies.py         # Dependency injection
-│   ├── models/
-│   │   ├── __init__.py
-│   │   ├── user.py            # SQLAlchemy User model
-│   │   └── schemas.py         # Pydantic schemas for API
-│   ├── routes/
-│   │   ├── __init__.py
-│   │   ├── auth.py            # Login/registration endpoints
-│   │   └── health.py          # Health check endpoint
-│   ├── services/
-│   │   ├── __init__.py
-│   │   ├── auth_service.py    # Authentication business logic
-│   │   └── user_service.py    # User management
-│   ├── middleware/
-│   │   ├── __init__.py
-│   │   ├── logging.py         # Request/response logging
-│   │   └── exception.py       # Global exception handler
-│   ├── utils/
-│   │   ├── __init__.py
-│   │   ├── jwt.py             # JWT utilities
-│   │   ├── password.py        # Password hashing/verification
-│   │   ├── circuit_breaker.py # Circuit breaker implementation
-│   │   └── logger.py          # Centralized logging setup
-│   └── database.py            # Database connection management
-├── tests/
-│   ├── __init__.py
-│   ├── conftest.py            # Pytest fixtures
-│   ├── unit/
-│   │   ├── __init__.py
-│   │   ├── test_auth_service.py
-│   │   └── test_user_service.py
-│   ├── integration/
-│   │   ├── __init__.py
-│   │   ├── test_auth_routes.py
-│   │   └── test_user_routes.py
-│   └── fixtures/
-│       ├── __init__.py
-│       └── database.py
-├── requirements.txt
-├── .env.example
-├── pytest.ini
-├── CLAUDE.md
-└── artifacts/
-    └── auth-analysis/
-        └── analysis.md
+app/
+├── main.py                 # FastAPI application entry point, middleware, route registration
+├── config.py              # Settings (BaseSettings from pydantic-settings)
+├── database.py            # SQLAlchemy async engine, session factory, init_db()
+├── dependencies.py        # Dependency injection (get_db_session, get_current_user)
+├── models/
+│   ├── user.py           # User ORM model (SQLAlchemy declarative)
+│   └── schemas.py        # Pydantic schemas for API requests/responses
+├── routes/
+│   ├── auth.py           # Authentication endpoints (register, login, refresh)
+│   └── health.py         # Health check endpoint
+├── services/
+│   ├── auth_service.py   # Authentication business logic
+│   └── user_service.py   # User management (CRUD via repository pattern)
+├── middleware/
+│   ├── logging.py        # Request/response logging with request ID
+│   └── exception.py      # Global exception handler
+└── utils/
+    ├── exceptions.py     # Custom exception hierarchy
+    ├── jwt.py           # JWT token operations
+    ├── password.py      # Password hashing/verification
+    ├── circuit_breaker.py # Circuit breaker pattern
+    └── logger.py        # Structured JSON logging
+
+tests/
+├── conftest.py           # Pytest fixtures and configuration
+├── unit/                 # Unit tests for services, utils
+├── integration/          # Integration tests for routes, middleware
+└── fixtures/             # Shared test data
+
+requirements.txt          # Python dependencies
+pytest.ini               # Pytest configuration
+CLAUDE.md                # This file - project standards
 ```
 
 ## Coding Conventions
 
 ### Python Style
-- Follow PEP 8 conventions
-- Use type hints for all function parameters and returns
+- Follow **PEP 8** conventions
+- Use **type hints** for all function parameters and return values
 - Use `snake_case` for variables, functions, and modules
 - Use `PascalCase` for classes
-- Imports: stdlib → third-party → local (one blank line between sections)
-- Line length: 100 characters (for readability)
+- Import order: stdlib → third-party → local (one blank line between sections)
+- Line length: 100 characters (not enforced, but preferred)
+- Use f-strings for string formatting
+- Use async/await for async code (never callbacks)
 
 ### FastAPI Patterns
-- Use dependency injection via `Depends()` for authentication, logging, DB session
-- Use path parameters for resource IDs, query parameters for filtering
-- Return Pydantic models for all endpoints
-- Use HTTP status codes appropriately (200, 201, 400, 401, 403, 404, 500)
-- Include proper error responses with detail messages
+- Use dependency injection via `Depends()` for:
+  - Database session: `Depends(get_db_session)`
+  - Authentication: `Depends(get_current_user)`
+  - Request ID: `Depends(get_request_id)`
+- Use path parameters for resource IDs (e.g., `/users/{user_id}`)
+- Use query parameters for filtering/pagination (e.g., `?skip=0&limit=10`)
+- Always return Pydantic model instances for endpoints (auto-serialized to JSON)
+- Use explicit HTTP status codes:
+  - 200 OK for successful GET/PUT/PATCH
+  - 201 Created for successful POST (creating resource)
+  - 204 No Content for successful DELETE
+  - 400 Bad Request for validation errors
+  - 401 Unauthorized for auth failures
+  - 403 Forbidden for permission denials
+  - 404 Not Found for missing resources
+  - 409 Conflict for duplicates/state conflicts
+  - 500 Internal Server Error for unhandled exceptions
+- Include proper docstrings with parameter and return descriptions
+- Use `response_model` parameter for automatic documentation
 
 ### Database Patterns
-- Use SQLAlchemy declarative base for models
-- Use Pydantic schemas separate from ORM models
-- Always use async context managers for DB sessions
-- Implement repository pattern for data access
+- Use SQLAlchemy **declarative base** for all models
+- Use `Column()` with explicit types (not Python type hints)
+- Separate **ORM models** (SQLAlchemy) from **API schemas** (Pydantic)
+- Always use **async context managers** for database sessions:
+  ```python
+  async with session_factory() as session:
+      # session operations
+  ```
+- Implement **repository pattern** via service classes:
+  - `UserService.get_user_by_id()` instead of raw SQL in routes
+  - Service classes wrap session operations and handle exceptions
+- Use `select()` syntax for queries (SQLAlchemy 2.0 style):
+  ```python
+  from sqlalchemy import select
+  result = await session.execute(select(User).where(User.id == user_id))
+  user = result.scalar_one_or_none()
+  ```
+- Always rollback on exception: `await session.rollback()`
 
 ### Testing Patterns
-- Pytest with pytest-asyncio for async support
-- Use fixtures for common setup (DB, auth tokens, users)
-- Separate unit tests from integration tests
-- Use mocking for external dependencies
-- Aim for 80%+ code coverage
+- Use **pytest** with **pytest-asyncio** for async tests
+- Mark async tests with `@pytest.mark.asyncio`
+- Separate **unit tests** (services, utils) from **integration tests** (routes, middleware)
+- Use **fixtures** for common setup (DB, auth tokens, test users) defined in `conftest.py`
+- Use **mocking** for external dependencies (not yet implemented)
+- Mock database using in-memory SQLite: `sqlite+aiosqlite:///:memory:`
+- Aim for **80%+ code coverage** (use `pytest --cov=app`)
+- Fixture scope guidelines:
+  - `scope="session"`: One instance for entire test run (event loop, app)
+  - `scope="function"`: Fresh instance per test (test_db_session, test_user)
 
 ### Logging Patterns
-- Use structured logging (JSON format)
-- Log levels: DEBUG, INFO, WARNING, ERROR, CRITICAL
-- Include request ID in all log entries for traceability
-- Log sensitive data redacted (never log passwords, tokens)
+- Use **structured JSON logging** (JSONFormatter in `utils/logger.py`)
+- Log levels:
+  - **DEBUG**: Detailed diagnostic info (disabled by default)
+  - **INFO**: User actions, successful operations (default)
+  - **WARNING**: Recoverable errors (auth failures, validation)
+  - **ERROR**: System errors, unhandled exceptions
+  - **CRITICAL**: System is unusable
+- Include **request ID** in all log entries (via ContextVar)
+- **Never log sensitive data**: passwords, tokens, PII
+- Log format: JSON with timestamp, level, message, logger name, request_id
+
+### Error Handling
+- Create **custom exception hierarchy** inheriting from `AppException`
+- Each exception includes:
+  - `detail`: User-facing error message
+  - `error_code`: Machine-readable error code (e.g., "INVALID_CREDENTIALS")
+  - `status_code`: HTTP status code (401, 400, 409, etc.)
+- Use **global exception handler** middleware to return consistent JSON responses
+- Format: `{"detail": "...", "error_code": "...", "timestamp": "...", "request_id": "..."}`
+- Never return stack traces to clients in production
+
+### API Response Format
+All endpoints return JSON with status code and optional data:
+- **Success (200, 201)**: Return Pydantic model instance
+  ```json
+  {
+    "access_token": "eyJ...",
+    "refresh_token": "eyJ...",
+    "token_type": "bearer",
+    "user": {
+      "id": 1,
+      "username": "john",
+      "email": "john@example.com",
+      "is_active": true,
+      "created_at": "2026-02-20T00:00:00Z"
+    }
+  }
+  ```
+- **Error (400, 401, 404, 500)**: Return error object
+  ```json
+  {
+    "detail": "Invalid credentials",
+    "error_code": "INVALID_CREDENTIALS",
+    "timestamp": "2026-02-20T00:00:00Z",
+    "request_id": "550e8400-e29b-41d4-a716-446655440000"
+  }
+  ```
 
 ## Commands
 
@@ -114,72 +176,166 @@ auth-agent-1/
 # Install dependencies
 pip install -r requirements.txt
 
-# Run development server
+# Run development server with auto-reload
 uvicorn app.main:app --reload
 
-# Run tests
+# Run tests (all tests)
 pytest
-
-# Run tests with coverage
-pytest --cov=app tests/
 
 # Run specific test file
 pytest tests/unit/test_auth_service.py -v
 
-# Lint code
-flake8 app/ tests/
+# Run with coverage report
+pytest --cov=app tests/ --cov-report=html
 
-# Format code
+# Run only unit or integration tests
+pytest tests/unit -v
+pytest tests/integration -v
+```
+
+### Code Quality
+```bash
+# Format code (requires black)
 black app/ tests/
 
-# Type checking
+# Lint code (requires flake8)
+flake8 app/ tests/
+
+# Type checking (requires mypy)
 mypy app/
 ```
 
 ### Database
 ```bash
-# Create database schema
-alembic upgrade head
+# Create all tables (runs on startup automatically)
+python -c "import asyncio; from app.database import init_db; asyncio.run(init_db())"
 
-# Generate migration
-alembic revision --autogenerate -m "Description"
+# Drop all tables for testing
+python -c "import asyncio; from app.database import Base, get_engine; asyncio.run(Base.metadata.drop_all(get_engine()))"
 ```
+
+## Configuration
+
+### Environment Variables (`.env` file)
+```env
+DATABASE_URL=sqlite+aiosqlite:///./test.db
+JWT_SECRET_KEY=your-secret-key-change-in-production
+JWT_ALGORITHM=HS256
+ACCESS_TOKEN_EXPIRE_MINUTES=30
+REFRESH_TOKEN_EXPIRE_DAYS=7
+ENVIRONMENT=development
+LOG_LEVEL=INFO
+CORS_ORIGINS=["http://localhost:3000", "http://localhost:8000"]
+```
+
+### Settings
+- Use `pydantic_settings.BaseSettings` for config
+- Load from `.env` file via `Config.env_file = ".env"`
+- Override in tests using environment variables or `.env.test`
+- Never commit `.env` with real secrets; use `.env.example` template
 
 ## Key Patterns
 
 ### Authentication Flow
-- User registration: Create user, hash password, store in DB
-- Login: Validate credentials, generate JWT token, return to client
-- Protected routes: Validate JWT, extract user info from token, inject into route
-- Token refresh: Implement refresh token mechanism for long-lived sessions
+1. **Registration**:
+   - POST `/auth/register` with email, username, password
+   - Validate: email format, username unique, password ≥8 chars
+   - Hash password with bcrypt
+   - Create user in database
+   - Generate access + refresh JWT tokens
+   - Return tokens + user info (201 Created)
 
-### Error Handling
-- Custom exception hierarchy: `BaseException` → `AuthException`, `ValidationException`, etc.
-- Global exception handler middleware that catches all exceptions
-- Return consistent error response format: `{"detail": "error message", "error_code": "CODE"}`
+2. **Login**:
+   - POST `/auth/login` with (email OR username) + password
+   - Look up user by email or username (case-insensitive for email)
+   - Verify password with bcrypt
+   - Check user is active (`is_active=True`)
+   - Generate new JWT tokens
+   - Return tokens + user info (200 OK)
 
-### Circuit Breaker
-- Implement for external service calls (if applicable)
-- States: Closed (normal), Open (fail fast), Half-Open (testing recovery)
-- Track failures by service/endpoint
-- Use exponential backoff for retries
+3. **Token Refresh**:
+   - POST `/auth/refresh` with refresh_token
+   - Validate refresh token (must not be expired)
+   - Extract user ID from token
+   - Generate new access token (keep same refresh token)
+   - Return new access + refresh token (200 OK)
+
+4. **Protected Routes** (example):
+   - Add `current_user: User = Depends(get_current_user)` parameter
+   - Dependency validates Bearer token and returns user object
+   - Route has access to authenticated user
+
+### Circuit Breaker Pattern
+- **States**: CLOSED (normal) → OPEN (fail fast) → HALF_OPEN (testing recovery)
+- **CLOSED**: Requests pass through normally
+- **OPEN**: After N failures within timeout, block all requests (fast fail)
+- **HALF_OPEN**: After timeout, allow 1 request to test recovery
+- On success in HALF_OPEN: return to CLOSED
+- On failure: return to OPEN
+- Use for external API calls, unstable services
+- Currently defined but not used in routes (available for future extensions)
 
 ### Dependency Injection
-- `get_db()`: Provide DB session to routes
-- `get_current_user()`: Validate JWT and return current user
-- `get_logger()`: Provide configured logger to routes
-
-## Configuration
-- Use environment variables via `.env` file and `pydantic-settings`
-- Separate configs: development, testing, production
-- Never commit `.env` files with secrets
-- Use `.env.example` template showing required variables
+- **`get_db_session()`**: Async context manager returning AsyncSession
+- **`get_current_user()`**: Extracts JWT token from Authorization header, validates, returns User
+- **`get_request_id()`**: Returns request ID from context var
+- All dependencies are async and can be nested (e.g., `get_current_user` depends on `get_db_session`)
 
 ## Security Considerations
-- Always hash passwords (bcrypt via passlib)
-- Use HTTPS in production (enforced via settings)
-- CORS configuration to restrict origin
-- Implement rate limiting on auth endpoints
-- JWT expiration: short-lived access tokens (15-30 min), long-lived refresh tokens (7 days)
-- Add request ID middleware for audit trails
-- Implement proper exception handling to avoid information disclosure
+
+### Authentication & Authorization
+- Passwords **hashed with bcrypt** (never store plaintext)
+- JWT tokens: 30-min access, 7-day refresh (adjust as needed)
+- **HTTPBearer** security scheme for protected routes
+- Generic error messages: "Invalid credentials" (don't reveal if email exists)
+
+### Data Protection
+- Email addresses **normalized to lowercase** for case-insensitive matching
+- Usernames are **case-sensitive**
+- Never log passwords or tokens
+- Request ID for audit trail of all requests
+
+### API Security
+- **CORS** configured for specific origins (localhost:3000, localhost:8000)
+- No HTTPS requirement in development (enforced in production via settings)
+- **Rate limiting** not yet implemented (add for production)
+- No SQL injection (SQLAlchemy parameterized queries)
+- Validation via Pydantic (request input, response serialization)
+
+### Database
+- Use **async SQLAlchemy** to prevent blocking operations
+- Connection pooling for PostgreSQL (not used with SQLite)
+- Unique constraints on email and username
+- Foreign keys can be added for future relationships
+
+## Known Limitations & TODO
+
+### Current Implementation
+- ✅ User registration and login
+- ✅ JWT token generation and refresh
+- ✅ Centralized logging with request IDs
+- ✅ Global exception handling
+- ✅ Circuit breaker pattern (defined, not used)
+- ✅ OpenAPI/Swagger documentation
+- ✅ Comprehensive test suite (111 tests)
+
+### Not Yet Implemented
+- ❌ Email verification (registration confirmation)
+- ❌ Password reset functionality
+- ❌ Rate limiting on auth endpoints
+- ❌ User profile endpoints (GET /users/me, PUT /users/me)
+- ❌ Admin endpoints (user management, account suspension)
+- ❌ Refresh token revocation/blacklist
+- ❌ 2FA/MFA support
+- ❌ API versioning (/api/v1/...)
+- ❌ Database migrations (Alembic)
+- ❌ Request ID propagation to external services
+
+### Known Deprecations (requires updates)
+- FastAPI `@app.on_event()` → Use lifespan context managers (0.93+)
+- Pydantic `from_orm()` → Use `model_validate()` (v2.0+)
+- Pydantic class `Config` → Use `ConfigDict` (v2.0+)
+
+---
+
+**Last updated**: 2026-02-20 | **Tests**: 111 total, 87 passing
