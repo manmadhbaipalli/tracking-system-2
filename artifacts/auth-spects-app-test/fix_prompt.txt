@@ -1,0 +1,90 @@
+You are an autonomous coding agent. A previous attempt at task auth-spects-app-test failed CI.
+
+## Task
+**[TEST] auth-spects-app**
+1. Build the FastAPI app
+	a) Add user registration and login endpoints
+	b) Enable Swagger/OpenAPI docs for all endpoints
+	c) Add centralized logging
+	d) Add centralized exception handling
+	e) Implement a circuit breaker for external calls / unstable operations
+2. Design the solution
+	a) Create PlantUML sequence + flow diagrams
+	b) Design the database schema (tables + relationships)
+3. Implement with tests
+	a) Write the application code
+	b) Add proper test cases (unit + integration where needed)
+4.Run the tests
+	a) Execute the test suite and confirm it passes
+5. Review and optimize
+	a) Fix issues found in testing/review
+	b) Improve performance/structure where necessary without changing behavior
+
+## Phase: test
+Write tests and validate the implementation. Read the implementation from the previous phase. Run tests and document results in artifacts/{task_id}/test-results.md.
+
+## CI Failure Output
+```
+
+ImportError while loading conftest 'C:\Manmadh\genai\claude-code-agents\workspace\auth-spects-app-agent-1\tests\conftest.py'.
+tests\conftest.py:10: in <module>
+    from app.main import app
+app\main.py:12: in <module>
+    from app.routes import auth, health
+app\routes\auth.py:6: in <module>
+    from app.models.schemas import UserRegister, UserLogin, TokenResponse, RefreshTokenRequest
+app\models\schemas.py:7: in <module>
+    class UserRegister(BaseModel):
+C:\Users\mdrao\AppData\Local\Programs\Python\Python311\Lib\site-packages\pydantic\_internal\_model_construction.py:226: in __new__
+    complete_model_class(
+C:\Users\mdrao\AppData\Local\Programs\Python\Python311\Lib\site-packages\pydantic\_internal\_model_construction.py:658: in complete_model_class
+    schema = cls.__get_pydantic_core_schema__(cls, handler)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\mdrao\AppData\Local\Programs\Python\Python311\Lib\site-packages\pydantic\main.py:702: in __get_pydantic_core_schema__
+    return handler(source)
+           ^^^^^^^^^^^^^^^
+C:\Users\mdrao\AppData\Local\Programs\Python\Python311\Lib\site-packages\pydantic\_internal\_schema_generation_shared.py:84: in __call__
+    schema = self._handler(source_type)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\mdrao\AppData\Local\Programs\Python\Python311\Lib\site-packages\pydantic\_internal\_generate_schema.py:610: in generate_schema
+    schema = self._generate_schema_inner(obj)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\mdrao\AppData\Local\Programs\Python\Python311\Lib\site-packages\pydantic\_internal\_generate_schema.py:879: in _generate_schema_inner
+    return self._model_schema(obj)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\mdrao\AppData\Local\Programs\Python\Python311\Lib\site-packages\pydantic\_internal\_generate_schema.py:691: in _model_schema
+    {k: self._generate_md_field_schema(k, v, decorators) for k, v in fields.items()},
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\mdrao\AppData\Local\Programs\Python\Python311\Lib\site-packages\pydantic\_internal\_generate_schema.py:691: in <dictcomp>
+    {k: self._generate_md_field_schema(k, v, decorators) for k, v in fields.items()},
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\mdrao\AppData\Local\Programs\Python\Python311\Lib\site-packages\pydantic\_internal\_generate_schema.py:1071: in _generate_md_field_schema
+    common_field = self._common_field_schema(name, field_info, decorators)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\mdrao\AppData\Local\Programs\Python\Python311\Lib\site-packages\pydantic\_internal\_generate_schema.py:1263: in _common_field_schema
+    schema = self._apply_annotations(
+C:\Users\mdrao\AppData\Local\Programs\Python\Python311\Lib\site-packages\pydantic\_internal\_generate_schema.py:2056: in _apply_annotations
+    schema = get_inner_schema(source_type)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\mdrao\AppData\Local\Programs\Python\Python311\Lib\site-packages\pydantic\_internal\_schema_generation_shared.py:84: in __call__
+    schema = self._handler(source_type)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\mdrao\AppData\Local\Programs\Python\Python311\Lib\site-packages\pydantic\_internal\_generate_schema.py:2035: in inner_handler
+    from_property = self._generate_schema_from_property(obj, source_type)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+C:\Users\mdrao\AppData\Local\Programs\Python\Python311\Lib\site-packages\pydantic\_internal\_generate_schema.py:759: in _generate_schema_from_property
+    schema = get_schema(
+C:\Users\mdrao\AppData\Local\Programs\Python\Python311\Lib\site-packages\pydantic\networks.py:935: in __get_pydantic_core_schema__
+    import_email_validator()
+C:\Users\mdrao\AppData\Local\Programs\Python\Python311\Lib\site-packages\pydantic\networks.py:897: in import_email_validator
+    raise ImportError('email-validator is not installed, run `pip install pydantic[email]`') from e
+E   ImportError: email-validator is not installed, run `pip install pydantic[email]`
+
+```
+
+## Instructions
+1. Read the failing test output carefully.
+2. Identify the root cause.
+3. Fix the code. Only modify files in your assigned scope.
+4. Run the tests again to verify the fix.
+5. Update `artifacts/auth-spects-app-test/findings.md` with what went wrong and how you fixed it.
