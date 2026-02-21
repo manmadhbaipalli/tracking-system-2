@@ -1,0 +1,28 @@
+## Task: test
+**test**
+
+## Description
+1. Build the FastAPI app
+	a) Add user registration and login endpoints
+	b) Enable Swagger/OpenAPI docs for all endpoints
+	c) Add centralized logging
+	d) Add centralized exception handling
+	e) Implement a circuit breaker for external calls / unstable operations
+2. Design the solution
+	a) Create PlantUML sequence + flow diagrams
+	b) Design the database schema (tables + relationships)
+3. Implement with tests
+	a) Write the application code
+	b) Add proper test cases (unit + integration where needed)
+4.Run the tests
+	a) Execute the test suite and confirm it passes
+5. Review and optimize
+	a) Fix issues found in testing/review
+	b) Improve performance/structure where necessary without changing behavior
+
+## File Constraints
+You may ONLY modify these files (other files are locked by other agents working in parallel):
+  (no file restrictions — you may modify any file)
+
+If you need to create new files, place them under the directories implied by the locked file paths.
+Do NOT modify files outside your assigned scope — doing so will cause merge conflicts.
