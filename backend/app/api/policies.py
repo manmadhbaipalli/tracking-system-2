@@ -1,182 +1,340 @@
 """
-Claims Service Platform - Policies API
+Claims Service Platform - Enhanced Policies API
 
-Provides policy search, CRUD operations with proper validation and error handling.
+Provides advanced policy search, CRUD operations with SSN/TIN search,
+validation, and comprehensive error handling.
 """
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from typing import List
+from typing import List, Dict, Any, Optional
 
 from app.core.database import get_db
 from app.core.security import get_current_user_token, require_permission, Permission
 from app.models.policy import Policy
 from app.schemas.policy import (
     PolicySearchRequest, PolicySearchResponse, PolicyCreate,
-    PolicyUpdate, PolicyResponse, PolicySummary
+    PolicyUpdate, PolicyResponse, PolicySummary, PolicyValidationRequest,
+    PolicyValidationResponse, BulkPolicyOperation, BulkPolicyOperationResponse
 )
+from app.services.policy_service import PolicyService
 from app.services.audit_service import audit_service
 
 router = APIRouter()
 
 
-@router.post("/search", response_model=PolicySearchResponse)
+@router.post("/search", response_model=Dict[str, Any])
 async def search_policies(
     search_request: PolicySearchRequest,
     current_user: dict = Depends(require_permission(Permission.POLICY_SEARCH)),
     db: Session = Depends(get_db)
 ):
-    """Search policies with multiple criteria"""
-    query = db.query(Policy).filter(Policy.is_deleted == False)
-
-    # Apply search filters
-    if search_request.policy_number:
-        if search_request.search_type == "exact":
-            query = query.filter(Policy.policy_number == search_request.policy_number.upper())
-        else:
-            query = query.filter(Policy.policy_number.ilike(f"%{search_request.policy_number}%"))
-
-    if search_request.insured_first_name:
-        query = query.filter(Policy.insured_first_name.ilike(f"%{search_request.insured_first_name}%"))
-
-    if search_request.insured_last_name:
-        query = query.filter(Policy.insured_last_name.ilike(f"%{search_request.insured_last_name}%"))
-
-    if search_request.policy_type:
-        query = query.filter(Policy.policy_type == search_request.policy_type)
-
-    if search_request.policy_city:
-        query = query.filter(Policy.city.ilike(f"%{search_request.policy_city}%"))
-
-    if search_request.policy_state:
-        query = query.filter(Policy.state == search_request.policy_state.upper())
-
-    if search_request.policy_zip:
-        query = query.filter(Policy.zip_code == search_request.policy_zip)
-
-    # Apply date filters
-    if search_request.effective_date_from:
-        query = query.filter(Policy.effective_date >= search_request.effective_date_from)
-
-    if search_request.effective_date_to:
-        query = query.filter(Policy.effective_date <= search_request.effective_date_to)
-
-    # Apply sorting
-    if search_request.sort_by == "policy_number":
-        sort_column = Policy.policy_number
-    elif search_request.sort_by == "insured_last_name":
-        sort_column = Policy.insured_last_name
-    elif search_request.sort_by == "effective_date":
-        sort_column = Policy.effective_date
-    else:
-        sort_column = Policy.created_at
-
-    if search_request.sort_order == "asc":
-        query = query.order_by(sort_column.asc())
-    else:
-        query = query.order_by(sort_column.desc())
-
-    # Get total count
-    total = query.count()
-
-    # Apply pagination
-    offset = (search_request.page - 1) * search_request.page_size
-    policies = query.offset(offset).limit(search_request.page_size).all()
-
-    # Convert to summary objects
-    policy_summaries = []
-    for policy in policies:
-        summary = PolicySummary(
-            id=policy.id,
-            policy_number=policy.policy_number,
-            policy_type=policy.policy_type,
-            status=policy.status,
-            insured_full_name=policy.insured_full_name,
-            effective_date=policy.effective_date,
-            expiration_date=policy.expiration_date,
-            city=policy.city,
-            state=policy.state,
-            is_active=policy.is_active()
+    """Advanced policy search with exact/partial matching and SSN/TIN support"""
+    try:
+        policy_service = PolicyService(db)
+        result = await policy_service.search_policies(
+            criteria=search_request,
+            user_id=current_user.get("user_id")
         )
-        policy_summaries.append(summary)
+        return result
 
-    total_pages = (total + search_request.page_size - 1) // search_request.page_size
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(e)
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Policy search failed"
+        )
 
-    return PolicySearchResponse(
-        policies=policy_summaries,
-        total=total,
-        page=search_request.page,
-        page_size=search_request.page_size,
-        total_pages=total_pages,
-        search_criteria=search_request.dict()
-    )
+
+@router.post("/search/advanced", response_model=Dict[str, Any])
+async def advanced_policy_search(
+    search_request: PolicySearchRequest,
+    include_deleted: Optional[bool] = False,
+    current_user: dict = Depends(require_permission(Permission.POLICY_SEARCH)),
+    db: Session = Depends(get_db)
+):
+    """Multi-criteria search with performance optimization"""
+    try:
+        policy_service = PolicyService(db)
+        result = await policy_service.search_policies(
+            criteria=search_request,
+            user_id=current_user.get("user_id"),
+            include_deleted=include_deleted
+        )
+        return result
+
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(e)
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Advanced policy search failed"
+        )
 
 
-@router.get("/{policy_id}", response_model=PolicyResponse)
+@router.get("/{policy_id}", response_model=Dict[str, Any])
 async def get_policy(
     policy_id: int,
+    mask_pii: bool = True,
     current_user: dict = Depends(require_permission(Permission.POLICY_READ)),
     db: Session = Depends(get_db)
 ):
-    """Get policy by ID"""
-    policy = db.query(Policy).filter(Policy.id == policy_id, Policy.is_deleted == False).first()
-
-    if not policy:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Policy not found"
+    """Get detailed policy information with optional PII masking"""
+    try:
+        policy_service = PolicyService(db)
+        policy = await policy_service.get_policy_details(
+            policy_id=policy_id,
+            user_id=current_user.get("user_id"),
+            mask_pii=mask_pii
         )
 
-    # Convert to response model
-    policy_dict = policy.to_dict(mask_pii=True)
-    policy_dict['is_active'] = policy.is_active()
-    policy_dict['days_until_expiration'] = policy.days_until_expiration()
+        if not policy:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Policy not found"
+            )
 
-    return PolicyResponse(**policy_dict)
+        return policy
+
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(e)
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to retrieve policy details"
+        )
 
 
-@router.post("/", response_model=PolicyResponse)
+@router.post("/", response_model=Dict[str, Any])
 async def create_policy(
     policy_data: PolicyCreate,
     current_user: dict = Depends(require_permission(Permission.POLICY_WRITE)),
     db: Session = Depends(get_db)
 ):
-    """Create new policy"""
-    # Check if policy number already exists
-    existing = db.query(Policy).filter(Policy.policy_number == policy_data.policy_number.upper()).first()
-    if existing:
+    """Create new policy with enhanced validation"""
+    try:
+        policy_service = PolicyService(db)
+        policy = await policy_service.create_policy(
+            policy_data=policy_data,
+            user_id=current_user.get("user_id")
+        )
+        return policy
+
+    except ValueError as e:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Policy number already exists"
+            detail=str(e)
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to create policy"
         )
 
-    # Create policy
-    policy = Policy(**policy_data.dict())
-    policy.policy_number = policy_data.policy_number.upper()
-    policy.state = policy_data.state.upper()
-    policy.generate_full_name()
-    policy.created_by = current_user.get("user_id")
 
-    # Validate data
-    policy.validate_data()
+@router.put("/{policy_id}", response_model=Dict[str, Any])
+async def update_policy(
+    policy_id: int,
+    policy_data: PolicyUpdate,
+    current_user: dict = Depends(require_permission(Permission.POLICY_WRITE)),
+    db: Session = Depends(get_db)
+):
+    """Update existing policy"""
+    try:
+        policy_service = PolicyService(db)
+        policy = await policy_service.update_policy(
+            policy_id=policy_id,
+            policy_data=policy_data,
+            user_id=current_user.get("user_id")
+        )
+        return policy
 
-    db.add(policy)
-    db.commit()
-    db.refresh(policy)
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(e)
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to update policy"
+        )
 
-    # Log creation
-    audit_service.log_action(
-        db=db,
-        user_id=current_user.get("user_id"),
-        action="create",
-        table_name="policies",
-        record_id=str(policy.id),
-        new_values=policy.to_dict(),
-        description=f"Created policy {policy.policy_number}"
-    )
 
-    policy_dict = policy.to_dict(mask_pii=True)
-    policy_dict['is_active'] = policy.is_active()
-    policy_dict['days_until_expiration'] = policy.days_until_expiration()
+@router.get("/{policy_id}/claims", response_model=Dict[str, Any])
+async def get_policy_claims(
+    policy_id: int,
+    status_filter: Optional[List[str]] = None,
+    current_user: dict = Depends(require_permission(Permission.POLICY_READ)),
+    db: Session = Depends(get_db)
+):
+    """Get policy claims history with optional status filtering"""
+    try:
+        policy_service = PolicyService(db)
+        claims = await policy_service.get_policy_claims_history(
+            policy_id=policy_id,
+            user_id=current_user.get("user_id"),
+            status_filter=status_filter
+        )
+        return claims
 
-    return PolicyResponse(**policy_dict)
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(e)
+        )
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to retrieve policy claims"
+        )
+
+
+@router.post("/validate", response_model=PolicyValidationResponse)
+async def validate_policy_data(
+    validation_request: Dict[str, Any],
+    current_user: dict = Depends(require_permission(Permission.POLICY_WRITE)),
+    db: Session = Depends(get_db)
+):
+    """Validate policy data and return validation results"""
+    try:
+        policy_service = PolicyService(db)
+        result = await policy_service.validate_policy_data(
+            policy_data=validation_request,
+            user_id=current_user.get("user_id")
+        )
+        return PolicyValidationResponse(**result)
+
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Policy validation failed"
+        )
+
+
+@router.post("/search/reset", response_model=Dict[str, Any])
+async def reset_search_criteria(
+    current_user: dict = Depends(require_permission(Permission.POLICY_SEARCH)),
+    db: Session = Depends(get_db)
+):
+    """Reset search criteria to default values"""
+    try:
+        default_criteria = PolicySearchRequest()
+        return {
+            "success": True,
+            "default_criteria": default_criteria.dict(),
+            "message": "Search criteria reset to defaults"
+        }
+
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to reset search criteria"
+        )
+
+
+@router.post("/bulk-operation", response_model=BulkPolicyOperationResponse)
+async def bulk_policy_operation(
+    operation_request: BulkPolicyOperation,
+    current_user: dict = Depends(require_permission(Permission.POLICY_WRITE)),
+    db: Session = Depends(get_db)
+):
+    """Perform bulk operations on multiple policies"""
+    try:
+        successful = []
+        failed = []
+
+        for policy_id in operation_request.policy_ids:
+            try:
+                policy = db.query(Policy).filter(
+                    Policy.id == policy_id,
+                    Policy.is_deleted == False
+                ).first()
+
+                if not policy:
+                    failed.append({
+                        "policy_id": policy_id,
+                        "error": "Policy not found"
+                    })
+                    continue
+
+                # Perform the operation
+                if operation_request.operation == "activate":
+                    policy.status = "active"
+                elif operation_request.operation == "deactivate":
+                    policy.status = "inactive"
+                elif operation_request.operation == "expire":
+                    policy.status = "expired"
+                elif operation_request.operation == "cancel":
+                    policy.status = "cancelled"
+
+                policy.updated_by = current_user.get("user_id")
+                successful.append(policy_id)
+
+            except Exception as e:
+                failed.append({
+                    "policy_id": policy_id,
+                    "error": str(e)
+                })
+
+        db.commit()
+
+        # Log bulk operation
+        audit_service.log_action(
+            db=db,
+            user_id=current_user.get("user_id"),
+            action="bulk_operation",
+            table_name="policies",
+            record_id=None,
+            new_values={
+                "operation": operation_request.operation,
+                "policy_ids": operation_request.policy_ids,
+                "reason": operation_request.reason
+            },
+            description=f"Bulk {operation_request.operation} on {len(successful)} policies"
+        )
+
+        return BulkPolicyOperationResponse(
+            successful=successful,
+            failed=failed,
+            total_processed=len(operation_request.policy_ids),
+            success_count=len(successful),
+            failure_count=len(failed)
+        )
+
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Bulk operation failed"
+        )
+
+
+@router.post("/search-vectors/update", response_model=Dict[str, Any])
+async def update_search_vectors(
+    current_user: dict = Depends(require_permission(Permission.POLICY_WRITE)),
+    db: Session = Depends(get_db)
+):
+    """Bulk update search vectors for all policies"""
+    try:
+        policy_service = PolicyService(db)
+        result = await policy_service.bulk_update_search_vectors(
+            user_id=current_user.get("user_id")
+        )
+        return result
+
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to update search vectors"
+        )
