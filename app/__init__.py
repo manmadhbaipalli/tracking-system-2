@@ -1,0 +1,1 @@
+"""FastAPI Auth Service - Main Application Package"""
