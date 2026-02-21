@@ -1,0 +1,408 @@
+@startuml User Registration Flow
+!theme plain
+title User Registration Sequence Diagram
+
+actor User as U
+participant "FastAPI App" as API
+participant "Auth Router" as AR
+participant "Auth Service" as AS
+participant "Circuit Breaker" as CB
+participant "Database" as DB
+participant "Logger" as LOG
+
+U -> API: POST /api/v1/auth/register\n{email, username, password}
+API -> AR: Route request
+AR -> CB: Check circuit state
+alt Circuit Open
+    CB -> AR: CircuitBreakerError
+    AR -> API: HTTP 503 Service Unavailable
+    API -> U: {"error": "Service temporarily unavailable"}
+else Circuit Closed
+    AR -> AS: validate_user_data(user_data)
+    AS -> AS: Check email format
+    AS -> AS: Validate password strength
+
+    AS -> CB: Database operation wrapper
+    CB -> DB: Check email uniqueness
+    DB -> CB: Query result
+    CB -> AS: Email available
+
+    AS -> CB: Database operation wrapper
+    CB -> DB: Check username uniqueness
+    DB -> CB: Query result
+    CB -> AS: Username available
+
+    AS -> AS: Hash password with bcrypt
+
+    AS -> CB: Database operation wrapper
+    CB -> DB: INSERT new user
+    DB -> CB: User created
+    CB -> AS: Success
+
+    AS -> LOG: Log registration event
+    AS -> AR: User created successfully
+    AR -> API: HTTP 201 Created
+    API -> U: {"message": "User registered successfully", "user_id": 123}
+end
+
+alt Validation Error
+    AS -> AR: ValidationError
+    AR -> LOG: Log validation failure
+    AR -> API: HTTP 400 Bad Request
+    API -> U: {"error": "Validation failed", "details": [...]}
+end
+
+alt Database Error
+    CB -> AS: Database connection failed
+    AS -> LOG: Log database error
+    AS -> AR: DatabaseError
+    AR -> API: HTTP 500 Internal Server Error
+    API -> U: {"error": "Registration failed"}
+end
+
+@enduml
+
+@startuml User Login Flow
+!theme plain
+title User Login Sequence Diagram
+
+actor User as U
+participant "FastAPI App" as API
+participant "Auth Router" as AR
+participant "Security Service" as SS
+participant "Circuit Breaker" as CB
+participant "Database" as DB
+participant "JWT Service" as JWT
+participant "Logger" as LOG
+
+U -> API: POST /api/v1/auth/login\n{username, password}
+API -> AR: Route request
+AR -> CB: Check circuit state
+
+alt Circuit Open
+    CB -> AR: CircuitBreakerError
+    AR -> API: HTTP 503 Service Unavailable
+    API -> U: {"error": "Service temporarily unavailable"}
+else Circuit Closed
+    AR -> CB: Database operation wrapper
+    CB -> DB: SELECT user by username/email
+    DB -> CB: User record or null
+    CB -> AR: User data
+
+    alt User Not Found
+        AR -> LOG: Log failed login attempt (user not found)
+        AR -> API: HTTP 401 Unauthorized
+        API -> U: {"error": "Invalid credentials"}
+    else User Found
+        AR -> SS: verify_password(password, hashed_password)
+        SS -> SS: bcrypt.checkpw()
+
+        alt Password Invalid
+            SS -> AR: Password mismatch
+            AR -> LOG: Log failed login attempt (wrong password)
+            AR -> API: HTTP 401 Unauthorized
+            API -> U: {"error": "Invalid credentials"}
+        else Password Valid
+            AR -> JWT: create_access_token(user_id)
+            JWT -> JWT: Generate JWT with expiration
+            JWT -> AR: Access token
+
+            AR -> LOG: Log successful login
+            AR -> API: HTTP 200 OK
+            API -> U: {"access_token": "jwt_token", "token_type": "bearer"}
+        end
+    end
+end
+
+@enduml
+
+@startuml Protected Endpoint Access Flow
+!theme plain
+title Protected Endpoint Access Sequence Diagram
+
+actor User as U
+participant "FastAPI App" as API
+participant "Users Router" as UR
+participant "JWT Middleware" as JM
+participant "Security Service" as SS
+participant "Circuit Breaker" as CB
+participant "Database" as DB
+participant "Logger" as LOG
+
+U -> API: GET /api/v1/users/me\nAuthorization: Bearer <token>
+API -> JM: Extract JWT token
+JM -> SS: validate_token(token)
+SS -> SS: Decode JWT
+SS -> SS: Check expiration
+
+alt Token Invalid/Expired
+    SS -> JM: Invalid token
+    JM -> LOG: Log invalid token attempt
+    JM -> API: HTTP 401 Unauthorized
+    API -> U: {"error": "Invalid or expired token"}
+else Token Valid
+    SS -> JM: Token valid, user_id extracted
+    JM -> UR: Route with user context
+    UR -> CB: Check circuit state
+
+    alt Circuit Open
+        CB -> UR: CircuitBreakerError
+        UR -> API: HTTP 503 Service Unavailable
+        API -> U: {"error": "Service temporarily unavailable"}
+    else Circuit Closed
+        UR -> CB: Database operation wrapper
+        CB -> DB: SELECT user by id
+        DB -> CB: User record
+        CB -> UR: User data
+
+        UR -> LOG: Log user data access
+        UR -> API: HTTP 200 OK
+        API -> U: {"user": {...}}
+    end
+end
+
+@enduml
+
+@startuml System Architecture
+!theme plain
+title Auth Service System Architecture
+
+package "Client Layer" {
+    [Web App] as WEB
+    [Mobile App] as MOBILE
+    [API Client] as CLIENT
+}
+
+package "API Gateway Layer" {
+    [Rate Limiter] as RATE
+    [Security Headers] as SEC
+    [CORS Handler] as CORS
+}
+
+package "Application Layer" {
+    [FastAPI App] as APP
+    [Auth Router] as AUTH_R
+    [Users Router] as USER_R
+    [Monitoring Router] as MON_R
+}
+
+package "Service Layer" {
+    [Auth Service] as AUTH_S
+    [Security Service] as SEC_S
+    [JWT Service] as JWT_S
+}
+
+package "Infrastructure Layer" {
+    [Circuit Breaker] as CB
+    [Logger] as LOG
+    [Exception Handler] as EXC
+}
+
+package "Data Layer" {
+    [SQLAlchemy ORM] as ORM
+    [SQLite Database] as DB
+    [Migration System] as MIG
+}
+
+' Client connections
+WEB -> RATE
+MOBILE -> RATE
+CLIENT -> RATE
+
+' API Gateway flow
+RATE -> SEC
+SEC -> CORS
+CORS -> APP
+
+' Application routing
+APP -> AUTH_R
+APP -> USER_R
+APP -> MON_R
+
+' Service layer connections
+AUTH_R -> AUTH_S
+USER_R -> AUTH_S
+AUTH_S -> SEC_S
+AUTH_S -> JWT_S
+
+' Infrastructure integration
+AUTH_S -> CB
+USER_R -> CB
+AUTH_S -> LOG
+USER_R -> LOG
+APP -> EXC
+
+' Data layer
+CB -> ORM
+ORM -> DB
+MIG -> DB
+
+@enduml
+
+@startuml Database Schema
+!theme plain
+title Database Schema Diagram
+
+entity "users" {
+    * id : INTEGER (Primary Key)
+    --
+    * email : VARCHAR(255) (Unique)
+    * username : VARCHAR(255) (Unique)
+    * hashed_password : VARCHAR(255)
+    * is_active : BOOLEAN (Default: True)
+    * created_at : DATETIME
+    * updated_at : DATETIME
+    --
+    Indexes:
+    - idx_users_email (email)
+    - idx_users_username (username)
+    - idx_users_active (is_active, created_at)
+}
+
+note right of users::email
+    Unique constraint prevents
+    duplicate email registrations
+end note
+
+note right of users::username
+    Unique constraint prevents
+    duplicate usernames
+end note
+
+note right of users::hashed_password
+    Stored using bcrypt hashing
+    Never store plain text passwords
+end note
+
+note right of users::is_active
+    Soft delete mechanism
+    Inactive users cannot login
+end note
+
+@enduml
+
+@startuml Circuit Breaker State Flow
+!theme plain
+title Circuit Breaker State Diagram
+
+[*] -> Closed : Initial State
+
+Closed : Normal Operation
+Closed : Counting Failures
+Closed -> Open : Failure Threshold\nReached
+
+Open : All Requests Fail Fast
+Open : No Database Calls
+Open -> HalfOpen : Timeout Expired
+
+HalfOpen : Limited Requests Allowed
+HalfOpen : Testing Service Health
+HalfOpen -> Closed : Success Threshold\nReached
+HalfOpen -> Open : Any Failure
+
+note right of Closed
+    - Requests pass through normally
+    - Track failure count
+    - Reset count on success
+end note
+
+note right of Open
+    - Fail fast for all requests
+    - Return CircuitBreakerError
+    - Wait for timeout period
+end note
+
+note right of HalfOpen
+    - Allow limited test requests
+    - Monitor success/failure
+    - Decide next state quickly
+end note
+
+@enduml
+
+@startuml Error Handling Flow
+!theme plain
+title Centralized Error Handling Flow
+
+participant "Client" as C
+participant "FastAPI App" as APP
+participant "Exception Middleware" as EM
+participant "Custom Exception" as CE
+participant "Logger" as LOG
+participant "Response Builder" as RB
+
+C -> APP: Request with error condition
+APP -> CE: Raise custom exception
+CE -> EM: Exception caught
+EM -> LOG: Log error details\n+ correlation_id\n+ stack trace
+EM -> RB: Build error response
+RB -> RB: Format standardized error
+RB -> EM: JSON error response
+EM -> APP: HTTP error response
+APP -> C: {"error": {...}, "correlation_id": "..."}
+
+note right of EM
+    Centralized exception handling:
+    - Catches all exceptions
+    - Logs with correlation ID
+    - Returns consistent format
+    - Prevents stack traces in response
+end note
+
+note right of RB
+    Standardized error format:
+    {
+        "error": {
+            "code": "AUTH001",
+            "message": "User friendly message",
+            "details": "Technical details",
+            "correlation_id": "req-123-456"
+        }
+    }
+end note
+
+@enduml
+
+@startuml Rate Limiting Flow
+!theme plain
+title Rate Limiting Middleware Flow
+
+participant "Client" as C
+participant "Rate Limit Middleware" as RLM
+participant "Rate Limiter" as RL
+participant "Cache/Redis" as CACHE
+participant "FastAPI App" as APP
+
+C -> RLM: Incoming request
+RLM -> RLM: Extract client IP
+RLM -> RL: Check rate limit(IP, endpoint)
+RL -> CACHE: Get current count for IP
+CACHE -> RL: Current request count
+
+alt Rate Limit Exceeded
+    RL -> RLM: Rate limit exceeded
+    RLM -> RLM: Build 429 response\nwith retry headers
+    RLM -> C: HTTP 429 Too Many Requests\nRetry-After: 60
+else Rate Limit OK
+    RL -> CACHE: Increment request count
+    RLM -> APP: Forward request
+    APP -> RLM: Response
+    RLM -> C: Forward response
+end
+
+note right of RL
+    Sliding window algorithm:
+    - Track requests per time window
+    - Different limits per endpoint
+    - IP-based tracking
+    - Configurable time windows
+end note
+
+note right of CACHE
+    Storage options:
+    - In-memory (single instance)
+    - Redis (distributed)
+    - Automatic cleanup of old entries
+end note
+
+@enduml
