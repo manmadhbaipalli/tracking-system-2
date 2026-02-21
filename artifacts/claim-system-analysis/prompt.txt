@@ -1,0 +1,117 @@
+## Task: claim-system-analysis
+**[ANALYSIS] claim-system**
+
+**Pipeline:** `claim-system` | **Phase:** `analysis`
+
+## Description
+Business Requirements Document (BRD)
+Integrated Policy, Claims, and Payments Platform
+
+Objective
+*********
+Develop a unified platform for managing insurance policies, claims, and payments. The system must support comprehensive policy lifecycle management, claims processing, and secure payment/disbursement workflows, with robust integration between all modules. The platform must be secure, auditable, responsive, and compliant with regulatory standards.
+
+Functional Requirements
+***********************
+
+Access & Authentication
+***********************
+* Only authorized users with appropriate roles can access policy, claims, and payment modules.
+* All actions (search, create, edit, payment, claim) must be logged with user ID and timestamp for audit purposes.
+
+Policy Management
+*****************
+
+1. Support creation, retrieval, update, and search of policies.
+2. Policy search must allow searching by Policy Number, Insured First Name, Insured Last Name, Policy Type, Loss Date, Policy City, Policy State, Policy Zip, SSN/TIN, and Organizational Name.
+3. Support both exact and partial matches for name, policy number, and address.
+4. Display policy details including: Insured Name, Policy Number, Policy Type, Effective Date, Expiration Date, Policy Status, Vehicle Details (Year, Make, Model, VIN), Location Details (Address, City, State, Zip), Coverage Details (Types, Limits, Deductibles).
+5. SSN/TIN must be masked according to security policies.
+6. Allow users to reset all defined search criteria to default/empty values.
+7. Policy details must be accessible and compliant with WCAG guidelines.
+8. All policy actions must be auditable.
+
+Claims Management
+*****************
+
+1. Claims must be linked to policies and support creation, retrieval, update, and search.
+2. Claim History must display a list of past claims associated with the policy, showing: Claim Number, Date of Loss, Claim Status.
+3. Claims must be sorted by Date of Loss (most recent first) and filterable by Claim Status (Open, Closed, Paid, Denied).
+4. Add/Edit policy information at claim level when policy is unverified; changes must be tracked separately and not overwrite original policy data.
+5. Visual indicator must show when claim-level policy information is being used.
+6. Audit log must track all changes to claim-level policy data, including user and timestamp.
+7. Claims must support referral to subrogation and management of scheduled payments (applicability, type, total amount, balance, current due, recipient identification).
+8. Claims must support injury incident details, coding information, and carrier involvement.
+
+Payments & Disbursements
+************************
+1. Payments must be linked to claims and policies, supporting multiple payment methods: ACH, wire, credit/debit card, Stripe Connect, global payouts.
+2. Support onboarding of vendors and claimants with secure payment method verification (including KYC/Identity).
+3. Enable automated creation of payable line items from external estimates (e.g., Xactimate/XactAnalysis).
+4. Allow configuration of payment routing rules based on payee, payment type, and business rules.
+5. Provide full payment lifecycle management: creation, voids, reversals, reissues, reserve handling.
+6. Enable allocation of payments across multiple reserve lines and management of joint payees.
+7. Support creation of Electronic Funds Transfers (EFT) and wire transfers with required banking details.
+8. Allow creation of payments with positive, negative, or zero dollar amounts.
+9. Support designation of payments as eroding or non-eroding against reserve lines.
+10. Enable management of multiple payment details per transaction (add/remove payees, payment portions, deductions).
+11. Allow withholding of income tax and designation of payments as tax reportable; capture tax ID numbers for payees.
+12. Support document attachment to payment transactions.
+13. Remittance & Medical Payments: Support EDI/EOB-style remittances to medical providers, including CPT/ICD mappings and adjustments; integrate with bill review vendors and support EDI 835/837 formats.
+14. Negotiation & Settlement Management: Provide negotiation management, coverage opinion requests, and settlement plan tracking.
+15. Compliance: Ensure PCI-DSS compliance, mask sensitive payment information, encrypt all payment data in transit and at rest, maintain audit trail for all payment actions and changes.
+
+Integration Requirements
+************************
+
+1. Integrate policy, claims, and payment modules for seamless workflow.
+2. Integrate with external systems: Stripe Connect, Global Payouts, Bank ACH/Wire, Xactimate/XactAnalysis, Accounting, Bill Review, EDI 835/837, Litigation Data, Tax ID, General Ledger, Agency Markets Payment Service, Document Management.
+3. Capture and reuse Other Carrier Information across claim functions, including parties and payments.
+
+Non-Functional Requirements
+***************************
+
+1. All interfaces must be responsive and optimized for workflow efficiency.
+2. Policy search results must be returned within 3 seconds; policy details and claim history within 5 seconds; payment processing within 5 seconds.
+3. System must support concurrent user sessions without performance degradation.
+4. All integrations must be robust and support error handling and retry logic.
+5. Display must be accessible and compliant with WCAG guidelines.
+
+Error Handling & Messaging
+**************************
+
+1. If no matching policies or claims are found, display: "No matching policies/claims found."
+2. If the system is unavailable, display: "System is currently unavailable."
+3. If policy/claim/payment details cannot be retrieved, display: "Unable to retrieve details. Please try again later."
+4. If claim-level policy data cannot be saved, display: "Unable to save claim-level policy data. Please try again later."
+5. If no prior claims exist, display: "No prior claims exist for this policy."
+
+Security
+********
+
+1. Mask and encrypt sensitive data (SSN/TIN, payment info).
+2. Enforce role-based access control.
+3. Maintain comprehensive audit logs for all actions.
+
+Audit & Compliance
+******************
+1. All changes to policy, claim, and payment data must be tracked with user and timestamp.
+2. System must comply with PCI-DSS and other relevant standards.
+
+
+Technology
+**********
+1. ReactJS - frontend
+2. Python, FastApi - backend
+
+
+
+## Phase: analysis
+Explore the codebase and analyze requirements. Identify affected files, dependencies, and risks. Write findings to artifacts/{task_id}/analysis.md.
+
+## File Constraints
+You may ONLY modify these files (other files are locked by other agents working in parallel):
+  (no file restrictions — you may modify any file)
+
+If you need to create new files, place them under the directories implied by the locked file paths.
+Do NOT modify files outside your assigned scope — doing so will cause merge conflicts.
