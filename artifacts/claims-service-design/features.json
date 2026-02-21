@@ -1,0 +1,310 @@
+[
+  {
+    "id": "backend-main",
+    "file": "backend/main.py",
+    "description": "FastAPI application entry point and configuration",
+    "acceptance_criteria": "FastAPI app starts on port 8000, includes CORS middleware, and mounts all API routes",
+    "status": "pending"
+  },
+  {
+    "id": "backend-config",
+    "file": "backend/app/core/config.py",
+    "description": "Application configuration and environment variable management",
+    "acceptance_criteria": "Loads environment variables for database, JWT, encryption keys, and external service configurations",
+    "status": "pending"
+  },
+  {
+    "id": "backend-database",
+    "file": "backend/app/core/database.py",
+    "description": "Database connection, session management, and SQLAlchemy setup",
+    "acceptance_criteria": "Establishes PostgreSQL connection pool, provides database sessions, and supports encryption",
+    "status": "pending"
+  },
+  {
+    "id": "backend-security",
+    "file": "backend/app/core/security.py",
+    "description": "JWT token handling, password hashing, and RBAC utilities",
+    "acceptance_criteria": "Creates and validates JWT tokens, hashes passwords securely, and enforces role-based access",
+    "status": "pending"
+  },
+  {
+    "id": "policy-model",
+    "file": "backend/app/models/policy.py",
+    "description": "Policy SQLAlchemy model with vehicle, location, and coverage details",
+    "acceptance_criteria": "Defines policy table with encrypted PII fields, relationships to claims, and all required search fields",
+    "status": "pending"
+  },
+  {
+    "id": "claim-model",
+    "file": "backend/app/models/claim.py",
+    "description": "Claims SQLAlchemy model with policy relationships and claim-level policy data",
+    "acceptance_criteria": "Defines claim table with policy foreign key, claim-level policy override fields, and status tracking",
+    "status": "pending"
+  },
+  {
+    "id": "payment-model",
+    "file": "backend/app/models/payment.py",
+    "description": "Payment and disbursement SQLAlchemy models with multiple payment methods",
+    "acceptance_criteria": "Defines payment tables with encrypted payment info, reserve line allocation, and lifecycle tracking",
+    "status": "pending"
+  },
+  {
+    "id": "user-model",
+    "file": "backend/app/models/user.py",
+    "description": "User authentication and role management model",
+    "acceptance_criteria": "Defines user table with hashed passwords, roles, and audit trail links",
+    "status": "pending"
+  },
+  {
+    "id": "audit-model",
+    "file": "backend/app/models/audit.py",
+    "description": "Audit logging model for all CRUD operations",
+    "acceptance_criteria": "Defines audit table capturing user, timestamp, action type, and changed data for all operations",
+    "status": "pending"
+  },
+  {
+    "id": "policy-schemas",
+    "file": "backend/app/schemas/policy.py",
+    "description": "Pydantic schemas for policy request/response validation",
+    "acceptance_criteria": "Defines policy create/update/response schemas with proper validation and field masking",
+    "status": "pending"
+  },
+  {
+    "id": "claim-schemas",
+    "file": "backend/app/schemas/claim.py",
+    "description": "Pydantic schemas for claims request/response validation",
+    "acceptance_criteria": "Defines claim schemas with policy relationship validation and claim-level policy overrides",
+    "status": "pending"
+  },
+  {
+    "id": "payment-schemas",
+    "file": "backend/app/schemas/payment.py",
+    "description": "Pydantic schemas for payment processing and validation",
+    "acceptance_criteria": "Defines payment schemas with sensitive data validation, amount constraints, and payee information",
+    "status": "pending"
+  },
+  {
+    "id": "auth-schemas",
+    "file": "backend/app/schemas/auth.py",
+    "description": "Authentication and authorization schemas",
+    "acceptance_criteria": "Defines login, token response, and user role schemas with proper validation",
+    "status": "pending"
+  },
+  {
+    "id": "policy-service",
+    "file": "backend/app/services/policy_service.py",
+    "description": "Policy business logic including search, CRUD, and data masking",
+    "acceptance_criteria": "Implements complex policy search, PII masking, and policy lifecycle management with audit logging",
+    "status": "pending"
+  },
+  {
+    "id": "claims-service",
+    "file": "backend/app/services/claims_service.py",
+    "description": "Claims processing business logic and workflow management",
+    "acceptance_criteria": "Manages claims-to-policy relationships, claim-level policy edits, status tracking, and workflow rules",
+    "status": "pending"
+  },
+  {
+    "id": "payment-service",
+    "file": "backend/app/services/payment_service.py",
+    "description": "Payment processing, disbursement, and compliance management",
+    "acceptance_criteria": "Handles payment lifecycle, reserve allocation, tax compliance, and integration with external processors",
+    "status": "pending"
+  },
+  {
+    "id": "audit-service",
+    "file": "backend/app/services/audit_service.py",
+    "description": "Audit logging service for all system operations",
+    "acceptance_criteria": "Creates audit records for all CRUD operations with user context and data change tracking",
+    "status": "pending"
+  },
+  {
+    "id": "auth-service",
+    "file": "backend/app/services/auth_service.py",
+    "description": "Authentication and authorization business logic",
+    "acceptance_criteria": "Handles user login, token management, role validation, and session management",
+    "status": "pending"
+  },
+  {
+    "id": "policy-api",
+    "file": "backend/app/api/policies.py",
+    "description": "Policy REST API endpoints for search, CRUD operations",
+    "acceptance_criteria": "Provides policy search with all criteria, CRUD endpoints with proper validation and error handling",
+    "status": "pending"
+  },
+  {
+    "id": "claims-api",
+    "file": "backend/app/api/claims.py",
+    "description": "Claims REST API endpoints for management and processing",
+    "acceptance_criteria": "Provides claims CRUD, history retrieval, status filtering, and claim-level policy editing endpoints",
+    "status": "pending"
+  },
+  {
+    "id": "payments-api",
+    "file": "backend/app/api/payments.py",
+    "description": "Payment processing REST API endpoints",
+    "acceptance_criteria": "Provides payment creation, lifecycle management, disbursement, and reporting endpoints",
+    "status": "pending"
+  },
+  {
+    "id": "auth-api",
+    "file": "backend/app/api/auth.py",
+    "description": "Authentication and authorization API endpoints",
+    "acceptance_criteria": "Provides login, logout, token refresh, and user management endpoints with proper security",
+    "status": "pending"
+  },
+  {
+    "id": "encryption-utils",
+    "file": "backend/app/utils/encryption.py",
+    "description": "Field-level encryption utilities for PII and payment data",
+    "acceptance_criteria": "Provides encrypt/decrypt functions for SSN/TIN, payment info with key management",
+    "status": "pending"
+  },
+  {
+    "id": "validation-utils",
+    "file": "backend/app/utils/validators.py",
+    "description": "Input validation utilities and business rule enforcement",
+    "acceptance_criteria": "Validates SSN/TIN formats, payment amounts, policy numbers, and other business constraints",
+    "status": "pending"
+  },
+  {
+    "id": "backend-requirements",
+    "file": "backend/requirements.txt",
+    "description": "Python dependency specifications",
+    "acceptance_criteria": "Lists all required packages with versions for FastAPI, SQLAlchemy, authentication, and integrations",
+    "status": "pending"
+  },
+  {
+    "id": "react-app",
+    "file": "frontend/src/App.tsx",
+    "description": "Main React application component with routing and layout",
+    "acceptance_criteria": "Provides app layout, routing between pages, authentication wrapper, and error boundaries",
+    "status": "pending"
+  },
+  {
+    "id": "frontend-types",
+    "file": "frontend/src/types/index.ts",
+    "description": "TypeScript type definitions for all data models",
+    "acceptance_criteria": "Defines interfaces for Policy, Claim, Payment, User, and API response types",
+    "status": "pending"
+  },
+  {
+    "id": "api-service",
+    "file": "frontend/src/services/api.ts",
+    "description": "HTTP client service for backend API communication",
+    "acceptance_criteria": "Provides typed API methods for all endpoints with error handling and authentication headers",
+    "status": "pending"
+  },
+  {
+    "id": "auth-service-frontend",
+    "file": "frontend/src/services/auth.ts",
+    "description": "Frontend authentication service and token management",
+    "acceptance_criteria": "Handles login/logout, token storage, automatic renewal, and authentication state",
+    "status": "pending"
+  },
+  {
+    "id": "auth-context",
+    "file": "frontend/src/stores/auth.tsx",
+    "description": "React context for global authentication state",
+    "acceptance_criteria": "Provides authentication context with user info, roles, and login state management",
+    "status": "pending"
+  },
+  {
+    "id": "api-hook",
+    "file": "frontend/src/hooks/useApi.ts",
+    "description": "Custom React hook for API calls with loading and error states",
+    "acceptance_criteria": "Provides consistent API call pattern with loading, success, and error state management",
+    "status": "pending"
+  },
+  {
+    "id": "policy-search-page",
+    "file": "frontend/src/pages/PolicySearch.tsx",
+    "description": "Policy search page with multi-criteria search and results display",
+    "acceptance_criteria": "Provides policy search form with all criteria, results table with sorting/filtering, and WCAG compliance",
+    "status": "pending"
+  },
+  {
+    "id": "policy-details-page",
+    "file": "frontend/src/pages/PolicyDetails.tsx",
+    "description": "Policy details view and editing page",
+    "acceptance_criteria": "Displays policy information with PII masking, editing capabilities, and claims history section",
+    "status": "pending"
+  },
+  {
+    "id": "claims-list-page",
+    "file": "frontend/src/pages/ClaimsList.tsx",
+    "description": "Claims history and management page",
+    "acceptance_criteria": "Shows claims list with sorting by date, status filtering, and claim-level policy editing indicators",
+    "status": "pending"
+  },
+  {
+    "id": "payment-processing-page",
+    "file": "frontend/src/pages/PaymentProcessing.tsx",
+    "description": "Payment creation and processing management page",
+    "acceptance_criteria": "Provides payment forms for different methods, lifecycle tracking, and compliance features",
+    "status": "pending"
+  },
+  {
+    "id": "search-form-component",
+    "file": "frontend/src/components/SearchForm.tsx",
+    "description": "Reusable policy search form component",
+    "acceptance_criteria": "Provides search fields with validation, reset functionality, and responsive design",
+    "status": "pending"
+  },
+  {
+    "id": "data-table-component",
+    "file": "frontend/src/components/DataTable.tsx",
+    "description": "Sortable and filterable data table component",
+    "acceptance_criteria": "Provides sorting, filtering, pagination, and accessibility features for tabular data",
+    "status": "pending"
+  },
+  {
+    "id": "payment-form-component",
+    "file": "frontend/src/components/PaymentForm.tsx",
+    "description": "Payment processing form component with multiple payment methods",
+    "acceptance_criteria": "Supports ACH, wire, card payments with validation, encryption, and PCI compliance",
+    "status": "pending"
+  },
+  {
+    "id": "audit-log-component",
+    "file": "frontend/src/components/AuditLog.tsx",
+    "description": "Audit trail display component",
+    "acceptance_criteria": "Shows audit history with user, timestamp, action details, and data change tracking",
+    "status": "pending"
+  },
+  {
+    "id": "frontend-formatters",
+    "file": "frontend/src/utils/formatters.ts",
+    "description": "Data formatting utilities for currency, dates, and PII masking",
+    "acceptance_criteria": "Provides consistent formatting for SSN masking, currency display, and date formatting",
+    "status": "pending"
+  },
+  {
+    "id": "frontend-package",
+    "file": "frontend/package.json",
+    "description": "Frontend dependency specifications and build scripts",
+    "acceptance_criteria": "Lists React, TypeScript, testing, and UI dependencies with proper scripts for development and build",
+    "status": "pending"
+  },
+  {
+    "id": "typescript-config",
+    "file": "frontend/tsconfig.json",
+    "description": "TypeScript compiler configuration for strict type checking",
+    "acceptance_criteria": "Enables strict mode, proper module resolution, and React JSX support",
+    "status": "pending"
+  },
+  {
+    "id": "docker-compose",
+    "file": "docker-compose.yml",
+    "description": "Development environment with PostgreSQL and application services",
+    "acceptance_criteria": "Provides PostgreSQL database, backend, and frontend services with proper networking and volumes",
+    "status": "pending"
+  },
+  {
+    "id": "env-template",
+    "file": ".env.example",
+    "description": "Environment variables template with all required configuration",
+    "acceptance_criteria": "Lists all environment variables for database, JWT, encryption keys, and external service credentials",
+    "status": "pending"
+  }
+]
