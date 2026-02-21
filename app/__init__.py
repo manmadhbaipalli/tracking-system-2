@@ -1,1 +1,0 @@
-"""FastAPI Authentication Service Package."""
