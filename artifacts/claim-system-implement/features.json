@@ -1,0 +1,134 @@
+[
+  {
+    "id": "policy-service",
+    "file": "backend/app/services/policy_service.py",
+    "description": "Advanced policy search service with exact/partial matching, SSN/TIN search optimization, and validation business logic",
+    "acceptance_criteria": "Policy search returns results within 3 seconds, supports all BRD search criteria, handles partial matches correctly",
+    "status": "done"
+  },
+  {
+    "id": "claim-service",
+    "file": "backend/app/services/claim_service.py",
+    "description": "Claims management service with history filtering, subrogation management, and claim-level policy data handling",
+    "acceptance_criteria": "Claim history displays with status filtering, claim-level policy data overrides work with audit trail",
+    "status": "done"
+  },
+  {
+    "id": "payment-service",
+    "file": "backend/app/services/payment_service.py",
+    "description": "Payment processing service with reserve allocation, settlement management, and multiple payment methods",
+    "acceptance_criteria": "Payment creation supports multiple methods, reserve allocation prevents over-allocation, settlement calculations are accurate",
+    "status": "done"
+  },
+  {
+    "id": "search-service",
+    "file": "backend/app/services/search_service.py",
+    "description": "Unified search service with PostgreSQL full-text search optimization and search vector management",
+    "acceptance_criteria": "Search service returns results within performance requirements, supports exact and partial matching across all entities",
+    "status": "done"
+  },
+  {
+    "id": "integration-service",
+    "file": "backend/app/services/integration_service.py",
+    "description": "External integration coordinator with circuit breaker pattern and error handling for third-party services",
+    "acceptance_criteria": "Integration service handles external API failures gracefully, implements retry logic with exponential backoff",
+    "status": "done"
+  },
+  {
+    "id": "enhanced-policies-api",
+    "file": "backend/app/api/policies.py",
+    "description": "Enhanced policy API endpoints with advanced search, SSN/TIN search, and comprehensive CRUD operations",
+    "acceptance_criteria": "Policy API supports all BRD search criteria, returns masked PII correctly, handles validation errors properly",
+    "status": "done"
+  },
+  {
+    "id": "enhanced-claims-api",
+    "file": "backend/app/api/claims.py",
+    "description": "Enhanced claims API with history display, status filtering, claim-level policy data management",
+    "acceptance_criteria": "Claims API returns filtered history, supports claim-level policy overrides with visual indicators, maintains audit trail",
+    "status": "partial",
+    "reason": "Basic structure implemented, needs enhanced endpoints for claim overrides and subrogation"
+  },
+  {
+    "id": "enhanced-payments-api",
+    "file": "backend/app/api/payments.py",
+    "description": "Enhanced payments API with multiple payment methods, reserve management, and settlement processing",
+    "acceptance_criteria": "Payments API supports ACH/Wire/Card methods, processes settlements correctly, validates reserve allocations",
+    "status": "partial",
+    "reason": "Basic structure exists, needs integration with payment service for full functionality"
+  },
+  {
+    "id": "stripe-integration",
+    "file": "backend/app/integrations/stripe_service.py",
+    "description": "Stripe Connect integration service for payment processing and payout management",
+    "acceptance_criteria": "Stripe integration processes payments successfully, handles webhooks correctly, maintains transaction records",
+    "status": "done"
+  },
+  {
+    "id": "frontend-core",
+    "file": "frontend/package.json",
+    "description": "Frontend project setup with React, TypeScript, dependencies, and build configuration",
+    "acceptance_criteria": "Frontend project builds successfully, development server starts without errors, TypeScript compilation passes",
+    "status": "done"
+  },
+  {
+    "id": "frontend-types",
+    "file": "frontend/src/types/index.ts",
+    "description": "TypeScript type definitions for policies, claims, payments, and API responses",
+    "acceptance_criteria": "Types match backend schemas exactly, enable proper type checking, support all required fields",
+    "status": "done"
+  },
+  {
+    "id": "api-service",
+    "file": "frontend/src/services/apiService.ts",
+    "description": "Frontend API service layer with HTTP client, error handling, and authentication",
+    "acceptance_criteria": "API service handles requests/responses correctly, includes JWT token management, provides consistent error handling",
+    "status": "done"
+  },
+  {
+    "id": "policy-search-page",
+    "file": "frontend/src/pages/PolicySearchPage.tsx",
+    "description": "Policy search page with form, results display, and advanced search criteria",
+    "acceptance_criteria": "Policy search page renders correctly, submits search requests, displays results with proper PII masking",
+    "status": "done"
+  },
+  {
+    "id": "policy-details-page",
+    "file": "frontend/src/pages/PolicyDetailsPage.tsx",
+    "description": "Policy details page with comprehensive information display and claims history",
+    "acceptance_criteria": "Policy details display all required fields, claims history shows with filtering, page is WCAG compliant",
+    "status": "partial",
+    "reason": "Stub created, needs full implementation of policy details display and claims history"
+  },
+  {
+    "id": "claims-management-page",
+    "file": "frontend/src/pages/ClaimsPage.tsx",
+    "description": "Claims management page with history display, filtering, and claim-level policy data editing",
+    "acceptance_criteria": "Claims page displays filterable history, supports claim-level policy editing with visual indicators",
+    "status": "partial",
+    "reason": "Stub created, needs full implementation of claims management functionality"
+  },
+  {
+    "id": "payments-page",
+    "file": "frontend/src/pages/PaymentsPage.tsx",
+    "description": "Payments management page with payment creation, method selection, and reserve allocation",
+    "acceptance_criteria": "Payments page supports multiple payment methods, displays reserve information, handles payment creation flow",
+    "status": "partial",
+    "reason": "Stub created, needs full implementation of payment management functionality"
+  },
+  {
+    "id": "search-component",
+    "file": "frontend/src/components/SearchComponent.tsx",
+    "description": "Reusable search component with criteria builder, exact/partial matching, and reset functionality",
+    "acceptance_criteria": "Search component supports all search criteria, handles exact/partial toggle, resets form correctly",
+    "status": "partial",
+    "reason": "Implemented as part of PolicySearchPage, needs extraction into reusable component"
+  },
+  {
+    "id": "app-router",
+    "file": "frontend/src/App.tsx",
+    "description": "Main application component with routing, authentication, and global state management",
+    "acceptance_criteria": "App routes to correct pages, maintains authentication state, provides global error handling",
+    "status": "done"
+  }
+]
