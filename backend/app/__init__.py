@@ -1,1 +1,0 @@
-"""Claims Service Platform - Application Package"""
