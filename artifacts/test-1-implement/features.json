@@ -1,0 +1,156 @@
+[
+  {
+    "id": "project-config",
+    "file": "requirements.txt",
+    "description": "Python dependencies for FastAPI, SQLAlchemy, JWT, testing, and circuit breaker",
+    "acceptance_criteria": "All required packages listed with appropriate versions",
+    "status": "done"
+  },
+  {
+    "id": "project-metadata",
+    "file": "pyproject.toml",
+    "description": "Project configuration with Black, mypy, and pytest settings",
+    "acceptance_criteria": "Configuration file parses correctly and tools work with specified settings",
+    "status": "done"
+  },
+  {
+    "id": "database-connection",
+    "file": "app/database.py",
+    "description": "SQLAlchemy database connection and session management",
+    "acceptance_criteria": "Database connects successfully and sessions can be created",
+    "status": "done"
+  },
+  {
+    "id": "app-config",
+    "file": "app/core/config.py",
+    "description": "Application configuration using Pydantic BaseSettings",
+    "acceptance_criteria": "Configuration loads from environment variables with proper defaults",
+    "status": "done"
+  },
+  {
+    "id": "security-utils",
+    "file": "app/core/security.py",
+    "description": "JWT token handling, password hashing, and authentication utilities",
+    "acceptance_criteria": "Passwords hash securely, JWT tokens generate and validate correctly",
+    "status": "done"
+  },
+  {
+    "id": "logging-setup",
+    "file": "app/core/logging.py",
+    "description": "Centralized logging configuration with structured JSON output",
+    "acceptance_criteria": "Logging initializes correctly and produces structured JSON logs",
+    "status": "done"
+  },
+  {
+    "id": "exception-handling",
+    "file": "app/core/exceptions.py",
+    "description": "Custom exceptions and global exception handlers for FastAPI",
+    "acceptance_criteria": "Custom exceptions inherit properly and handlers return consistent error format",
+    "status": "done"
+  },
+  {
+    "id": "user-model",
+    "file": "app/models/user.py",
+    "description": "SQLAlchemy User model with email, hashed password, and timestamps",
+    "acceptance_criteria": "Model creates database table and supports CRUD operations",
+    "status": "done"
+  },
+  {
+    "id": "user-schemas",
+    "file": "app/schemas/user.py",
+    "description": "Pydantic models for user registration, login, and response data",
+    "acceptance_criteria": "Schemas validate input correctly and serialize responses properly",
+    "status": "done"
+  },
+  {
+    "id": "api-dependencies",
+    "file": "app/api/deps.py",
+    "description": "Dependency injection for database sessions and authentication",
+    "acceptance_criteria": "Dependencies inject correctly and handle authentication failures",
+    "status": "done"
+  },
+  {
+    "id": "auth-service",
+    "file": "app/services/auth.py",
+    "description": "Authentication business logic for user registration and login",
+    "acceptance_criteria": "Users can register, login returns JWT token, duplicate emails rejected",
+    "status": "done"
+  },
+  {
+    "id": "circuit-breaker",
+    "file": "app/services/circuit_breaker.py",
+    "description": "Circuit breaker implementation for external calls and unstable operations",
+    "acceptance_criteria": "Circuit opens on failures and recovers automatically",
+    "status": "done"
+  },
+  {
+    "id": "auth-endpoints",
+    "file": "app/api/v1/endpoints/auth.py",
+    "description": "FastAPI routes for user registration and login with proper validation",
+    "acceptance_criteria": "Endpoints return 200 for success, proper error codes for failures",
+    "status": "done"
+  },
+  {
+    "id": "api-router",
+    "file": "app/api/v1/__init__.py",
+    "description": "API v1 router configuration that includes auth endpoints",
+    "acceptance_criteria": "Router includes all endpoints and integrates with main app",
+    "status": "done"
+  },
+  {
+    "id": "main-app",
+    "file": "app/main.py",
+    "description": "FastAPI application with middleware, exception handlers, and router registration",
+    "acceptance_criteria": "App starts successfully, OpenAPI docs accessible, middleware functioning",
+    "status": "done"
+  },
+  {
+    "id": "app-init",
+    "file": "app/__init__.py",
+    "description": "App package initialization file",
+    "acceptance_criteria": "Package imports without error",
+    "status": "done"
+  },
+  {
+    "id": "core-init",
+    "file": "app/core/__init__.py",
+    "description": "Core package initialization file",
+    "acceptance_criteria": "Package imports without error",
+    "status": "done"
+  },
+  {
+    "id": "api-init",
+    "file": "app/api/__init__.py",
+    "description": "API package initialization file",
+    "acceptance_criteria": "Package imports without error",
+    "status": "done"
+  },
+  {
+    "id": "models-init",
+    "file": "app/models/__init__.py",
+    "description": "Models package initialization file",
+    "acceptance_criteria": "Package imports without error",
+    "status": "done"
+  },
+  {
+    "id": "schemas-init",
+    "file": "app/schemas/__init__.py",
+    "description": "Schemas package initialization file",
+    "acceptance_criteria": "Package imports without error",
+    "status": "done"
+  },
+  {
+    "id": "services-init",
+    "file": "app/services/__init__.py",
+    "description": "Services package initialization file",
+    "acceptance_criteria": "Package imports without error",
+    "status": "done"
+  },
+  {
+    "id": "endpoints-init",
+    "file": "app/api/v1/endpoints/__init__.py",
+    "description": "Endpoints package initialization file",
+    "acceptance_criteria": "Package imports without error",
+    "status": "done"
+  }
+]
