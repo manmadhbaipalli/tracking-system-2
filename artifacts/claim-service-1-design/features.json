@@ -1,0 +1,226 @@
+[
+  {
+    "id": "app-init",
+    "file": "app/__init__.py",
+    "description": "Main application package initialization",
+    "acceptance_criteria": "Package can be imported without errors",
+    "status": "pending"
+  },
+  {
+    "id": "main-app",
+    "file": "app/main.py",
+    "description": "FastAPI application entry point with middleware, CORS, and route registration",
+    "acceptance_criteria": "FastAPI app starts successfully and serves OpenAPI docs at /docs",
+    "status": "pending"
+  },
+  {
+    "id": "config-core",
+    "file": "app/core/config.py",
+    "description": "Environment-based configuration management with database URLs, JWT settings, and external integration configs",
+    "acceptance_criteria": "Configuration loads from environment variables with proper defaults and validation",
+    "status": "pending"
+  },
+  {
+    "id": "database-core",
+    "file": "app/core/database.py",
+    "description": "Async SQLAlchemy database connection, session management, and base model configuration",
+    "acceptance_criteria": "Database sessions can be created and closed properly with async context",
+    "status": "pending"
+  },
+  {
+    "id": "security-core",
+    "file": "app/core/security.py",
+    "description": "JWT authentication, password hashing, role-based access control decorators",
+    "acceptance_criteria": "JWT tokens can be created, verified, and role permissions enforced",
+    "status": "pending"
+  },
+  {
+    "id": "models-init",
+    "file": "app/models/__init__.py",
+    "description": "Models package initialization with all model imports",
+    "acceptance_criteria": "All models can be imported from this package",
+    "status": "pending"
+  },
+  {
+    "id": "user-model",
+    "file": "app/models/user.py",
+    "description": "User account and role management models with authentication support",
+    "acceptance_criteria": "Users can be created with roles and authenticated against the database",
+    "status": "pending"
+  },
+  {
+    "id": "audit-model",
+    "file": "app/models/audit.py",
+    "description": "Comprehensive audit log model for tracking all data modifications with polymorphic relationships",
+    "acceptance_criteria": "Audit entries can be created for any model with user, timestamp, and change details",
+    "status": "pending"
+  },
+  {
+    "id": "policy-model",
+    "file": "app/models/policy.py",
+    "description": "Policy entities with vehicle details, location info, coverage data, and search indexes",
+    "acceptance_criteria": "Policies can be created with all required fields and support complex search queries",
+    "status": "pending"
+  },
+  {
+    "id": "claim-model",
+    "file": "app/models/claim.py",
+    "description": "Claims linked to policies with claim-level policy overrides, subrogation support, and audit tracking",
+    "acceptance_criteria": "Claims can be created with policy links and support policy data overrides with audit trails",
+    "status": "pending"
+  },
+  {
+    "id": "payment-model",
+    "file": "app/models/payment.py",
+    "description": "Payment transactions with multiple payees, reserve allocation, and complex payment lifecycle management",
+    "acceptance_criteria": "Payments can be created with multiple payment methods, payee allocations, and state transitions",
+    "status": "pending"
+  },
+  {
+    "id": "schemas-init",
+    "file": "app/schemas/__init__.py",
+    "description": "Schemas package initialization with all schema imports",
+    "acceptance_criteria": "All Pydantic schemas can be imported from this package",
+    "status": "pending"
+  },
+  {
+    "id": "auth-schemas",
+    "file": "app/schemas/auth.py",
+    "description": "Authentication request/response schemas with JWT token models and user registration",
+    "acceptance_criteria": "Login, token refresh, and user registration requests can be validated",
+    "status": "pending"
+  },
+  {
+    "id": "policy-schemas",
+    "file": "app/schemas/policy.py",
+    "description": "Policy request/response schemas with search criteria, masking for sensitive data, and validation rules",
+    "acceptance_criteria": "Policy data can be validated with proper SSN/TIN masking and search parameters",
+    "status": "pending"
+  },
+  {
+    "id": "claim-schemas",
+    "file": "app/schemas/claim.py",
+    "description": "Claims request/response schemas with policy linking, audit trail data, and status filtering",
+    "acceptance_criteria": "Claim data can be validated with policy references and audit information",
+    "status": "pending"
+  },
+  {
+    "id": "payment-schemas",
+    "file": "app/schemas/payment.py",
+    "description": "Payment request/response schemas with multiple payment methods, payee details, and compliance data masking",
+    "acceptance_criteria": "Payment data can be validated with proper PCI-DSS compliant data masking",
+    "status": "pending"
+  },
+  {
+    "id": "api-init",
+    "file": "app/api/__init__.py",
+    "description": "API package initialization",
+    "acceptance_criteria": "API package can be imported without errors",
+    "status": "pending"
+  },
+  {
+    "id": "api-deps",
+    "file": "app/api/deps.py",
+    "description": "API dependencies for database sessions, authentication, and role-based access control",
+    "acceptance_criteria": "Dependencies provide proper database sessions and enforce authentication/authorization",
+    "status": "pending"
+  },
+  {
+    "id": "api-v1-init",
+    "file": "app/api/v1/__init__.py",
+    "description": "API version 1 package initialization with route registration",
+    "acceptance_criteria": "All v1 routes are properly registered and accessible",
+    "status": "pending"
+  },
+  {
+    "id": "auth-api",
+    "file": "app/api/v1/auth.py",
+    "description": "Authentication endpoints for login, token refresh, user registration, and role management",
+    "acceptance_criteria": "Users can authenticate, receive JWT tokens, and manage their accounts",
+    "status": "pending"
+  },
+  {
+    "id": "policies-api",
+    "file": "app/api/v1/policies.py",
+    "description": "Policy management endpoints with CRUD operations and advanced search (9+ criteria) under 3-second response time",
+    "acceptance_criteria": "Policies can be created, read, updated, searched with multiple criteria, and results returned within performance requirements",
+    "status": "pending"
+  },
+  {
+    "id": "claims-api",
+    "file": "app/api/v1/claims.py",
+    "description": "Claims management endpoints with policy linking, claim history, and audit trail access under 5-second response time",
+    "acceptance_criteria": "Claims can be managed with policy associations, history can be retrieved, and audit trails are accessible within performance requirements",
+    "status": "pending"
+  },
+  {
+    "id": "payments-api",
+    "file": "app/api/v1/payments.py",
+    "description": "Payment processing endpoints with multiple payment methods, lifecycle management, and PCI-DSS compliance under 5-second response time",
+    "acceptance_criteria": "Payments can be processed with various methods, state transitions managed, and compliance requirements met within performance requirements",
+    "status": "pending"
+  },
+  {
+    "id": "services-init",
+    "file": "app/services/__init__.py",
+    "description": "Services package initialization",
+    "acceptance_criteria": "Services package can be imported without errors",
+    "status": "pending"
+  },
+  {
+    "id": "policy-service",
+    "file": "app/services/policy_service.py",
+    "description": "Policy business logic with advanced search algorithms, audit logging, and performance optimization",
+    "acceptance_criteria": "Policy operations are fast, properly audited, and support complex search requirements",
+    "status": "pending"
+  },
+  {
+    "id": "claim-service",
+    "file": "app/services/claim_service.py",
+    "description": "Claims processing business logic with policy linking, claim-level policy overrides, and comprehensive audit trails",
+    "acceptance_criteria": "Claims can be processed with proper policy associations, data overrides are tracked, and audit trails are complete",
+    "status": "pending"
+  },
+  {
+    "id": "payment-service",
+    "file": "app/services/payment_service.py",
+    "description": "Payment lifecycle management with routing rules, multiple payment methods, reserve allocation, and compliance handling",
+    "acceptance_criteria": "Payments are processed according to business rules with proper compliance and audit tracking",
+    "status": "pending"
+  },
+  {
+    "id": "utils-init",
+    "file": "app/utils/__init__.py",
+    "description": "Utils package initialization",
+    "acceptance_criteria": "Utils package can be imported without errors",
+    "status": "pending"
+  },
+  {
+    "id": "audit-utils",
+    "file": "app/utils/audit.py",
+    "description": "Audit logging utilities for automatic tracking of all data modifications with user context and timestamps",
+    "acceptance_criteria": "All model changes are automatically logged with proper user attribution and change details",
+    "status": "pending"
+  },
+  {
+    "id": "security-utils",
+    "file": "app/utils/security.py",
+    "description": "Data masking and encryption utilities for SSN/TIN, payment information, and PCI-DSS compliance",
+    "acceptance_criteria": "Sensitive data is properly masked in responses and encrypted at rest according to compliance requirements",
+    "status": "pending"
+  },
+  {
+    "id": "integrations-utils",
+    "file": "app/utils/integrations.py",
+    "description": "External system integration utilities with circuit breakers, retry logic, and error handling for Stripe, banking, and EDI systems",
+    "acceptance_criteria": "External integrations are resilient with proper error handling and retry mechanisms",
+    "status": "pending"
+  },
+  {
+    "id": "initial-migration",
+    "file": "migrations/versions/001_initial_schema.py",
+    "description": "Initial database schema migration with all tables, indexes, and relationships for policies, claims, payments, users, and audit logs",
+    "acceptance_criteria": "Database schema is created successfully with all required tables, indexes, and foreign key relationships",
+    "status": "pending"
+  }
+]
