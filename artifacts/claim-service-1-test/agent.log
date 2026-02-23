@@ -1,0 +1,45 @@
+I'll help you fix the CI failure. Let me start by examining the failing test setup and understanding what went wrong.
+
+> **Read** `C:\Manmadh\Workspaces\claude-code-agents\workspace\claim-service-1-agent-1\tests\conftest.py`
+
+Now let me check the project dependencies to understand what's missing:
+
+> **Glob** `requirements*.txt`
+
+> **Read** `C:\Manmadh\Workspaces\claude-code-agents\workspace\claim-service-1-agent-1\requirements.txt`
+
+I can see that `pytest-asyncio>=0.21.0` is already listed in requirements.txt on line 28. The issue seems to be that the dependencies weren't installed during CI. Let me check for other potential dependency files:
+
+> **Glob** `pyproject.toml`
+
+> **Glob** `setup.py`
+
+> **Glob** `.github/**/*"`
+
+> **Glob** `.github/**"`
+
+> **Bash** `Find any YAML files that might be CI configurations`
+
+Let me create a todo list to track the CI failure investigation and fix:
+
+> **Update Todos** Install project dependencies from requir, Run tests to verify the fix works, Document findings in artifacts/claim-ser
+
+> **Bash** `Install project dependencies to fix the missing pytest_asyncio module`
+
+> **Update Todos** Install project dependencies from requir, Run tests to verify the fix works, Document findings in artifacts/claim-ser
+
+> **Bash** `Run all tests with verbose output`
+
+Now I see a different issue. The original `pytest_asyncio` import issue has been resolved, but now we have a PostgreSQL driver issue. Let me check what tests exist:
+
+> **Glob** `tests/**/*.py"`
+
+> **Bash** `Find all Python files in the tests directory`
+
+Let me check one of the test files to understand what dependencies they're using:
+
+> **Read** `C:\Manmadh\Workspaces\claude-code-agents\workspace\claim-service-1-agent-1\tests\test_main.py`
+
+---
+
+**Completed** in 16 turns (cost: $0.2311)
