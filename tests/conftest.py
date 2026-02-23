@@ -11,7 +11,7 @@ from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 
 from app.main import create_app
-from app.core.database import Base, get_db
+from app.core.database import Base, get_database_session
 from app.core.config import Settings
 
 
@@ -69,7 +69,7 @@ async def test_app(test_db):
     async def override_get_db():
         yield test_db
 
-    app.dependency_overrides[get_db] = override_get_db
+    app.dependency_overrides[get_database_session] = override_get_db
 
     return app
 
@@ -87,5 +87,6 @@ def test_settings():
     return Settings(
         environment="testing",
         debug=True,
+        jwt_secret_key="test-jwt-secret-key-for-unit-testing-minimum-32-chars-long!",
         database={"sqlite_url": TEST_DATABASE_URL}
     )

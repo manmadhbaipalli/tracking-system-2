@@ -1,0 +1,47 @@
+I can see the CI failure is due to a missing `pytest_asyncio` module. Let me investigate and fix this issue.
+
+> **Read** `C:\Manmadh\Workspaces\claude-code-agents\workspace\claim-service-2-agent-1\tests\conftest.py`
+
+> **Glob** `requirements*.txt`
+
+> **Read** `C:\Manmadh\Workspaces\claude-code-agents\workspace\claim-service-2-agent-1\requirements.txt`
+
+> **Bash** `Install project dependencies from requirements.txt`
+
+> **Bash** `Run all tests to check if pytest_asyncio issue is resolved`
+
+> **Read** `C:\Manmadh\Workspaces\claude-code-agents\workspace\claim-service-2-agent-1\app\api\deps.py`
+
+> **Read** `C:\Manmadh\Workspaces\claude-code-agents\workspace\claim-service-2-agent-1\app\api\v1\auth.py`
+
+> **Edit** `C:\Manmadh\Workspaces\claude-code-agents\workspace\claim-service-2-agent-1\app\api\v1\auth.py`
+> Replace: `from app.api.deps import get_db, get_current_user...`
+
+> **Edit** `C:\Manmadh\Workspaces\claude-code-agents\workspace\claim-service-2-agent-1\app\api\v1\auth.py`
+> Replace: `    db: AsyncSession = Depends(get_db)...`
+
+> **Edit** `C:\Manmadh\Workspaces\claude-code-agents\workspace\claim-service-2-agent-1\app\api\v1\auth.py`
+> Replace: `    current_user: User = Depends(get_current_user)...`
+
+> **Bash** `Run tests again to check if import error is resolved`
+
+> **Read** `C:\Manmadh\Workspaces\claude-code-agents\workspace\claim-service-2-agent-1\app\schemas\auth.py`
+
+> **Edit** `C:\Manmadh\Workspaces\claude-code-agents\workspace\claim-service-2-agent-1\app\api\v1\auth.py`
+> Replace: `from app.schemas.auth import (
+    UserCreate,
+    UserResponse,
+    Token,
+    ...`
+
+> **Edit** `C:\Manmadh\Workspaces\claude-code-agents\workspace\claim-service-2-agent-1\app\api\v1\auth.py`
+> Replace: `@router.post("/login", response_model=Token)...`
+
+> **Edit** `C:\Manmadh\Workspaces\claude-code-agents\workspace\claim-service-2-agent-1\app\api\v1\auth.py`
+> Replace: `@router.post("/refresh", response_model=Token)
+async def refresh_token(
+    refr...`
+
+---
+
+**Completed** in 16 turns (cost: $0.2836)

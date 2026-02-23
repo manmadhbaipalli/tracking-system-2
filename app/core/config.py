@@ -27,7 +27,7 @@ class DatabaseSettings(BaseModel):
 class JWTSettings(BaseModel):
     """JWT authentication settings."""
 
-    secret_key: str = Field(default="your-secret-key-change-in-production-must-be-at-least-32-chars-long!", min_length=32)
+    secret_key: str = Field(min_length=32)
     algorithm: str = "HS256"
     access_token_expire_minutes: int = 30
     refresh_token_expire_days: int = 7
@@ -105,9 +105,8 @@ class Settings(BaseSettings):
 
     # JWT - Direct fields for better env var integration
     jwt_secret_key: str = Field(
-        default="your-secret-key-change-in-production-must-be-at-least-32-chars-long!",
-        min_length=32,
-        description="JWT secret key for token signing"
+        description="JWT secret key for token signing - MUST be set via JWT_SECRET_KEY environment variable",
+        min_length=32
     )
     jwt_algorithm: str = "HS256"
     jwt_access_token_expire_minutes: int = 30
