@@ -36,11 +36,55 @@ class JWTSettings(BaseModel):
 class IntegrationSettings(BaseModel):
     """External integration settings."""
 
+    # Stripe Connect settings
     stripe_secret_key: Optional[str] = None
     stripe_publishable_key: Optional[str] = None
-    banking_api_key: Optional[str] = None
+    stripe_webhook_secret: Optional[str] = None
+    stripe_connect_client_id: Optional[str] = None
+
+    # Banking systems
+    ach_api_key: Optional[str] = None
+    ach_api_url: Optional[str] = None
+    wire_transfer_api_key: Optional[str] = None
+    wire_transfer_api_url: Optional[str] = None
+
+    # Xactimate/XactAnalysis integration
+    xactimate_api_key: Optional[str] = None
+    xactimate_api_url: Optional[str] = None
+    xactanalysis_api_key: Optional[str] = None
+    xactanalysis_api_url: Optional[str] = None
+
+    # EDI systems
+    edi_835_endpoint: Optional[str] = None
+    edi_837_endpoint: Optional[str] = None
+    edi_api_key: Optional[str] = None
+
+    # Document management
+    document_storage_bucket: Optional[str] = None
+    document_storage_key: Optional[str] = None
+    document_storage_secret: Optional[str] = None
+
+    # Bill review vendors
+    bill_review_api_key: Optional[str] = None
+    bill_review_api_url: Optional[str] = None
+
+    # General ledger integration
+    gl_api_key: Optional[str] = None
+    gl_api_url: Optional[str] = None
+
+    # Tax ID services
+    tax_id_verification_api_key: Optional[str] = None
+    tax_id_verification_api_url: Optional[str] = None
+
+    # Circuit breaker settings
     circuit_breaker_failure_threshold: int = 5
     circuit_breaker_reset_timeout: int = 60
+    circuit_breaker_half_open_max_calls: int = 3
+
+    # Retry settings
+    max_retry_attempts: int = 3
+    retry_backoff_factor: float = 2.0
+    retry_base_delay: float = 1.0
 
 
 class Settings(BaseSettings):
@@ -75,15 +119,42 @@ class Settings(BaseSettings):
     # Security
     encryption_key: Optional[str] = None
     password_min_length: int = 8
+    max_failed_login_attempts: int = 5
+    account_lockout_duration_minutes: int = 30
+    session_timeout_minutes: int = 480  # 8 hours
+    require_2fa: bool = False
+    allowed_file_types: list[str] = ["pdf", "doc", "docx", "jpg", "jpeg", "png"]
+    max_file_size_mb: int = 10
 
     # Performance
     max_search_results: int = 1000
     search_timeout_seconds: int = 3
     api_timeout_seconds: int = 5
+    policy_search_cache_ttl: int = 300  # 5 minutes
+    claim_details_cache_ttl: int = 60   # 1 minute
+    max_concurrent_requests: int = 100
+    rate_limit_per_minute: int = 60
 
     # Logging
     log_level: str = "INFO"
     log_format: str = "json"
+    audit_log_retention_days: int = 2555  # 7 years
+    enable_request_logging: bool = True
+    log_sensitive_data: bool = False
+
+    # Email settings
+    smtp_host: Optional[str] = None
+    smtp_port: int = 587
+    smtp_username: Optional[str] = None
+    smtp_password: Optional[str] = None
+    smtp_use_tls: bool = True
+    from_email: str = "noreply@insurance.com"
+
+    # Monitoring and health checks
+    enable_metrics: bool = True
+    metrics_endpoint: str = "/metrics"
+    health_check_endpoint: str = "/health"
+    enable_database_health_check: bool = True
 
     class Config:
         env_file = ".env"

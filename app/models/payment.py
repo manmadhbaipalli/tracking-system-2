@@ -15,7 +15,7 @@ from typing import Optional, Dict, Any, List
 from datetime import date, datetime
 from decimal import Decimal
 from enum import Enum
-from sqlalchemy import String, Date, Numeric, JSON, Text, ForeignKey, Boolean, Enum as SQLEnum, Index, Table
+from sqlalchemy import String, Date, Numeric, JSON, Text, ForeignKey, Boolean, Enum as SQLEnum, Index, Table, Column
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.core.database import Base, GUID
@@ -61,8 +61,8 @@ class PaymentType(str, Enum):
 payment_payee_table = Table(
     "payment_payees",
     Base.metadata,
-    mapped_column("payment_id", GUID, ForeignKey("payments.id"), primary_key=True),
-    mapped_column("payee_id", GUID, ForeignKey("payees.id"), primary_key=True),
+    Column("payment_id", GUID, ForeignKey("payments.id"), primary_key=True),
+    Column("payee_id", GUID, ForeignKey("payees.id"), primary_key=True),
 )
 
 
