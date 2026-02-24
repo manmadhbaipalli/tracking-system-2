@@ -1,112 +1,102 @@
-# Project Standards
+# Project: Integrated Policy, Claims, and Payments Platform
 
 ## Tech Stack
-- **Backend**: Python 3.11+ with FastAPI framework
-- **Database**: SQLAlchemy 2.0+ with async support
-- **Database Engines**: aiosqlite (dev), asyncpg/PostgreSQL (prod)
-- **Authentication**: passlib + python-jose for JWT tokens
-- **Migration**: Alembic for database migrations
-- **Testing**: pytest with pytest-asyncio and pytest-cov
+- **Language**: Python 3.11+ with async/await support
+- **Framework**: FastAPI 0.100+ for high-performance APIs
+- **Database**: PostgreSQL 16 (production), aiosqlite (development)
+- **ORM**: SQLAlchemy 2.0+ with async drivers (asyncpg, aiosqlite)
+- **Authentication**: python-jose + passlib for JWT and BCrypt
+- **API Docs**: FastAPI auto-generated OpenAPI/Swagger
+- **Migrations**: Alembic for database schema versioning
+- **Validation**: Pydantic 2.0+ for request/response schemas
+- **Logging**: structlog for structured JSON logging
+- **Testing**: pytest + pytest-asyncio + pytest-cov
 - **Code Quality**: black (formatting), flake8 (linting), mypy (typing)
-- **Frontend**: ReactJS (to be implemented)
 - **Payment Processing**: Stripe Connect, Global Payouts, ACH/Wire integrations
 - **External Systems**: Xactimate/XactAnalysis, EDI 835/837, Document Management
 
 ## Project Structure
 ```
-claim-service-2-agent-1/
-├── requirements.txt           # Python dependencies
-├── app/                      # Main application package
+app/
+├── __init__.py
+├── main.py                  # FastAPI application entry point
+├── core/                    # Core configuration and infrastructure
 │   ├── __init__.py
-│   ├── main.py              # FastAPI application entry point
-│   ├── core/                # Core configuration and security
-│   │   ├── config.py        # Settings and configuration
-│   │   ├── security.py      # Authentication and authorization
-│   │   └── database.py      # Database connection and session
-│   ├── models/              # SQLAlchemy models (implemented)
-│   │   ├── __init__.py
-│   │   ├── audit.py         # Audit logging models
-│   │   ├── claim.py         # Claims data models (comprehensive)
-│   │   ├── payment.py       # Payment and disbursement models (complex)
-│   │   ├── policy.py        # Policy data models (advanced search)
-│   │   └── user.py          # User and role models
-│   ├── schemas/             # Pydantic models for API (implemented)
-│   │   ├── __init__.py
-│   │   ├── auth.py          # Authentication schemas
-│   │   ├── claim.py         # Claims request/response schemas
-│   │   ├── payment.py       # Payment request/response schemas
-│   │   └── policy.py        # Policy request/response schemas
-│   ├── api/                 # API routes (structure ready, logic needed)
-│   │   ├── __init__.py
-│   │   ├── deps.py          # API dependencies (auth, db)
-│   │   └── v1/              # API version 1
-│   │       ├── __init__.py
-│   │       ├── auth.py      # Authentication endpoints (basic)
-│   │       ├── claims.py    # Claims management endpoints (stubs)
-│   │       ├── payments.py  # Payment processing endpoints (stubs)
-│   │       └── policies.py  # Policy management endpoints (stubs)
-│   ├── services/            # Business logic layer (needs implementation)
-│   │   ├── __init__.py
-│   │   ├── claim_service.py # Claims business logic (stub)
-│   │   ├── payment_service.py # Payment processing logic (stub)
-│   │   └── policy_service.py # Policy management logic (stub)
-│   └── utils/               # Utility functions (foundational)
-│       ├── __init__.py
-│       ├── audit.py         # Audit logging utilities
-│       ├── integrations.py  # External system integrations (stubs)
-│       └── security.py      # Data masking and encryption
-├── tests/                   # Test files (basic structure)
-│   ├── conftest.py         # Test configuration
-│   ├── test_main.py        # Main app tests
-│   └── unit/               # Unit tests
-├── migrations/              # Alembic migration files (to be created)
-├── frontend/                # React frontend (future implementation)
-└── artifacts/               # Agent artifacts and analysis
+│   ├── config.py           # Pydantic Settings configuration
+│   ├── database.py         # Async SQLAlchemy setup
+│   └── security.py         # JWT utilities and auth functions
+├── models/                  # SQLAlchemy ORM models
+│   ├── __init__.py
+│   ├── base.py             # Base model with audit fields
+│   ├── user.py             # User and authentication models
+│   ├── policy.py           # Policy with vehicles, locations, coverages
+│   ├── claim.py            # Claims with policy relationships
+│   ├── payment.py          # Payments with multi-payee support
+│   └── audit.py            # Audit logging models
+├── schemas/                 # Pydantic request/response models
+│   ├── __init__.py
+│   ├── auth.py             # Authentication schemas
+│   ├── user.py             # User management schemas
+│   ├── policy.py           # Policy CRUD and search schemas
+│   ├── claim.py            # Claim management schemas
+│   ├── payment.py          # Payment processing schemas
+│   └── common.py           # Common response formats (ErrorResponse, PageResponse)
+├── api/                     # API endpoints and routing
+│   ├── __init__.py         # Main API router configuration
+│   ├── deps.py             # FastAPI dependencies (auth, db, roles)
+│   └── v1/                 # API version 1
+│       ├── __init__.py     # V1 router with endpoint inclusion
+│       ├── auth.py         # Authentication endpoints
+│       ├── users.py        # User management endpoints
+│       ├── policies.py     # Policy CRUD and search endpoints
+│       ├── claims.py       # Claim management endpoints
+│       ├── payments.py     # Payment processing endpoints
+│       └── health.py       # Health check endpoints
+├── services/                # Business logic layer
+│   ├── __init__.py
+│   ├── auth_service.py     # Authentication business logic
+│   ├── policy_service.py   # Policy management with search optimization
+│   ├── claim_service.py    # Claim processing and status management
+│   ├── payment_service.py  # Payment lifecycle and external integrations
+│   └── audit_service.py    # Cross-cutting audit logging service
+├── utils/                   # Cross-cutting utilities
+│   ├── __init__.py
+│   ├── security.py         # Data encryption and masking utilities
+│   ├── audit.py            # Audit logging helpers and decorators
+│   ├── correlation.py      # Correlation ID middleware
+│   ├── integrations.py     # External system integration base classes
+│   └── exceptions.py       # Custom exceptions and global handlers
+requirements.txt             # Python dependencies with pinned versions
+migrations/                  # Alembic database migrations
+├── env.py                  # Alembic environment configuration
+└── versions/               # Migration version files
+tests/                       # Test suites (created by SmartQA)
+artifacts/                   # Agent artifacts and documentation
 ```
 
-## Coding Conventions
-- **Python Style**: Follow PEP 8, enforced by black formatter
-- **Import Order**: Standard library, third-party, local imports (separated by blank lines)
-- **Naming**:
-  - snake_case for variables, functions, modules
-  - PascalCase for classes and schemas
-  - UPPER_CASE for constants
-- **Type Hints**: Required for all function signatures and class attributes
-- **Async/Await**: Use async patterns throughout for database and external calls
-- **Error Handling**: Use FastAPI's HTTPException for API errors with specific messages
-- **Logging**: Use structlog for structured logging with audit context
-- **Documentation**: Clear docstrings and OpenAPI schema examples
+## Conventions
+- **Package Naming**: `app.{module}` structure with clear separation of concerns
+- **API Prefix**: All endpoints use `/api/v1/` prefix for versioning
+- **Error Format**: Consistent ErrorResponse schema with correlation IDs
+- **Authentication**: JWT Bearer tokens in Authorization header
+- **Pagination**: PageResponse envelope for all list endpoints with default 20, max 100 items
+- **Logging**: Structured JSON in production, readable format in development
+- **Data Masking**: SSN/TIN show only last 4 digits in all API responses
+- **Type Safety**: Full type hints required, enforced by mypy
+- **Async Patterns**: Use async/await throughout for database and external API calls
+- **Transaction Safety**: Payment operations wrapped in database transactions
+- **Audit Trail**: All data modifications tracked with user_id, correlation_id, timestamps
 
 ## Commands
-```bash
-# Install dependencies
-pip install -r requirements.txt
-
-# Run development server
-uvicorn app.main:app --reload
-
-# Run tests
-pytest
-
-# Run tests with coverage
-pytest --cov=app --cov-report=term-missing
-
-# Format code
-black app/ tests/
-
-# Lint code
-flake8 app/ tests/
-
-# Type checking
-mypy app/
-
-# Database migrations
-alembic upgrade head
-
-# Pre-commit hooks (after setup)
-pre-commit install
-pre-commit run --all-files
-```
+- **Build**: `pip install -r requirements.txt`
+- **Run**: `uvicorn app.main:app --reload`
+- **Test**: `pytest -v --tb=short`
+- **Test with Coverage**: `pytest --cov=app --cov-report=term-missing`
+- **Format**: `black app/ tests/`
+- **Lint**: `flake8 app/ tests/`
+- **Type Check**: `mypy app/`
+- **Database Migration**: `alembic upgrade head`
+- **Generate Migration**: `alembic revision --autogenerate -m "description"`
 
 ## Key Patterns
 - **Dependency Injection**: Use FastAPI's Depends() for database sessions, auth
