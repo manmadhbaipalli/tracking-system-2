@@ -1,6 +1,6 @@
 **Agent:** `auth-service-1-ba` | **Phase:** `ba` | **Tech Stack:** `python-greenfield`
 
-**Model:** `claude-sonnet-4-6` | **Budget:** $`2.00` | **Max Turns:** `2` | **Tools:** `9`
+**Model:** `claude-sonnet-4-6` | **Budget:** $`2.00` | **Max Turns:** `5` | **Tools:** `9`
 
 ### Skill: `smart-ba`
 > SmartBA — Business Analyst agent. Elicits requirements, writes user stories with acceptance criteria, defines NFRs, models the domain, and identifies error scenarios.
@@ -20,16 +20,22 @@
 
 ---
 
-I'll analyze the task description and create comprehensive requirements for the auth-service-1 BA phase. Let me first check for any existing artifacts or prior work.
+I'll start by reading the prior artifacts and best practices to understand the context before writing requirements.
 
-> **Glob** `artifacts/**/*`
+> **Glob** `artifacts/auth-service-1-ba/**`
 
-> **Glob** `references/**/*`
+> **Glob** `references/**`
 
 > **Read** `artifacts/auth-service-1-ba/prompt.txt`
 
-> **Read** `artifacts/auth-service-1-ba/system_prompt_append.txt`
+Now I have all the context I need. The task is to create requirements for a Python FastAPI application with login and registration endpoints. Let me write the two required output files.
+
+> **Update Todos** Write requirements.md with user stories,, Write features-brief.json with high-leve
+
+> **Write** `artifacts/auth-service-1-ba/requirements.md`
+
+> **Update Todos** Write requirements.md with user stories,, Write features-brief.json with high-leve
 
 ---
 
-**Completed** in 3 turns (cost: $0.0527)
+**Completed** in 6 turns (cost: $0.1674)
