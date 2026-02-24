@@ -1,0 +1,71 @@
+I can see the CI failure is due to a missing `aiosqlite` dependency. The error occurs when trying to import the module during database initialization. Let me investigate and fix this issue.
+
+> **Update Todos** Analyze the CI failure and identify miss, Fix the missing aiosqlite dependency, Run tests to verify the fix
+
+Let me first check the current requirements and database configuration to understand the dependency issue.
+
+> **Read** `C:\Manmadh\genai\claude-code-agents\workspace\claim-system-agent-1\requirements.txt`
+
+> **Read** `C:\Manmadh\genai\claude-code-agents\workspace\claim-system-agent-1\app\core\database.py`
+
+The issue is clear now. I can see that `aiosqlite>=0.19.0` is listed in the requirements.txt file (line 7), but it's not installed in the environment. The error occurs because SQLAlchemy is trying to create an async SQLite engine but the `aiosqlite` module is missing.
+
+> **Update Todos** Analyze the CI failure and identify miss, Install the missing aiosqlite dependency, Run tests to verify the fix
+
+Let me install the missing dependency:
+
+> **Bash** `Install missing aiosqlite dependency`
+
+Now let me run the tests to see if this fixes the import issue:
+
+> **Update Todos** Analyze the CI failure and identify miss, Install the missing aiosqlite dependency, Run tests to verify the fix
+
+> **Bash** `Run the test suite to verify the aiosqlite fix`
+
+Great! The `aiosqlite` dependency issue is fixed. Now there's a different import error - missing `Token` from `app.schemas.auth`. Let me check the auth schema file:
+
+> **Read** `C:\Manmadh\genai\claude-code-agents\workspace\claim-system-agent-1\app\schemas\auth.py`
+
+> **Read** `C:\Manmadh\genai\claude-code-agents\workspace\claim-system-agent-1\app\api\v1\auth.py` (lines 8-13)
+
+I can see that in the `app.schemas.auth` file, there's no class named `Token` - there's `TokenResponse` instead. Let me check what's being imported in the auth router:
+
+> **Read** `C:\Manmadh\genai\claude-code-agents\workspace\claim-system-agent-1\app\api\v1\auth.py` (lines 10-20)
+
+I found the issue. The auth router is trying to import `Token` and `TokenRefresh` from the auth schema, but these classes don't exist. Looking at the schema file, I can see the correct classes are `TokenResponse` and `RefreshTokenRequest`. Let me fix the import:
+
+> **Edit** `C:\Manmadh\genai\claude-code-agents\workspace\claim-system-agent-1\app\api\v1\auth.py`
+> Replace: `from app.schemas.auth import (
+    UserCreate,
+    UserResponse,
+    Token,
+    ...`
+
+Now I need to check if there are any references to these old class names in the auth router file and update them:
+
+> **Read** `C:\Manmadh\genai\claude-code-agents\workspace\claim-system-agent-1\app\api\v1\auth.py`
+
+I need to update the response models from `Token` to `TokenResponse` and `TokenRefresh` to `RefreshTokenRequest`:
+
+> **Edit** `C:\Manmadh\genai\claude-code-agents\workspace\claim-system-agent-1\app\api\v1\auth.py`
+> Replace: `Token...`
+
+> **Edit** `C:\Manmadh\genai\claude-code-agents\workspace\claim-system-agent-1\app\api\v1\auth.py`
+> Replace: `    refresh_data: TokenRefresh,...`
+
+Let me check the current content to see what was changed:
+
+> **Read** `C:\Manmadh\genai\claude-code-agents\workspace\claim-system-agent-1\app\api\v1\auth.py` (lines 48-53)
+
+I see the issue - the replacement changed `TokenRefresh` to `TokenResponseRefresh`. Let me fix this:
+
+> **Edit** `C:\Manmadh\genai\claude-code-agents\workspace\claim-system-agent-1\app\api\v1\auth.py`
+> Replace: `    refresh_data: TokenResponseRefresh,...`
+
+Now let me run the tests again to see if the import error is fixed:
+
+> **Bash** `Run tests after fixing import errors`
+
+---
+
+**Completed** in 16 turns (cost: $0.2323)

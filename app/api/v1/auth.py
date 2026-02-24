@@ -10,8 +10,8 @@ from app.api.deps import get_db, get_current_user
 from app.schemas.auth import (
     UserCreate,
     UserResponse,
-    Token,
-    TokenRefresh
+    TokenResponseResponse,
+    RefreshTokenResponseRequest
 )
 from app.models.user import User
 from app.core.security import create_access_token, verify_password, get_password_hash
@@ -32,7 +32,7 @@ async def register_user(
     )
 
 
-@router.post("/login", response_model=Token)
+@router.post("/login", response_model=TokenResponse)
 async def login(
     form_data: OAuth2PasswordRequestForm = Depends(),
     db: AsyncSession = Depends(get_db)
@@ -45,16 +45,16 @@ async def login(
     )
 
 
-@router.post("/refresh", response_model=Token)
+@router.post("/refresh", response_model=TokenResponse)
 async def refresh_token(
-    refresh_data: TokenRefresh,
+    refresh_data: RefreshTokenRequest,
     db: AsyncSession = Depends(get_db)
 ):
     """Refresh JWT token."""
     # TODO: Implement token refresh
     raise HTTPException(
         status_code=status.HTTP_501_NOT_IMPLEMENTED,
-        detail="Token refresh not yet implemented"
+        detail="TokenResponse refresh not yet implemented"
     )
 
 

@@ -16,6 +16,9 @@ from app.models.user import User, UserRole
 # Database dependencies
 DatabaseDep = Depends(get_database_session)
 
+# Legacy alias for compatibility
+get_db = get_database_session
+
 
 async def get_database_manager() -> DatabaseSessionManager:
     """Get database session manager for complex operations."""
@@ -196,15 +199,15 @@ class EnhancedRoleChecker(RoleChecker):
 RequireAdmin = EnhancedRoleChecker([UserRole.ADMIN.value])
 RequireClaimsAdjuster = EnhancedRoleChecker([
     UserRole.ADMIN.value,
-    UserRole.ADJUSTER.value
+    UserRole.CLAIMS_ADJUSTER.value
 ])
 RequirePolicyAgent = EnhancedRoleChecker([
     UserRole.ADMIN.value,
-    UserRole.AGENT.value
+    UserRole.POLICY_AGENT.value
 ])
 RequirePaymentProcessor = EnhancedRoleChecker([
     UserRole.ADMIN.value,
-    UserRole.ADJUSTER.value
+    UserRole.PAYMENT_PROCESSOR.value
 ])
 
 # Combined permissions for common scenarios
