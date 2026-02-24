@@ -196,15 +196,15 @@ class EnhancedRoleChecker(RoleChecker):
 RequireAdmin = EnhancedRoleChecker([UserRole.ADMIN.value])
 RequireClaimsAdjuster = EnhancedRoleChecker([
     UserRole.ADMIN.value,
-    UserRole.CLAIMS_ADJUSTER.value
+    UserRole.ADJUSTER.value
 ])
 RequirePolicyAgent = EnhancedRoleChecker([
     UserRole.ADMIN.value,
-    UserRole.POLICY_AGENT.value
+    UserRole.AGENT.value
 ])
 RequirePaymentProcessor = EnhancedRoleChecker([
     UserRole.ADMIN.value,
-    UserRole.PAYMENT_PROCESSOR.value
+    UserRole.ADJUSTER.value
 ])
 
 # Combined permissions for common scenarios

@@ -22,8 +22,9 @@ class UserRole(str, Enum):
     """User roles for access control."""
 
     ADMIN = "ADMIN"
-    AGENT = "AGENT"  # Policy agent
-    ADJUSTER = "ADJUSTER"  # Claims adjuster and payment processor
+    CLAIMS_ADJUSTER = "CLAIMS_ADJUSTER"  # Claims adjuster
+    POLICY_AGENT = "POLICY_AGENT"  # Policy agent
+    PAYMENT_PROCESSOR = "PAYMENT_PROCESSOR"  # Payment processor
     VIEWER = "VIEWER"
 
 
