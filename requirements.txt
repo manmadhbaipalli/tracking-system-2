@@ -12,10 +12,17 @@ alembic>=1.13.0
 passlib[bcrypt]>=1.7.4
 python-jose[cryptography]>=3.3.0
 python-multipart>=0.0.6
+cryptography>=41.0.0
 
 # Configuration management
 pydantic>=2.5.0
 pydantic-settings>=2.1.0
+python-dotenv>=1.0.0
+
+# Payment processing and integrations
+stripe>=7.8.0
+httpx>=0.25.0
+aiohttp>=3.9.0
 
 # Circuit breaker and resilience
 circuitbreaker>=1.4.0
@@ -23,11 +30,19 @@ circuitbreaker>=1.4.0
 # Logging and monitoring
 structlog>=23.2.0
 
+# Date/time handling
+python-dateutil>=2.8.2
+
+# JSON handling
+orjson>=3.9.10
+
+# Async utilities
+anyio>=4.1.0
+
 # Development and testing
 pytest>=7.4.0
 pytest-asyncio>=0.21.0
 pytest-cov>=4.1.0
-httpx>=0.25.0
 
 # Code quality
 black>=23.12.0
