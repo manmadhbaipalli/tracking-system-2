@@ -1,0 +1,92 @@
+I'll analyze the CI failure and fix the issue. Let me start by understanding the problem.
+
+> **Read** `C:\Manmadh\genai\claude-code-agents\workspace\auth-service-python-agent-1\app\core\database.py`
+
+> **Read** `C:\Manmadh\genai\claude-code-agents\workspace\auth-service-python-agent-1\requirements.txt`
+
+Good! I can see the issue. The `requirements.txt` file includes `aiosqlite>=0.19.0` on line 7, but the error shows that `aiosqlite` is not installed. This is likely a dependency installation issue during CI.
+
+Let me check the main.py and config to understand better:
+
+> **Read** `C:\Manmadh\genai\claude-code-agents\workspace\auth-service-python-agent-1\app\main.py`
+
+> **Read** `C:\Manmadh\genai\claude-code-agents\workspace\auth-service-python-agent-1\app\core\config.py`
+
+Now I understand the issue completely:
+
+**Root Cause**: The error occurs at line 104 of `database.py` when the engine is created during module import. The `aiosqlite` package is listed in `requirements.txt` but wasn't installed in the CI environment. The problem is that the code tries to create the async engine at module load time, which fails if `aiosqlite` is not installed.
+
+**The Solution**: Move the engine creation from module-level code to a lazy initialization pattern, so that dependencies are only loaded when actually needed. This is a common pattern for handling optional or lazy-loaded dependencies.
+
+Let me fix this:
+
+> **Edit** `C:\Manmadh\genai\claude-code-agents\workspace\auth-service-python-agent-1\app\core\database.py`
+> Replace: `# Create async engine with enhanced pooling parameters
+engine_kwargs = {
+    "ec...`
+
+Now I need to update the functions that use the engine and session factory:
+
+> **Edit** `C:\Manmadh\genai\claude-code-agents\workspace\auth-service-python-agent-1\app\core\database.py`
+> Replace: `async def get_database_session() -> AsyncGenerator[AsyncSession, None]:
+    """
+...`
+
+> **Edit** `C:\Manmadh\genai\claude-code-agents\workspace\auth-service-python-agent-1\app\core\database.py`
+> Replace: `async def init_database() -> None:
+    """Initialize the database by creating al...`
+
+> **Edit** `C:\Manmadh\genai\claude-code-agents\workspace\auth-service-python-agent-1\app\core\database.py`
+> Replace: `async def close_database() -> None:
+    """Close the database engine."""
+    awa...`
+
+> **Edit** `C:\Manmadh\genai\claude-code-agents\workspace\auth-service-python-agent-1\app\core\database.py`
+> Replace: `async def check_database_connection() -> bool:
+    """Check if database connecti...`
+
+> **Edit** `C:\Manmadh\genai\claude-code-agents\workspace\auth-service-python-agent-1\app\core\database.py`
+> Replace: `async def get_database_session_context():
+    """Context manager for database se...`
+
+> **Edit** `C:\Manmadh\genai\claude-code-agents\workspace\auth-service-python-agent-1\app\core\database.py`
+> Replace: `class DatabaseSessionManager:
+    """Enhanced database session manager for compl...`
+
+Now let me verify the updated file looks correct:
+
+> **Read** `C:\Manmadh\genai\claude-code-agents\workspace\auth-service-python-agent-1\app\core\database.py` (lines 80-140)
+
+I see there's some leftover code from my edit. Let me clean that up and simplify the approach:
+
+> **Edit** `C:\Manmadh\genai\claude-code-agents\workspace\auth-service-python-agent-1\app\core\database.py`
+> Replace: `# Lazy property accessors
+@property
+def engine():
+    """Get the database engine...`
+
+Now let me test if the application can be imported without errors:
+
+> **Bash** `Test if the application imports successfully`
+
+Good! The database initialization error is fixed. Now there's a different import error related to missing schema. Let me check the claims schema:
+
+> **Read** `C:\Manmadh\genai\claude-code-agents\workspace\auth-service-python-agent-1\app\schemas\claim.py`
+
+> **Read** `C:\Manmadh\genai\claude-code-agents\workspace\auth-service-python-agent-1\app\api\v1\claims.py`
+
+I can see the issue - the `claims.py` file is trying to import `ClaimSearchRequest` and `ClaimHistoryResponse` which don't exist in the `claim.py` schema file. Let me add these missing schemas:
+
+> **Edit** `C:\Manmadh\genai\claude-code-agents\workspace\auth-service-python-agent-1\app\schemas\claim.py`
+> Replace: `class ClaimHistoryItem(BaseModel):
+    """Claim history item schema."""
+
+    cla...`
+
+Now let's test the import again:
+
+> **Bash** `Test if the application imports successfully`
+
+---
+
+**Completed** in 16 turns (cost: $0.0953)

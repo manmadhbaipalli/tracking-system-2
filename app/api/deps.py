@@ -259,3 +259,16 @@ class PerformanceTracker:
 def get_performance_tracker(endpoint_name: str) -> PerformanceTracker:
     """Get performance tracker for an endpoint."""
     return PerformanceTracker(endpoint_name)
+
+
+def require_role(allowed_roles: list[str]):
+    """
+    Factory function to create a role checker dependency.
+
+    Args:
+        allowed_roles: List of role values that are allowed
+
+    Returns:
+        EnhancedRoleChecker instance configured for the specified roles
+    """
+    return EnhancedRoleChecker(allowed_roles)

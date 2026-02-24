@@ -10,8 +10,8 @@ from app.api.deps import get_db, get_current_user
 from app.schemas.auth import (
     UserCreate,
     UserResponse,
-    TokenResponseResponse,
-    RefreshTokenResponseRequest
+    TokenResponse,
+    RefreshTokenRequest
 )
 from app.models.user import User
 from app.core.security import create_access_token, verify_password, get_password_hash

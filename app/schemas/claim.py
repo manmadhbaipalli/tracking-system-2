@@ -73,3 +73,34 @@ class ClaimHistoryItem(BaseModel):
     claim_amount: Optional[Decimal]
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class ClaimSearchRequest(BaseModel):
+    """Claim search request schema."""
+
+    claim_number: Optional[str] = None
+    policy_id: Optional[uuid.UUID] = None
+    claim_status: Optional[ClaimStatus] = None
+    date_from: Optional[date] = None
+    date_to: Optional[date] = None
+    skip: int = Field(default=0, ge=0)
+    limit: int = Field(default=10, ge=1, le=100)
+
+    model_config = ConfigDict(str_strip_whitespace=True)
+
+
+class ClaimHistoryResponse(BaseModel):
+    """Claim history response schema."""
+
+    id: uuid.UUID
+    claim_number: str
+    policy_id: uuid.UUID
+    claim_type: str
+    claim_status: ClaimStatus
+    date_of_loss: date
+    claim_amount: Optional[Decimal]
+    paid_amount: Decimal
+    is_open: bool
+    created_at: datetime
+
+    model_config = ConfigDict(from_attributes=True)

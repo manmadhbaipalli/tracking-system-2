@@ -80,37 +80,53 @@ class Base(DeclarativeBase):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 
-# Create async engine with enhanced pooling parameters
-engine_kwargs = {
-    "echo": settings.database.echo,
-    "pool_pre_ping": True,  # Validate connections before use
-    "pool_recycle": 3600,  # Recycle connections after 1 hour
-    "connect_args": {"check_same_thread": False} if "sqlite" in settings.database_url else {},
-}
+# Engine and session factory - lazily initialized
+_engine = None
+_AsyncSessionLocal = None
 
-# Add pooling parameters for PostgreSQL (not SQLite)
-if settings.database_url.startswith(("postgresql", "postgres")):
-    engine_kwargs.update({
-        "pool_size": settings.database.pool_size,
-        "max_overflow": settings.database.max_overflow,
-        "pool_timeout": 30,  # Timeout for getting connection from pool
-    })
-elif "sqlite" in settings.database_url:
-    # SQLite specific optimizations
-    engine_kwargs.update({
-        "poolclass": pool.StaticPool,  # Use static pool for SQLite
-    })
 
-engine = create_async_engine(settings.database_url, **engine_kwargs)
+def _get_engine():
+    """Get or create the async database engine (lazy initialization)."""
+    global _engine
+    if _engine is None:
+        engine_kwargs = {
+            "echo": settings.database.echo,
+            "pool_pre_ping": True,  # Validate connections before use
+            "pool_recycle": 3600,  # Recycle connections after 1 hour
+            "connect_args": {"check_same_thread": False} if "sqlite" in settings.database_url else {},
+        }
 
-# Create session factory with enhanced configuration
-AsyncSessionLocal = async_sessionmaker(
-    engine,
-    class_=AsyncSession,
-    expire_on_commit=False,
-    autoflush=False,  # Manual flush control for better performance
-    autocommit=False
-)
+        # Add pooling parameters for PostgreSQL (not SQLite)
+        if settings.database_url.startswith(("postgresql", "postgres")):
+            engine_kwargs.update({
+                "pool_size": settings.database.pool_size,
+                "max_overflow": settings.database.max_overflow,
+                "pool_timeout": 30,  # Timeout for getting connection from pool
+            })
+        elif "sqlite" in settings.database_url:
+            # SQLite specific optimizations
+            engine_kwargs.update({
+                "poolclass": pool.StaticPool,  # Use static pool for SQLite
+            })
+
+        _engine = create_async_engine(settings.database_url, **engine_kwargs)
+    return _engine
+
+
+def _get_session_factory():
+    """Get or create the async session factory (lazy initialization)."""
+    global _AsyncSessionLocal
+    if _AsyncSessionLocal is None:
+        _AsyncSessionLocal = async_sessionmaker(
+            _get_engine(),
+            class_=AsyncSession,
+            expire_on_commit=False,
+            autoflush=False,  # Manual flush control for better performance
+            autocommit=False
+        )
+    return _AsyncSessionLocal
+
+
 
 
 async def get_database_session() -> AsyncGenerator[AsyncSession, None]:
@@ -119,7 +135,7 @@ async def get_database_session() -> AsyncGenerator[AsyncSession, None]:
 
     Provides an async database session with proper cleanup.
     """
-    async with AsyncSessionLocal() as session:
+    async with _get_session_factory()() as session:
         try:
             yield session
         except Exception:
@@ -135,19 +151,20 @@ get_db = get_database_session
 
 async def init_database() -> None:
     """Initialize the database by creating all tables."""
-    async with engine.begin() as conn:
+    async with _get_engine().begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
 
 
 async def close_database() -> None:
     """Close the database engine."""
-    await engine.dispose()
+    if _engine is not None:
+        await _engine.dispose()
 
 
 async def check_database_connection() -> bool:
     """Check if database connection is healthy."""
     try:
-        async with engine.begin() as conn:
+        async with _get_engine().begin() as conn:
             await conn.execute(text("SELECT 1"))
         return True
     except Exception:
@@ -156,7 +173,7 @@ async def check_database_connection() -> bool:
 
 async def get_database_session_context():
     """Context manager for database sessions with automatic transaction handling."""
-    async with AsyncSessionLocal() as session:
+    async with _get_session_factory()() as session:
         try:
             async with session.begin():
                 yield session
@@ -175,7 +192,7 @@ class DatabaseSessionManager:
 
     async def __aenter__(self) -> AsyncSession:
         """Enter async context and create session."""
-        self.session = AsyncSessionLocal()
+        self.session = _get_session_factory()()
         return self.session
 
     async def __aexit__(self, exc_type, exc_val, exc_tb):
