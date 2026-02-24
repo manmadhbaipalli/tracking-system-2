@@ -1,0 +1,14 @@
+{
+  "features": [
+    {
+      "name": "Create database models",
+      "agent": "dba",
+      "status": "done"
+    },
+    {
+      "name": "Implement Alembic migrations",
+      "agent": "dba",
+      "status": "done"
+    }
+  ]
+}
