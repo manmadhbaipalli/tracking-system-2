@@ -1,0 +1,234 @@
+[
+  {
+    "id": "db-base-model",
+    "file": "app/models/base.py",
+    "description": "SQLAlchemy base model with audit fields (id, created_at, updated_at, created_by, updated_by)",
+    "acceptance_criteria": "All models inherit from BaseModel, audit fields auto-populated via SQLAlchemy events",
+    "agent": "dba",
+    "status": "pending"
+  },
+  {
+    "id": "db-user-model",
+    "file": "app/models/user.py",
+    "description": "User SQLAlchemy model with email, password_hash, full_name, role, active fields and constraints",
+    "acceptance_criteria": "User model with unique email constraint, role enum, indexes on email and active fields",
+    "agent": "dba",
+    "status": "pending"
+  },
+  {
+    "id": "db-request-log-model",
+    "file": "app/models/request_log.py",
+    "description": "RequestLog model for audit trail with correlation_id, method, endpoint, status_code, response_time_ms",
+    "acceptance_criteria": "RequestLog model with foreign key to User, correlation_id unique constraint",
+    "agent": "dba",
+    "status": "pending"
+  },
+  {
+    "id": "db-database-config",
+    "file": "app/database.py",
+    "description": "SQLAlchemy database configuration with async engine, session factory, and get_db dependency",
+    "acceptance_criteria": "Database session management, connection pooling, async session support",
+    "agent": "dba",
+    "status": "pending"
+  },
+  {
+    "id": "db-user-repository",
+    "file": "app/repositories/user_repository.py",
+    "description": "User repository with CRUD operations: create, get_by_email, get_by_id, update, list_users",
+    "acceptance_criteria": "Async repository methods, email uniqueness check, user filtering by active status",
+    "agent": "dba",
+    "status": "pending"
+  },
+  {
+    "id": "db-request-log-repository",
+    "file": "app/repositories/request_log_repository.py",
+    "description": "RequestLog repository for creating audit trail entries",
+    "acceptance_criteria": "Async method to create request log entries with performance metrics",
+    "agent": "dba",
+    "status": "pending"
+  },
+  {
+    "id": "api-auth-schemas",
+    "file": "app/schemas/auth.py",
+    "description": "Pydantic schemas for auth endpoints: RegisterRequest, LoginRequest, TokenResponse",
+    "acceptance_criteria": "Input validation for email format, password length, response schema with JWT token",
+    "agent": "apidesign",
+    "status": "pending"
+  },
+  {
+    "id": "api-user-schemas",
+    "file": "app/schemas/user.py",
+    "description": "Pydantic schemas for user endpoints: UserResponse, UserUpdateRequest, PasswordChangeRequest",
+    "acceptance_criteria": "User profile schemas without sensitive fields, password validation for updates",
+    "agent": "apidesign",
+    "status": "pending"
+  },
+  {
+    "id": "api-admin-schemas",
+    "file": "app/schemas/admin.py",
+    "description": "Pydantic schemas for admin endpoints: UserListResponse, RoleUpdateRequest, StatusUpdateRequest",
+    "acceptance_criteria": "Admin-specific schemas with pagination, role enum validation, status update schemas",
+    "agent": "apidesign",
+    "status": "pending"
+  },
+  {
+    "id": "api-common-schemas",
+    "file": "app/schemas/common.py",
+    "description": "Common Pydantic schemas: ErrorResponse, PaginatedResponse, HealthCheckResponse",
+    "acceptance_criteria": "Standardized error format with correlation_id, pagination envelope, health check format",
+    "agent": "apidesign",
+    "status": "pending"
+  },
+  {
+    "id": "api-auth-router",
+    "file": "app/routers/auth.py",
+    "description": "FastAPI router for authentication endpoints: POST /register, POST /login",
+    "acceptance_criteria": "Register returns 201 with JWT token, login returns 200 with JWT token, proper error handling",
+    "agent": "apidesign",
+    "status": "pending"
+  },
+  {
+    "id": "api-user-router",
+    "file": "app/routers/users.py",
+    "description": "FastAPI router for user endpoints: GET /me, PUT /me, PUT /me/password",
+    "acceptance_criteria": "JWT-protected endpoints, user can only access own profile, password change validation",
+    "agent": "apidesign",
+    "status": "pending"
+  },
+  {
+    "id": "api-admin-router",
+    "file": "app/routers/admin.py",
+    "description": "FastAPI router for admin endpoints: GET /users, PUT /users/{id}/role, PUT /users/{id}/status",
+    "acceptance_criteria": "Admin-only endpoints with pagination, role management, user activation/deactivation",
+    "agent": "apidesign",
+    "status": "pending"
+  },
+  {
+    "id": "api-health-router",
+    "file": "app/routers/health.py",
+    "description": "FastAPI router for health check endpoints: GET /live, GET /ready",
+    "acceptance_criteria": "Liveness returns 200 OK, readiness checks database and circuit breaker status",
+    "agent": "apidesign",
+    "status": "pending"
+  },
+  {
+    "id": "dev-security-module",
+    "file": "app/security.py",
+    "description": "JWT token generation, validation, password hashing, and auth dependencies",
+    "acceptance_criteria": "BCrypt password hashing, JWT creation/validation, FastAPI auth dependencies for USER/ADMIN",
+    "agent": "dev",
+    "status": "pending"
+  },
+  {
+    "id": "dev-auth-service",
+    "file": "app/services/auth_service.py",
+    "description": "Authentication business logic: user registration, login, token validation",
+    "acceptance_criteria": "Email uniqueness check, password validation, BCrypt hashing, JWT generation, rate limiting",
+    "agent": "dev",
+    "status": "pending"
+  },
+  {
+    "id": "dev-user-service",
+    "file": "app/services/user_service.py",
+    "description": "User management business logic: profile updates, password changes",
+    "acceptance_criteria": "Profile update with email uniqueness, password change with current password verification",
+    "agent": "dev",
+    "status": "pending"
+  },
+  {
+    "id": "dev-admin-service",
+    "file": "app/services/admin_service.py",
+    "description": "Admin operations business logic: user listing, role management, status updates",
+    "acceptance_criteria": "Paginated user listing, role updates with validation, prevent self-deactivation",
+    "agent": "dev",
+    "status": "pending"
+  },
+  {
+    "id": "dev-health-service",
+    "file": "app/services/health_service.py",
+    "description": "Health check business logic: liveness check, database connectivity, circuit breaker status",
+    "acceptance_criteria": "Database connection test, circuit breaker status reporting, response under 100ms",
+    "agent": "dev",
+    "status": "pending"
+  },
+  {
+    "id": "dev-circuit-breaker",
+    "file": "app/utils/circuit_breaker.py",
+    "description": "Circuit breaker implementation with CLOSED, OPEN, HALF_OPEN states for database operations",
+    "acceptance_criteria": "Configurable failure threshold, timeout handling, state management, async support",
+    "agent": "dev",
+    "status": "pending"
+  },
+  {
+    "id": "dev-exceptions",
+    "file": "app/exceptions.py",
+    "description": "Custom exception classes and global exception handler",
+    "acceptance_criteria": "Exception hierarchy, HTTP status mapping, global FastAPI exception handler with correlation ID",
+    "agent": "dev",
+    "status": "pending"
+  },
+  {
+    "id": "dev-middleware",
+    "file": "app/middleware.py",
+    "description": "HTTP middleware for correlation ID generation, request logging, CORS, security headers",
+    "acceptance_criteria": "UUID correlation ID per request, structured request/response logging, security headers",
+    "agent": "dev",
+    "status": "pending"
+  },
+  {
+    "id": "dev-logging-config",
+    "file": "app/utils/logging.py",
+    "description": "Structured logging configuration with correlation ID support and JSON formatting",
+    "acceptance_criteria": "Structlog configuration, JSON output in production, correlation ID context, sensitive data filtering",
+    "agent": "dev",
+    "status": "pending"
+  },
+  {
+    "id": "dev-config",
+    "file": "app/config.py",
+    "description": "Pydantic Settings configuration for environment variables and app configuration",
+    "acceptance_criteria": "Environment-based configuration, JWT settings, database URL, CORS origins, validation",
+    "agent": "dev",
+    "status": "pending"
+  },
+  {
+    "id": "dev-main-app",
+    "file": "app/main.py",
+    "description": "FastAPI application factory with middleware, routers, exception handlers, and startup/shutdown events",
+    "acceptance_criteria": "FastAPI app with all routers, middleware stack, global exception handler, database initialization",
+    "agent": "dev",
+    "status": "pending"
+  },
+  {
+    "id": "dev-dependencies",
+    "file": "requirements.txt",
+    "description": "Python dependencies: FastAPI, SQLAlchemy, Alembic, structlog, passlib, PyJWT, httpx, pydantic",
+    "acceptance_criteria": "All required dependencies with version pinning, compatible versions, security-focused choices",
+    "agent": "dev",
+    "status": "pending"
+  },
+  {
+    "id": "dev-alembic-config",
+    "file": "alembic.ini",
+    "description": "Alembic configuration file for database migrations",
+    "acceptance_criteria": "Alembic configuration with SQLAlchemy async support, migration directory setup",
+    "agent": "dev",
+    "status": "pending"
+  },
+  {
+    "id": "dev-alembic-env",
+    "file": "alembic/env.py",
+    "description": "Alembic environment configuration with async SQLAlchemy support",
+    "acceptance_criteria": "Async migration support, model metadata import, database URL from config",
+    "agent": "dev",
+    "status": "pending"
+  },
+  {
+    "id": "dev-initial-migration",
+    "file": "alembic/versions/001_initial_schema.py",
+    "description": "Initial database migration creating users and request_logs tables",
+    "acceptance_criteria": "Creates users table with constraints, indexes, and request_logs table with foreign keys",
+    "agent": "dev",
+    "status": "pending"
+  }
+]
