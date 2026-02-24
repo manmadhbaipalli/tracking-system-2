@@ -21,11 +21,10 @@ from app.core.database import Base
 class UserRole(str, Enum):
     """User roles for access control."""
 
-    ADMIN = "admin"
-    CLAIMS_ADJUSTER = "claims_adjuster"
-    POLICY_AGENT = "policy_agent"
-    PAYMENT_PROCESSOR = "payment_processor"
-    VIEWER = "viewer"
+    ADMIN = "ADMIN"
+    AGENT = "AGENT"  # Policy agent
+    ADJUSTER = "ADJUSTER"  # Claims adjuster and payment processor
+    VIEWER = "VIEWER"
 
 
 class User(Base):
