@@ -1,0 +1,89 @@
+**Agent:** `auth-service-1-dev` | **Phase:** `dev` | **Tech Stack:** `python-greenfield`
+
+**Model:** `claude-sonnet-4-6` | **Budget:** $`2.00` | **Max Turns:** `5` | **Tools:** `7`
+
+### Skill: `smart-dev-python`
+> SmartDev for Python/FastAPI — Developer agent. Implements ALL business logic, security, exception handling, middleware, and wires everything into a fully runnable application with ZERO import errors.
+
+**Sections:** Phase Role: SmartDev (Python/FastAPI Developer), Prior Work (READ ALL BEFORE WRITING ANY CODE), Standalone Mode (no prior pipeline artifacts), CRITICAL: File Path Rules, Step-by-Step Implementation (follow this order exactly), Output Files, ABSOLUTE RULES (violation = failure)
+
+**Key Rules:**
+1. **EVERY import must resolve.** If you write `from passlib.context import CryptContext`, `passlib[bcrypt]` MUST be in requirements.txt AND installed.
+2. **requirements.txt MUST be installed.** Create venv, pip install, verify.
+3. **`python -c "from app.main import app"` MUST succeed.** Run it. If it fails, fix it. Run again. Repeat.
+4. **EVERY `__init__.py` must exist.** Missing `__init__.py` = broken imports. Create them for EVERY package directory.
+5. **NO stubs.** Every function body must have complete implementation. No `pass`, no `...`, no `raise NotImplementedError`.
+*...and 6 more*
+
+**References:** `artifact-template.md`, `best-practices.md`, `exception-handling-template.md`, `fastapi-config-template.md`, `main-app-template.md`, `middleware-template.md`, `requirements-template.md`, `security-template.md`
+
+
+---
+
+I'll start by reading all the existing artifacts and files to understand what's been created before implementing the business logic.
+
+> **Task** Read existing artifacts and code
+
+> **Glob** `artifacts/auth-service-1-apidesign/**`
+
+> **Glob** `app/**`
+
+> **Glob** `CLAUDE.md`
+
+> **Bash** `Find all JSON and Markdown files in the project`
+
+> **Bash** `List contents of the root directory`
+
+> **Bash** `List all files in artifacts directory`
+
+> **Read** `C:\Manmadh\genai\claude-code-agents\workspace\auth-service-1-agent-1\artifacts\auth-service-1-apidesign\agent.log`
+
+> **Read** `C:\Manmadh\genai\claude-code-agents\workspace\auth-service-1-agent-1\artifacts\auth-service-1-apidesign\prompt.txt`
+
+> **Read** `C:\Manmadh\genai\claude-code-agents\workspace\auth-service-1-agent-1\artifacts\auth-service-1-apidesign\system_prompt_append.txt`
+
+> **Read** `C:\Manmadh\genai\claude-code-agents\workspace\auth-service-1-agent-1\readme.md`
+
+> **Read** `C:\Manmadh\genai\claude-code-agents\workspace\auth-service-1-agent-1\artifacts\auth-service-1-ba\requirements.md`
+
+> **Read** `C:\Manmadh\genai\claude-code-agents\workspace\auth-service-1-agent-1\artifacts\auth-service-1-architect\agent.log`
+
+> **Read** `C:\Manmadh\genai\claude-code-agents\workspace\auth-service-1-agent-1\artifacts\auth-service-1-architect\prompt.txt`
+
+> **Read** `C:\Manmadh\genai\claude-code-agents\workspace\auth-service-1-agent-1\artifacts\auth-service-1-dba\agent.log`
+
+> **Read** `C:\Manmadh\genai\claude-code-agents\workspace\auth-service-1-agent-1\artifacts\auth-service-1-ba\prompt.txt`
+
+> **Read** `C:\Manmadh\genai\claude-code-agents\workspace\auth-service-1-agent-1\artifacts\auth-service-1-architect\system_prompt_append.txt`
+
+> **Read** `C:\Manmadh\genai\claude-code-agents\workspace\auth-service-1-agent-1\artifacts\auth-service-1-dba\prompt.txt`
+
+> **Read** `C:\Manmadh\genai\claude-code-agents\workspace\auth-service-1-agent-1\artifacts\auth-service-1-dba\system_prompt_append.txt`
+
+> **Read** `C:\Manmadh\genai\claude-code-agents\workspace\auth-service-1-agent-1\artifacts\auth-service-1-ba\system_prompt_append.txt`
+
+> **Read** `C:\Manmadh\genai\claude-code-agents\workspace\auth-service-1-agent-1\artifacts\auth-service-1-dev\prompt.txt`
+
+> **Read** `C:\Manmadh\genai\claude-code-agents\workspace\auth-service-1-agent-1\artifacts\auth-service-1-dev\system_prompt_append.txt`
+
+The explore agent didn't find the apidesign artifacts. Let me check what's actually on the main branch since those were merged.
+
+> **Bash** `List all files in the project directory`
+
+The apidesign artifacts (features.json, architecture.md) were supposed to be merged from main but aren't in the working tree. Let me check what's in the git history and the agent.log.
+
+> **Bash** `Check git log and what's in main branch`
+
+The apidesign phase didn't produce features.json or architecture.md - it only has logs. This is standalone mode. Let me read the requirements and agent logs to understand what needs to be built.
+
+> **Read** `artifacts/auth-service-1-ba/requirements.md`
+
+> **Read** `artifacts/auth-service-1-apidesign/agent.log`
+
+I can see the apidesign agent ran for only 6 turns and appears to have not actually created any files (just planned). I'm in standalone mode. Let me now build everything from scratch. I'll set up all the todos and start implementing.
+
+> **Update Todos** Create requirements.txt, Create virtual environment and install d, Create app/config.py
+
+---
+
+**Completed** in 6 turns (cost: $0.2163)
