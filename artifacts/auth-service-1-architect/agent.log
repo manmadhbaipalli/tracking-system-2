@@ -1,6 +1,6 @@
 **Agent:** `auth-service-1-architect` | **Phase:** `architect` | **Tech Stack:** `python-greenfield`
 
-**Model:** `claude-sonnet-4-6` | **Budget:** $`2.00` | **Max Turns:** `2` | **Tools:** `9`
+**Model:** `claude-sonnet-4-6` | **Budget:** $`2.00` | **Max Turns:** `5` | **Tools:** `9`
 
 ### Skill: `smart-architect`
 > SmartArchitect — Solution Architect agent. Designs system architecture, makes technology decisions, defines security and observability strategy, and creates the implementation contract (features.json).
@@ -26,10 +26,16 @@ I'll start by reading the prior work from the BA phase and reference files to de
 
 > **Read** `artifacts/auth-service-1-ba/features-brief.json`
 
-> **Glob** `artifacts/**/*`
+> **Bash** `ls artifacts/ 2>/dev/null || echo "No artifacts dir"`
 
-> **Glob** `references/**/*`
+> **Bash** `ls artifacts/auth-service-1-ba/ && ls artifacts/auth-service-1-architect/ 2>/dev/null`
+
+> **Read** `artifacts/auth-service-1-ba/requirements.md`
+
+Now I have a thorough understanding of the requirements. Let me create the three required output files.
+
+> **Update Todos** Write CLAUDE.md with project standards, Write architecture.md, Write features.json
 
 ---
 
-**Completed** in 3 turns (cost: $0.0561)
+**Completed** in 6 turns (cost: $0.1075)
