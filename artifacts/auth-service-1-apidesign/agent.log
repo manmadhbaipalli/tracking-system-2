@@ -1,0 +1,37 @@
+**Agent:** `auth-service-1-apidesign` | **Phase:** `apidesign` | **Tech Stack:** `python-greenfield`
+
+**Model:** `claude-sonnet-4-6` | **Budget:** $`2.00` | **Max Turns:** `2` | **Tools:** `7`
+
+### Skill: `smart-api-python`
+> SmartAPI for Python/FastAPI — API Designer agent. Designs REST endpoints, writes FastAPI routers, Pydantic schemas with validation, and OpenAPI configuration.
+
+**Sections:** Phase Role: SmartAPI (Python/FastAPI API Designer), Prior Work (READ ALL BEFORE WRITING ANY CODE), Standalone Mode (no prior pipeline artifacts), CRITICAL: File Path Rules, Step-by-Step Implementation, Output Files, ABSOLUTE RULES
+
+**Key Rules:**
+1. **Pydantic v2 ONLY** — `model_config`, NOT `class Config`
+2. **Validation on EVERY request field** — `Field()`, `EmailStr`, validators
+3. **Use `PageResponse[T]` for ALL list endpoints** — never return raw `list[T]`
+4. **ErrorResponse format for ALL errors** — consistent error contract
+5. **`response_model` + `summary` on EVERY endpoint** — complete Swagger docs
+*...and 7 more*
+
+**References:** `api-code-templates.md`, `artifact-template.md`, `best-practices.md`
+
+
+---
+
+I'll start by reading the prior work artifacts and understanding the project structure before designing the API layer.
+
+> **Read** `CLAUDE.md`
+
+> **Read** `artifacts/auth-service-1-dba/architecture.md`
+
+> **Read** `artifacts/auth-service-1-dba/features.json`
+
+> **Bash** `List project root and artifacts directory`
+
+> **Glob** `app/**/*.py`
+
+---
+
+**Completed** in 3 turns (cost: $0.0546)
