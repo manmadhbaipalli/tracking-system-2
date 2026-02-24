@@ -1,6 +1,6 @@
 **Agent:** `auth-service-1-dba` | **Phase:** `dba` | **Tech Stack:** `python-greenfield`
 
-**Model:** `claude-sonnet-4-6` | **Budget:** $`2.00` | **Max Turns:** `2` | **Tools:** `7`
+**Model:** `claude-sonnet-4-6` | **Budget:** $`2.00` | **Max Turns:** `5` | **Tools:** `7`
 
 ### Skill: `smart-dba-python`
 > SmartDBA for Python/SQLAlchemy — Database Engineer agent. Designs schema, writes SQLAlchemy 2.0 models with audit mixin, database session, and Alembic migrations.
@@ -20,7 +20,7 @@
 
 ---
 
-I'll start by reading the prerequisite artifacts and project structure to understand what needs to be built.
+I'll start by reading the prerequisite artifacts and project structure before implementing the database schema.
 
 > **Read** `artifacts/auth-service-1-architect/architecture.md`
 
@@ -30,6 +30,18 @@ I'll start by reading the prerequisite artifacts and project structure to unders
 
 > **Glob** `app/**/*`
 
+> **Read** `artifacts/auth-service-1-architect/agent.log`
+
+> **Read** `artifacts/auth-service-1-ba/requirements.md`
+
+The architect artifacts aren't in the standard location but the BA requirements are clear. Let me also check for any existing CLAUDE.md or architecture files:
+
+> **Glob** `CLAUDE.md`
+
+> **Glob** `*.md`
+
+> **Read** `readme.md`
+
 ---
 
-**Completed** in 3 turns (cost: $0.0492)
+**Completed** in 6 turns (cost: $0.1069)
