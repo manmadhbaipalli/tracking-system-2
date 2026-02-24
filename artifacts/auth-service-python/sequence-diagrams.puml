@@ -1,0 +1,338 @@
+@startuml User Registration Flow
+!theme plain
+title User Registration Sequence Diagram
+
+actor User as U
+participant "FastAPI Router" as R
+participant "Auth Service" as AS
+participant "Database" as DB
+participant "Audit Service" as AUD
+participant "Logger" as LOG
+
+U -> R: POST /api/v1/auth/register
+note right: {email, password, first_name, last_name, role}
+
+R -> R: Generate Correlation ID
+R -> LOG: Log request start
+
+R -> R: Validate request data
+note right: Email format, password strength, required fields
+
+alt Validation fails
+    R -> U: 400 Bad Request
+    note right: {"error": "VALIDATION_ERROR", "details": {...}}
+else Validation success
+    R -> AS: register_user(user_data)
+
+    AS -> DB: Check if email exists
+
+    alt Email already exists
+        AS -> R: ConflictError("Email already registered")
+        R -> U: 409 Conflict
+        note right: {"error": "EMAIL_ALREADY_EXISTS"}
+    else Email available
+        AS -> AS: Hash password (BCrypt)
+        AS -> DB: Create new user record
+        DB -> AS: User created successfully
+
+        AS -> AUD: Log user registration
+        note right: {action: "USER_REGISTERED", user_id, details}
+
+        AS -> R: Return user data (no password)
+        R -> LOG: Log successful registration
+        R -> U: 201 Created
+        note right: {"success": true, "data": {"id": "...", "email": "..."}}
+    end
+end
+
+@enduml
+
+@startuml User Login Flow
+!theme plain
+title User Login Sequence Diagram
+
+actor User as U
+participant "FastAPI Router" as R
+participant "Auth Service" as AS
+participant "Database" as DB
+participant "Security Utils" as SEC
+participant "Audit Service" as AUD
+participant "Logger" as LOG
+
+U -> R: POST /api/v1/auth/login
+note right: {email, password}
+
+R -> R: Generate Correlation ID
+R -> LOG: Log login attempt
+
+R -> AS: authenticate_user(email, password)
+
+AS -> DB: Get user by email
+alt User not found
+    AS -> R: AuthenticationError("Invalid credentials")
+    R -> LOG: Log failed login attempt
+    R -> U: 401 Unauthorized
+else User found
+    AS -> AS: Check if account is locked
+    alt Account locked
+        AS -> AUD: Log locked account access attempt
+        AS -> R: AuthenticationError("Account locked")
+        R -> U: 401 Unauthorized
+        note right: {"error": "ACCOUNT_LOCKED", "locked_until": "..."}
+    else Account active
+        AS -> SEC: verify_password(plain_password, hashed_password)
+        alt Password invalid
+            AS -> DB: Increment failed login attempts
+            AS -> AS: Check if should lock account
+            AS -> AUD: Log failed login
+            AS -> R: AuthenticationError("Invalid credentials")
+            R -> U: 401 Unauthorized
+        else Password valid
+            AS -> DB: Reset failed login attempts
+            AS -> DB: Update last_login timestamp
+
+            AS -> SEC: create_access_token(user_data)
+            SEC -> AS: Return JWT tokens
+
+            AS -> AUD: Log successful login
+            note right: {action: "USER_LOGIN", user_id, ip_address}
+
+            AS -> R: Return tokens and user data
+            R -> LOG: Log successful authentication
+            R -> U: 200 OK
+            note right: {"access_token": "...", "refresh_token": "...", "user": {...}}
+        end
+    end
+end
+
+@enduml
+
+@startuml Token Refresh Flow
+!theme plain
+title Token Refresh Sequence Diagram
+
+actor User as U
+participant "FastAPI Router" as R
+participant "Auth Service" as AS
+participant "Security Utils" as SEC
+participant "Database" as DB
+participant "Logger" as LOG
+
+U -> R: POST /api/v1/auth/refresh
+note right: {refresh_token}
+
+R -> R: Generate Correlation ID
+
+R -> AS: refresh_access_token(refresh_token)
+
+AS -> SEC: decode_token(refresh_token)
+alt Token invalid/expired
+    SEC -> AS: JWTError
+    AS -> R: AuthenticationError("Invalid refresh token")
+    R -> U: 401 Unauthorized
+else Token valid
+    SEC -> AS: Return decoded payload
+    AS -> DB: Get user by ID from token
+
+    alt User not found or inactive
+        AS -> R: AuthenticationError("User not found")
+        R -> U: 401 Unauthorized
+    else User active
+        AS -> SEC: create_access_token(user_data)
+        AS -> SEC: create_refresh_token(user_data)
+        SEC -> AS: Return new tokens
+
+        AS -> R: Return new tokens
+        R -> LOG: Log token refresh
+        R -> U: 200 OK
+        note right: {"access_token": "...", "refresh_token": "..."}
+    end
+end
+
+@enduml
+
+@startuml Protected Endpoint Access
+!theme plain
+title Protected Endpoint Access Flow
+
+actor User as U
+participant "FastAPI Router" as R
+participant "Auth Dependency" as AD
+participant "Security Utils" as SEC
+participant "Database" as DB
+participant "Endpoint Logic" as EL
+
+U -> R: GET /api/v1/auth/me
+note right: Authorization: Bearer {jwt_token}
+
+R -> AD: get_current_user(token)
+
+AD -> SEC: decode_access_token(token)
+alt Token invalid/expired
+    SEC -> AD: JWTError
+    AD -> R: HTTPException(401, "Invalid token")
+    R -> U: 401 Unauthorized
+else Token valid
+    SEC -> AD: Return decoded payload
+    AD -> DB: Get user by ID from token
+
+    alt User not found or inactive
+        AD -> R: HTTPException(401, "User not found")
+        R -> U: 401 Unauthorized
+    else User active
+        DB -> AD: Return user object
+        AD -> R: Return authenticated user
+
+        R -> EL: Execute endpoint logic with user
+        EL -> R: Return user data
+        R -> U: 200 OK
+        note right: {"id": "...", "email": "...", "role": "..."}
+    end
+end
+
+@enduml
+
+@startuml Circuit Breaker Pattern
+!theme plain
+title Circuit Breaker Pattern Flow
+
+participant "API Client" as C
+participant "Circuit Breaker" as CB
+participant "External Service" as ES
+participant "Logger" as LOG
+
+== CLOSED State (Normal Operation) ==
+C -> CB: Request to external service
+CB -> ES: Forward request
+ES -> CB: Successful response
+CB -> C: Return response
+
+== Failure Detection ==
+C -> CB: Request to external service
+CB -> ES: Forward request
+ES -> CB: Error response
+CB -> CB: Increment failure counter
+CB -> LOG: Log failure
+CB -> C: Return error
+
+note over CB: Failure threshold exceeded
+
+== OPEN State (Circuit Open) ==
+CB -> CB: Change state to OPEN
+C -> CB: Request to external service
+CB -> LOG: Log circuit open
+CB -> C: Fail fast - return cached/default response
+note right: No call to external service
+
+== Recovery Attempt ==
+note over CB: After timeout period
+CB -> CB: Change state to HALF_OPEN
+
+C -> CB: Request to external service
+CB -> ES: Test request
+alt Service recovered
+    ES -> CB: Successful response
+    CB -> CB: Change state to CLOSED
+    CB -> C: Return response
+    CB -> LOG: Log circuit closed
+else Service still failing
+    ES -> CB: Error response
+    CB -> CB: Change state to OPEN
+    CB -> LOG: Log circuit remains open
+    CB -> C: Return error
+end
+
+@enduml
+
+@startuml Error Handling Flow
+!theme plain
+title Centralized Error Handling Flow
+
+participant "API Endpoint" as EP
+participant "Service Layer" as SL
+participant "Database" as DB
+participant "Exception Handler" as EH
+participant "Logger" as LOG
+participant "Client" as C
+
+EP -> SL: Business logic call
+
+alt Database Error
+    SL -> DB: Database operation
+    DB -> SL: Database exception
+    SL -> EP: Raise custom DatabaseError
+    EP -> EH: Exception caught by global handler
+    EH -> LOG: Log error with correlation ID
+    EH -> C: 500 Internal Server Error
+    note right: {"error": "DATABASE_ERROR", "correlation_id": "..."}
+
+else Validation Error
+    SL -> SL: Business rule validation
+    SL -> EP: Raise ValidationError
+    EP -> EH: Exception caught
+    EH -> LOG: Log validation error
+    EH -> C: 400 Bad Request
+    note right: {"error": "VALIDATION_ERROR", "details": {...}}
+
+else Authentication Error
+    SL -> SL: Check user permissions
+    SL -> EP: Raise AuthenticationError
+    EP -> EH: Exception caught
+    EH -> LOG: Log auth error
+    EH -> C: 401 Unauthorized
+    note right: {"error": "AUTHENTICATION_FAILED"}
+
+else Success
+    SL -> DB: Database operation
+    DB -> SL: Success
+    SL -> EP: Return result
+    EP -> C: 200 OK
+end
+
+@enduml
+
+@startuml Logging Architecture
+!theme plain
+title Centralized Logging Architecture
+
+participant "API Request" as REQ
+participant "Correlation Middleware" as CM
+participant "Request Logger" as RL
+participant "Service Layer" as SL
+participant "Audit Service" as AS
+participant "Log Formatter" as LF
+participant "Log Destination" as LD
+
+REQ -> CM: Incoming request
+CM -> CM: Generate correlation ID
+CM -> RL: Log request start
+note right: Include correlation ID, method, path, IP
+
+RL -> LF: Format log message
+LF -> LD: Write structured JSON log
+note right: {"timestamp": "...", "level": "INFO", "correlation_id": "...", "event": "REQUEST_START"}
+
+CM -> SL: Process request
+SL -> SL: Business logic
+SL -> AS: Log business event
+note right: User actions, data changes
+
+AS -> LF: Format audit log
+LF -> LD: Write audit log
+note right: {"event": "USER_LOGIN", "user_id": "...", "success": true}
+
+alt Success
+    SL -> CM: Return success
+    CM -> RL: Log request completion
+    RL -> LF: Format success log
+    LF -> LD: Write completion log
+
+else Error
+    SL -> CM: Raise exception
+    CM -> RL: Log error
+    RL -> LF: Format error log
+    LF -> LD: Write error log
+    note right: Include stack trace, correlation ID
+end
+
+@enduml
