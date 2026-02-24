@@ -1,0 +1,90 @@
+**Agent:** `auth-service-python-1-apidesign` | **Phase:** `apidesign` | **Tech Stack:** `python-greenfield`
+
+**Model:** `claude-sonnet-4-20250514` | **Budget:** $`2.00` | **Max Turns:** `25` | **Tools:** `7`
+
+### Skill: `smart-api-python`
+> SmartAPI for Python/FastAPI — API Designer agent. Designs REST endpoints, writes FastAPI routers, Pydantic schemas with validation, and OpenAPI configuration.
+
+**Sections:** Phase Role: SmartAPI (Python/FastAPI API Designer), Prior Work (READ ALL BEFORE WRITING ANY CODE), CRITICAL: File Path Rules, Step-by-Step Implementation, Output Files, ABSOLUTE RULES
+
+**Key Rules:**
+1. **Pydantic v2 ONLY** — `model_config`, NOT `class Config`
+2. **Validation on EVERY request field** — `Field()`, `EmailStr`, validators
+3. **Use `PageResponse[T]` for ALL list endpoints** — never return raw `list[T]`
+4. **ErrorResponse format for ALL errors** — consistent error contract
+5. **`response_model` + `summary` on EVERY endpoint** — complete Swagger docs
+*...and 7 more*
+
+**References:** `api-code-templates.md`, `artifact-template.md`
+
+
+---
+
+I'll help you design and implement the API layer for this FastAPI authentication service. Let me start by analyzing the prior work from the DBA agent and understanding the project structure.
+
+> **Read** `CLAUDE.md`
+
+> **Read** `artifacts/auth-service-python-1-dba/architecture.md`
+
+> **Bash** `List available artifact files`
+
+> **Read** `artifacts/auth-service-python-1-architect/architecture.md`
+
+> **Read** `artifacts/auth-service-python-1-architect/features.json`
+
+> **Glob** `app/models/*.py`
+
+> **Read** `app/models/user.py`
+
+> **Read** `app/models/base.py`
+
+> **Read** `app/models/request_log.py`
+
+> **Update Todos** Design API contract with endpoint invent, Create ErrorResponse and FieldError sche, Create PageResponse generic schema for p
+
+Let me start by designing the complete API contract with an endpoint inventory table, then implement the schemas and routers step by step.
+
+> **Bash** `Create artifact directory`
+
+> **Write** `artifacts/auth-service-python-1-apidesign/api-design.md`
+
+> **Update Todos** Design API contract with endpoint invent, Create ErrorResponse and FieldError sche, Create PageResponse generic schema for p
+
+Now let me create the common schemas with the mandatory ErrorResponse and PageResponse classes:
+
+> **Bash** `Create schemas directory`
+
+> **Write** `app/schemas/common.py`
+
+> **Update Todos** Design API contract with endpoint invent, Create ErrorResponse and FieldError sche, Create PageResponse generic schema for p
+
+> **Write** `app/schemas/auth.py`
+
+> **Write** `app/schemas/user.py`
+
+> **Write** `app/schemas/admin.py`
+
+> **Update Todos** Design API contract with endpoint invent, Create ErrorResponse and FieldError sche, Create PageResponse generic schema for p
+
+> **Bash** `Create routers directory`
+
+> **Write** `app/routers/auth.py`
+
+> **Write** `app/routers/users.py`
+
+> **Edit** `app/routers/users.py`
+> Replace: `@router.get("/me", response_model=UserResponse,
+            summary="Get current...`
+
+> **Edit** `app/routers/users.py`
+> Replace: `current_user_id: int = Depends(get_current_user_id)...`
+
+> **Read** `app/routers/users.py`
+
+> **Write** `app/routers/users.py`
+
+> **Write** `app/routers/admin.py`
+
+---
+
+**Completed** in 26 turns (cost: $0.6056)
