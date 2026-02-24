@@ -57,3 +57,38 @@ class PaymentResponse(BaseModel):
     created_at: datetime
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class PaymentSearchRequest(BaseModel):
+    """Payment search request schema."""
+
+    payment_number: Optional[str] = Field(None, max_length=50)
+    claim_id: Optional[uuid.UUID] = None
+    payment_status: Optional[PaymentStatus] = None
+    payment_method: Optional[PaymentMethod] = None
+    payment_type: Optional[PaymentType] = None
+    date_from: Optional[date] = None
+    date_to: Optional[date] = None
+    amount_min: Optional[Decimal] = Field(None, ge=0)
+    amount_max: Optional[Decimal] = Field(None, ge=0)
+
+    model_config = ConfigDict(str_strip_whitespace=True)
+
+
+class VoidPaymentRequest(BaseModel):
+    """Void payment request schema."""
+
+    reason: str = Field(..., max_length=500)
+    void_date: Optional[date] = None
+
+    model_config = ConfigDict(str_strip_whitespace=True)
+
+
+class ReversalRequest(BaseModel):
+    """Payment reversal request schema."""
+
+    reason: str = Field(..., max_length=500)
+    reversal_amount: Optional[Decimal] = Field(None, gt=0)
+    reversal_date: Optional[date] = None
+
+    model_config = ConfigDict(str_strip_whitespace=True)

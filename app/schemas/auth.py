@@ -174,6 +174,19 @@ class PasswordResetConfirm(BaseModel):
     )
 
 
+class LoginResponse(BaseModel):
+    """Login response schema used by auth service."""
+
+    access_token: str = Field(..., description="JWT access token")
+    refresh_token: str = Field(..., description="JWT refresh token")
+    token_type: str = Field(default="bearer", description="Token type")
+    user_id: uuid.UUID = Field(..., description="User ID")
+    email: str = Field(..., description="User email")
+    role: UserRole = Field(..., description="User role")
+
+    model_config = ConfigDict(from_attributes=True)
+
+
 class APIResponse(BaseModel):
     """Standard API response wrapper."""
 

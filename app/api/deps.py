@@ -259,3 +259,9 @@ class PerformanceTracker:
 def get_performance_tracker(endpoint_name: str) -> PerformanceTracker:
     """Get performance tracker for an endpoint."""
     return PerformanceTracker(endpoint_name)
+
+
+# Legacy compatibility function
+def require_role(roles: list[str]):
+    """Legacy function for role-based access control."""
+    return EnhancedRoleChecker(roles)

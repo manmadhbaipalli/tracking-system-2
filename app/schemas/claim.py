@@ -73,3 +73,29 @@ class ClaimHistoryItem(BaseModel):
     claim_amount: Optional[Decimal]
 
     model_config = ConfigDict(from_attributes=True)
+
+
+class ClaimSearchRequest(BaseModel):
+    """Claim search request schema."""
+
+    policy_id: Optional[uuid.UUID] = None
+    claim_status: Optional[ClaimStatus] = None
+    claim_type: Optional[ClaimType] = None
+    date_from: Optional[date] = None
+    date_to: Optional[date] = None
+    min_amount: Optional[Decimal] = Field(None, ge=0)
+    max_amount: Optional[Decimal] = Field(None, ge=0)
+    limit: int = Field(default=100, ge=1, le=1000)
+    offset: int = Field(default=0, ge=0)
+
+    model_config = ConfigDict(str_strip_whitespace=True)
+
+
+class ClaimHistoryResponse(BaseModel):
+    """Claim history response schema."""
+
+    claims: List[ClaimHistoryItem]
+    total_count: int
+    has_more: bool
+
+    model_config = ConfigDict(from_attributes=True)

@@ -1,0 +1,50 @@
+You are an autonomous coding agent. A previous attempt at task auth-service-java-1 failed CI.
+
+## Task
+**auth-service-java-1**
+1. Analyze the below requirement
+	1. Create java and springboot application with login, registration endpoints
+	2. centralized logging system
+	3. centralized exception handling
+	4. implement circuit breaker
+	5. swagger for all endpoints
+2. Design the application
+	1. Sequence Diagrams and flow diagrams in platuml
+	2. design and create the db schema/tables
+3. code implementation with proper testcases
+4. execute testcases
+5. review and optimize if any issues.
+
+## CI Failure Output
+```
+
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "C:\Manmadh\Workspaces\claude-code-agents\workspace\auth-service-java-1-agent-1\app\main.py", line 8, in <module>
+    from app.core.database import init_database, close_database
+  File "C:\Manmadh\Workspaces\claude-code-agents\workspace\auth-service-java-1-agent-1\app\core\database.py", line 104, in <module>
+    engine = create_async_engine(settings.database_url, **engine_kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mbaipall\AppData\Roaming\Python\Python311\site-packages\sqlalchemy\ext\asyncio\engine.py", line 120, in create_async_engine
+    sync_engine = _create_engine(url, **kw)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<string>", line 2, in create_engine
+  File "C:\Users\mbaipall\AppData\Roaming\Python\Python311\site-packages\sqlalchemy\util\deprecations.py", line 281, in warned
+    return fn(*args, **kwargs)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mbaipall\AppData\Roaming\Python\Python311\site-packages\sqlalchemy\engine\create.py", line 599, in create_engine
+    dbapi = dbapi_meth(**dbapi_args)
+            ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\mbaipall\AppData\Roaming\Python\Python311\site-packages\sqlalchemy\dialects\sqlite\aiosqlite.py", line 374, in import_dbapi
+    __import__("aiosqlite"), __import__("sqlite3")
+    ^^^^^^^^^^^^^^^^^^^^^^^
+ModuleNotFoundError: No module named 'aiosqlite'
+
+```
+
+## Instructions
+1. Read the failing test output carefully.
+2. Identify the root cause.
+3. Fix the code. Only modify files in your assigned scope.
+4. Run the tests again to verify the fix.
+5. Update `artifacts/auth-service-java-1/findings.md` with what went wrong and how you fixed it.

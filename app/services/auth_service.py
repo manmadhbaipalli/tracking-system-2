@@ -12,7 +12,7 @@ from uuid import UUID
 
 from app.core.config import settings
 from app.models.user import User
-from app.schemas.auth import LoginRequest, LoginResponse, RegisterRequest
+from app.schemas.auth import LoginRequest, LoginResponse, UserCreate
 from app.utils.exceptions import AuthenticationError, ValidationError
 
 
@@ -56,26 +56,26 @@ class AuthService:
         if expires_delta:
             expire = datetime.utcnow() + expires_delta
         else:
-            expire = datetime.utcnow() + timedelta(minutes=settings.access_token_expire_minutes)
+            expire = datetime.utcnow() + timedelta(minutes=settings.jwt_access_token_expire_minutes)
 
         to_encode.update({"exp": expire})
 
-        encoded_jwt = jwt.encode(to_encode, settings.secret_key, algorithm=settings.algorithm)
+        encoded_jwt = jwt.encode(to_encode, settings.jwt_secret_key, algorithm=settings.jwt_algorithm)
         return encoded_jwt
 
     def create_refresh_token(self, data: Dict[str, Any]) -> str:
         """Create JWT refresh token."""
         to_encode = data.copy()
-        expire = datetime.utcnow() + timedelta(days=settings.refresh_token_expire_days)
+        expire = datetime.utcnow() + timedelta(days=settings.jwt_refresh_token_expire_days)
         to_encode.update({"exp": expire, "type": "refresh"})
 
-        encoded_jwt = jwt.encode(to_encode, settings.secret_key, algorithm=settings.algorithm)
+        encoded_jwt = jwt.encode(to_encode, settings.jwt_secret_key, algorithm=settings.jwt_algorithm)
         return encoded_jwt
 
     def verify_token(self, token: str) -> Optional[Dict[str, Any]]:
         """Verify and decode JWT token."""
         try:
-            payload = jwt.decode(token, settings.secret_key, algorithms=[settings.algorithm])
+            payload = jwt.decode(token, settings.jwt_secret_key, algorithms=[settings.jwt_algorithm])
             return payload
         except JWTError:
             return None
@@ -118,7 +118,7 @@ class AuthService:
             role=user.role
         )
 
-    async def register(self, register_data: RegisterRequest, user_id: UUID) -> User:
+    async def register(self, register_data: UserCreate, user_id: UUID) -> User:
         """Register a new user."""
         # Check if user already exists
         stmt = select(User).where(User.email == register_data.email)
