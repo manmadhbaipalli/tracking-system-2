@@ -129,6 +129,10 @@ async def get_database_session() -> AsyncGenerator[AsyncSession, None]:
             await session.close()
 
 
+# Legacy alias for compatibility
+get_db = get_database_session
+
+
 async def init_database() -> None:
     """Initialize the database by creating all tables."""
     async with engine.begin() as conn:
