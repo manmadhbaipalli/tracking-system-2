@@ -1,0 +1,150 @@
+**Agent:** `auth-service-python-architect` | **Phase:** `architect` | **Tech Stack:** `python-greenfield`
+
+**Model:** `claude-haiku-4-5-20251001` | **Budget:** $`2.00` | **Max Turns:** `20` | **Tools:** `9`
+
+### Skill: `smart-architect`
+> SmartArchitect — Solution Architect agent. Designs system architecture, makes technology decisions, defines security and observability strategy, and creates the implementation contract (features.json).
+
+**Sections:** Phase Role: SmartArchitect (Solution Architect), Prior Work (READ ALL BEFORE DESIGNING), CRITICAL: File Path Rules, Step-by-Step Architecture Design, Output — Write EXACTLY these 3 files, ABSOLUTE RULES
+
+**Key Rules:**
+1. **Do NOT write any code** — downstream agents handle implementation
+2. **features.json is the SINGLE SOURCE OF TRUTH** — every file that must exist appears here
+3. **EVERY feature MUST have `acceptance_criteria`** — this is the verification contract
+4. **Agent tags MUST be accurate** — wrong tag = feature never gets implemented
+5. **Security architecture is MANDATORY** — never skip security design
+*...and 5 more*
+
+**References:** `artifact-template.md`, `claude-md-template.md`, `features-json-example.md`
+
+
+---
+
+I'm the **SmartArchitect** agent. My role is to design the complete system architecture for this Python FastAPI authentication service. Let me start by reading the existing requirements and business analysis artifacts.
+
+> **Read** `artifacts/auth-service-python-ba/requirements.md`
+
+> **Read** `artifacts/auth-service-python-ba/features-brief.json`
+
+> **Read** `CLAUDE.md`
+
+Excellent! I have comprehensive requirements and an existing CLAUDE.md. Now I'll design the complete architecture and create the implementation contract.
+
+Let me create the three critical files needed for the implementation team:
+
+> **Write** `artifacts/auth-service-python-architect/architecture.md`
+
+Now let me create the implementation contract (features.json):
+
+> **Write** `artifacts/auth-service-python-architect/features.json`
+
+Now let me update CLAUDE.md to ensure it's fully aligned with the architecture:
+
+> **Edit** `CLAUDE.md`
+> Replace: `## Security Requirements
+- Passwords: BCrypt with cost factor 12, never store pl...`
+
+Perfect! I've completed the architecture design phase. Let me verify the files are in place:
+
+> **Bash** `find artifacts/auth-service-python-architect -type f -name "*.md" -o -name "*.json" | sort`
+
+Excellent! I have successfully completed the **SmartArchitect** phase for the Auth Service Python 1 project. Here's what I've designed:
+
+## 📋 Architecture Summary
+
+### **Architecture Style: Layered Monolith**
+- **Rationale:** Clear separation of concerns (Controller → Service → Repository), ideal for MVP, easily scalable
+- **Components:** 12 layers (routers, services, repositories, models, schemas, security, middleware, exceptions, utilities, config, database, main)
+
+### **Technology Stack (Already Chosen)**
+- **Language:** Python 3.12 + FastAPI 0.100+
+- **Database:** PostgreSQL (prod) / SQLite (dev) with SQLAlchemy ORM 2.0+
+- **Authentication:** JWT (HS256) + BCrypt password hashing
+- **Logging:** structlog with JSON formatting
+- **Migrations:** Alembic for version-controlled schema changes
+- **Validation:** Pydantic v2 (built into FastAPI)
+- **API Docs:** FastAPI auto-generated Swagger UI + OpenAPI schema
+
+### **Critical Design Decisions**
+
+✅ **Security Architecture:**
+- JWT tokens (15-minute expiration, HS256 algorithm)
+- BCrypt password hashing (cost factor 12)
+- Role-based access control (USER, ADMIN)
+- Constant-time password comparison
+- Input validation via Pydantic on all endpoints
+- OWASP API Top 10 mitigations implemented
+
+✅ **Observability:**
+- Structured JSON logging with correlation IDs (UUID v4 per request)
+- Health checks: `/health/live` (liveness) and `/health/ready` (readiness)
+- Request/response logging with timing and correlation ID propagation
+- Slow query logging (>100ms threshold)
+
+✅ **Configuration Management (12-Factor App):**
+- All configuration via environment variables
+- Required: `JWT_SECRET_KEY`, optional defaults for port, database URL, log level
+- Dev/prod profiles with distinct settings
+- Startup validation (fail-fast for missing required config)
+
+✅ **Error Handling:**
+- Custom exception hierarchy (Validation, Authentication, Authorization, NotFound, Conflict, ServiceUnavailable)
+- Global exception handler returns consistent `ErrorResponse` format
+- No stack traces to clients; full logs server-side with correlation ID
+
+✅ **API Design:**
+- RESTful conventions with `/api/v1/` versioning
+- Endpoints: `/auth/register`, `/auth/login`, `/auth/refresh`, `/users/me`, `/admin/users`, `/health/*`
+- Pagination support (limit/offset)
+- JWT Bearer token in Authorization header
+
+### **Files Created**
+
+1. **`CLAUDE.md`** (updated)
+   - Project standards, tech stack, conventions, commands for all downstream agents
+
+2. **`artifacts/auth-service-python-architect/architecture.md`**
+   - Complete 500+ line architecture document covering:
+     - Architecture style and component diagram
+     - Technology decision rationale table
+     - 12-layer component design
+     - Data flow diagrams
+     - Security architecture (auth, authz, input validation, OWASP mitigations)
+     - Observability strategy (logging, correlation IDs, health checks)
+     - Configuration strategy with environment variables
+     - Error handling hierarchy and mapping
+     - API design principles
+     - Database schema design
+     - Circuit breaker pattern (for future external calls)
+
+3. **`artifacts/auth-service-python-architect/features.json`**
+   - **28 features** organized by layer with proper agent tags:
+     - **4 DBA features:** Database models, migrations, session config
+     - **8 API Design features:** DTOs, routers (auth, users, admin, health), OpenAPI config
+     - **6 Service features:** Auth, user, admin, health business logic
+     - **1 Repository feature:** User CRUD with soft delete
+     - **9 Dev/Infrastructure features:** JWT/security, exceptions, middleware, circuit breaker, logging, config, main app, requirements
+   - **Each feature includes specific acceptance criteria** for implementation and QA verification
+
+### **Key Implementation Contracts**
+
+✅ **Database:** User entity with email uniqueness, BCrypt password_hash, soft deletes (active flag), audit timestamps
+✅ **Authentication:** Register → hash password → create user → issue JWT; Login → find user → verify password → issue JWT
+✅ **Authorization:** Role checks in FastAPI dependencies; USER accesses own profile only; ADMIN manages all users
+✅ **Observability:** All requests logged with correlation_id; errors logged with full context; health checks check DB connectivity
+✅ **Error Responses:** Standard format with `{status, code, message, correlation_id, timestamp, errors[]}`
+
+### **Ready for Implementation**
+
+The architecture is **locked and ready** for downstream agents:
+- **SmartDBA** → Implement database layer (features: db-base-model, db-user-model, etc.)
+- **SmartAPIDesign** → Implement routers and DTOs (features: api-auth-router, dto-auth-schemas, etc.)
+- **SmartDev** → Implement services, security, middleware (features: service-auth, security-jwt, middleware-*, etc.)
+- **SmartQA** → Create tests against acceptance criteria
+- **SmartDevOps** → Create Docker, CI/CD
+
+All decisions are documented, justified, and there are no ambiguities for implementation.
+
+---
+
+**Completed** in 8 turns (cost: $0.1755)

@@ -83,13 +83,16 @@ requirements.txt      # Python dependencies
 
 ## Security Requirements
 - Passwords: BCrypt with cost factor 12, never store plain text
-- JWT: HS256 algorithm, configurable expiration (default 24 hours)
-- Input validation: All endpoints validate via Pydantic schemas
+- JWT: HS256 algorithm, configurable expiration (default 15 minutes), stateless (no refresh tokens in MVP)
+- Input validation: All endpoints validate via Pydantic schemas (email RFC 5322, password min 8 chars, name max 100)
 - CORS: Whitelist specific origins, no wildcards in production
-- Rate limiting: 5 failed login attempts per email per hour
-- Sensitive data: Never log passwords, tokens, or PII
-- SQL injection: Use SQLAlchemy ORM, no raw SQL queries
-- Admin endpoints: Require ADMIN role, check in dependency chain
+- Rate limiting: Scope for future (not in MVP), logged failed attempts via observability
+- Sensitive data: Never log passwords, tokens, or PII; safe field-level error messages
+- SQL injection: Use SQLAlchemy ORM only, no raw SQL queries; all queries parameterized
+- Constant-time comparison: Password verification uses bcrypt.checkpw() to prevent timing attacks
+- Admin endpoints: Require ADMIN role, enforced via FastAPI dependencies
+- Soft deletes: Use active=false flag, no physical record deletion
+- Correlation IDs: UUID v4 per request, propagated to all logs for tracing
 
 ## API Response Standards
 - Success responses: Include data in response body
