@@ -1,0 +1,35 @@
+**Agent:** `auth-service-1-dba` | **Phase:** `dba` | **Tech Stack:** `python-greenfield`
+
+**Model:** `claude-sonnet-4-6` | **Budget:** $`2.00` | **Max Turns:** `2` | **Tools:** `7`
+
+### Skill: `smart-dba-python`
+> SmartDBA for Python/SQLAlchemy — Database Engineer agent. Designs schema, writes SQLAlchemy 2.0 models with audit mixin, database session, and Alembic migrations.
+
+**Sections:** Phase Role: SmartDBA (Python/SQLAlchemy Database Engineer), Prior Work (READ ALL BEFORE WRITING ANY CODE), Standalone Mode (no prior pipeline artifacts), CRITICAL: File Path Rules, Step-by-Step Implementation, Output, ABSOLUTE RULES
+
+**Key Rules:**
+1. **ALL models MUST use AuditMixin** — no models without audit columns
+2. **Alembic migration setup is MANDATORY**
+3. **Use SQLAlchemy 2.0 style** (`Mapped`, `mapped_column`) — not legacy Column() style
+4. **Use `func.now()`** for timestamps — never `datetime.utcnow` (deprecated)
+5. **Create ALL `__init__.py` files** — missing ones break downstream agents
+*...and 3 more*
+
+**References:** `artifact-template.md`, `best-practices.md`
+
+
+---
+
+I'll start by reading the prerequisite artifacts and project structure to understand what needs to be built.
+
+> **Read** `artifacts/auth-service-1-architect/architecture.md`
+
+> **Read** `artifacts/auth-service-1-architect/features.json`
+
+> **Glob** `artifacts/**/*`
+
+> **Glob** `app/**/*`
+
+---
+
+**Completed** in 3 turns (cost: $0.0492)
