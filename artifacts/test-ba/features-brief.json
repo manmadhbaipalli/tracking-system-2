@@ -1,0 +1,44 @@
+[
+  {
+    "id": "auth-register",
+    "name": "User Registration",
+    "description": "Email/password registration with JWT",
+    "priority": "high"
+  },
+  {
+    "id": "auth-login",
+    "name": "User Login",
+    "description": "Email/password authentication",
+    "priority": "high"
+  },
+  {
+    "id": "user-profile",
+    "name": "User Profile",
+    "description": "View and update user profile",
+    "priority": "medium"
+  },
+  {
+    "id": "admin-user-mgmt",
+    "name": "Admin User Management",
+    "description": "Admin CRUD for users",
+    "priority": "medium"
+  },
+  {
+    "id": "health-checks",
+    "name": "Health Checks",
+    "description": "Liveness and readiness endpoints",
+    "priority": "high"
+  },
+  {
+    "id": "error-handling",
+    "name": "Global Error Handling",
+    "description": "Consistent error response format",
+    "priority": "high"
+  },
+  {
+    "id": "observability",
+    "name": "Structured Logging",
+    "description": "JSON logging with correlation IDs",
+    "priority": "medium"
+  }
+]
