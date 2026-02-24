@@ -1,0 +1,63 @@
+# Development environment overrides
+version: '3.8'
+
+services:
+  app:
+    build:
+      target: builder
+    environment:
+      - ENVIRONMENT=development
+      - DEBUG=true
+      - LOG_LEVEL=DEBUG
+      - LOG_FORMAT=pretty
+      - DATABASE__ECHO=true
+      - ENABLE_REQUEST_LOGGING=true
+    volumes:
+      # Mount source code for development
+      - .:/app
+      - /app/__pycache__
+      - /app/.pytest_cache
+    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload", "--log-level", "debug"]
+    ports:
+      - "8000:8000"
+      - "5678:5678"  # debugpy port
+
+  postgres:
+    environment:
+      - POSTGRES_DB=insurance_dev
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=dev_password
+    ports:
+      - "5433:5432"  # Different port to avoid conflicts
+
+  redis:
+    command: >
+      --requirepass dev_redis_password
+      --maxmemory 128mb
+      --maxmemory-policy allkeys-lru
+    ports:
+      - "6380:6379"  # Different port to avoid conflicts
+
+  # Development tools
+  adminer:
+    image: adminer:4.8.1
+    ports:
+      - "8080:8080"
+    environment:
+      - ADMINER_DEFAULT_SERVER=postgres
+    depends_on:
+      - postgres
+    networks:
+      - app_network
+    profiles:
+      - dev-tools
+
+  mailhog:
+    image: mailhog/mailhog:v1.0.1
+    ports:
+      - "1025:1025"  # SMTP
+      - "8025:8025"  # Web UI
+    networks:
+      - app_network
+    profiles:
+      - dev-tools
