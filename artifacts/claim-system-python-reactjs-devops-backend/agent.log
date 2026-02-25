@@ -1,0 +1,23 @@
+**Agent:** `claim-system-python-reactjs-devops-backend` | **Phase:** `devops` | **Tech Stack:** `insurance-python-greenfield`
+
+**Provider:** `anthropic` | **Model:** `claude-haiku-4-5-20251001` | **Budget:** $`2.00` | **Max Turns:** `20` | **Tools:** `7`
+
+### Skill: `smart-devops-python`
+> SmartDevOps for Python — DevOps Engineer agent. Creates slim Dockerfile, Docker Compose, GitHub Actions CI/CD with security scanning, gunicorn production config, and deployment documentation.
+
+**Sections:** Phase Role: SmartDevOps (Python DevOps Engineer), Prior Work (READ ALL BEFORE WRITING ANY FILES), Standalone Mode (no prior pipeline artifacts), CRITICAL: File Path Rules, Step-by-Step Implementation, Output Files, ABSOLUTE RULES
+
+**Key Rules:**
+1. **Non-root user in Dockerfile** — NEVER run containers as root
+2. **Multi-stage builds** — separate dependency install and runtime
+3. **HEALTHCHECK in Dockerfile** — mandatory for orchestration
+4. **No hardcoded secrets** — ALL secrets via environment variables
+5. **Required secrets use `?` syntax in compose** — fail fast on missing config
+*...and 6 more*
+
+**References:** `artifact-template.md`, `best-practices.md`, `cicd-template.md`, `compose-template.md`, `dockerfile-template.md`
+
+
+---
+
+**Exception:** Claude Code not found at: C:\Users\mbaipall\AppData\Roaming\Python\Python311\site-packages\claude_agent_sdk\_bundled\claude.exe
