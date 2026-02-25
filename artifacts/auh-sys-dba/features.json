@@ -1,0 +1,74 @@
+{
+  "features": [
+    {
+      "id": "dba-001",
+      "name": "Base Model with Audit Mixin",
+      "description": "Create Base class and AuditMixin for all entities with id, created_at, updated_at",
+      "agent": "dba",
+      "status": "pending"
+    },
+    {
+      "id": "dba-002",
+      "name": "User & Role Models",
+      "description": "Implement User, Role, Permission entities with RBAC support",
+      "agent": "dba",
+      "status": "pending"
+    },
+    {
+      "id": "dba-003",
+      "name": "Policy & Coverage Models",
+      "description": "Implement Policy, Coverage, Vehicle, Location, Insured, Endorsement entities",
+      "agent": "dba",
+      "status": "pending"
+    },
+    {
+      "id": "dba-004",
+      "name": "Claim Models",
+      "description": "Implement Claim, ClaimAdjustment, ReserveLine, ClaimLevelPolicy entities",
+      "agent": "dba",
+      "status": "pending"
+    },
+    {
+      "id": "dba-005",
+      "name": "Payment & Payee Models",
+      "description": "Implement Payment, PaymentDetail, PaymentDeduction, Payee, PaymentMethod entities",
+      "agent": "dba",
+      "status": "pending"
+    },
+    {
+      "id": "dba-006",
+      "name": "Audit Log Model",
+      "description": "Implement comprehensive AuditLog entity for tracking all system changes",
+      "agent": "dba",
+      "status": "pending"
+    },
+    {
+      "id": "dba-007",
+      "name": "Integration Models",
+      "description": "Implement ExternalEstimate, PaymentRoutingRule, ScheduledPayment, OtherCarrierInfo entities",
+      "agent": "dba",
+      "status": "pending"
+    },
+    {
+      "id": "dba-008",
+      "name": "Database Session Management",
+      "description": "Create database.py with engine, SessionLocal, and get_db() dependency",
+      "agent": "dba",
+      "status": "pending"
+    },
+    {
+      "id": "dba-009",
+      "name": "Alembic Migration Setup",
+      "description": "Initialize Alembic, configure alembic.ini, create initial migration",
+      "agent": "dba",
+      "status": "pending"
+    },
+    {
+      "id": "dba-010",
+      "name": "Database Design Documentation",
+      "description": "Create database-design.md with ER diagram, table definitions, indexes, and rationale",
+      "agent": "dba",
+      "status": "pending"
+    }
+  ]
+}

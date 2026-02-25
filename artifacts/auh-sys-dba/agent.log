@@ -1,0 +1,135 @@
+**Agent:** `auh-sys-dba` | **Phase:** `dba` | **Tech Stack:** `insurance-python-greenfield`
+
+**Provider:** `anthropic` | **Model:** `claude-haiku-4-5-20251001` | **Budget:** $`2.00` | **Max Turns:** `20` | **Tools:** `7`
+
+### Skill: `smart-dba-python`
+> SmartDBA for Python/SQLAlchemy — Database Engineer agent. Designs schema, writes SQLAlchemy 2.0 models with audit mixin, database session, and Alembic migrations.
+
+**Sections:** Phase Role: SmartDBA (Python/SQLAlchemy Database Engineer), Prior Work (READ ALL BEFORE WRITING ANY CODE), Standalone Mode (no prior pipeline artifacts), CRITICAL: File Path Rules, Step-by-Step Implementation, Output, ABSOLUTE RULES
+
+**Key Rules:**
+1. **ALL models MUST use AuditMixin** — no models without audit columns
+2. **Alembic migration setup is MANDATORY**
+3. **Use SQLAlchemy 2.0 style** (`Mapped`, `mapped_column`) — not legacy Column() style
+4. **Use `func.now()`** for timestamps — never `datetime.utcnow` (deprecated)
+5. **Create ALL `__init__.py` files** — missing ones break downstream agents
+*...and 2 more*
+
+**References:** `artifact-template.md`, `best-practices.md`
+
+
+---
+
+I'll help you implement the database schema for the auh-sys platform. Let me start by reading the architecture artifacts from the upstream phase to understand the entity design.
+
+> **Read** `artifacts/auh-sys-architect/architecture.md`
+
+> **Read** `artifacts/auh-sys-architect/features.json`
+
+> **Read** `CLAUDE.md`
+
+Let me check the directory structure to see what exists.
+
+> **Bash** `Check if artifacts directory exists`
+
+> **Bash** `Check if app directory exists`
+
+> **Bash** `List files in auh-sys-architect`
+
+> **Bash** `List files in auh-sys-dba`
+
+> **Bash** `Search for architecture and features files`
+
+I see this is running in **Standalone Mode** since the architecture artifacts don't exist yet. According to the instructions, I need to:
+
+1. Create upstream artifacts (`architecture.md` and `features.json`) in `artifacts/auh-sys-dba/`
+2. Implement the database schema and models
+3. Set up Alembic migrations
+4. Write `database-design.md`
+
+Let me start by reading the BRD more carefully and creating the architecture artifacts.
+
+> **Write** `artifacts/auh-sys-dba/architecture.md`
+
+> **Write** `artifacts/auh-sys-dba/features.json`
+
+Now I'll implement the complete database schema. Let me start with the base structure and models.
+
+> **Write** `app/__init__.py`
+
+> **Write** `app/config.py`
+
+> **Write** `app/models/base.py`
+
+> **Write** `app/models/user.py`
+
+> **Write** `app/models/policy.py`
+
+> **Write** `app/models/claim.py`
+
+> **Write** `app/models/payment.py`
+
+> **Write** `app/models/audit.py`
+
+> **Write** `app/models/integration.py`
+
+> **Write** `app/models/__init__.py`
+
+> **Write** `app/database.py`
+
+Now let me set up Alembic for database migrations.
+
+> **Bash** `Initialize Alembic migrations directory`
+
+> **Read** `alembic.ini`
+
+> **Read** `alembic/env.py`
+
+> **Edit** `alembic.ini`
+> Replace: `sqlalchemy.url = driver://user:pass@localhost/dbname...`
+
+> **Edit** `alembic/env.py`
+> Replace: `# add your model's MetaData object here
+# for 'autogenerate' support
+# from myap...`
+
+> **Edit** `alembic.ini`
+> Replace: `# A generic, single database configuration.
+
+[alembic]
+# path to migration scrip...`
+
+> **Edit** `alembic.ini`
+> Replace: `sqlalchemy.url = sqlite:///./dev.db...`
+
+> **Read** `alembic.ini`
+
+> **Edit** `alembic.ini`
+> Replace: `sqlalchemy.url = driver://user:pass@localhost/dbname...`
+
+> **Read** `alembic/env.py`
+
+> **Bash** `Verify models can be imported`
+
+> **Bash** `Verify models import successfully`
+
+> **Bash** `Generate initial migration with autogenerate`
+
+> **Bash** `List generated migration files`
+
+Now let me create the comprehensive database design documentation.
+
+> **Write** `artifacts/auh-sys-dba/database-design.md`
+
+Now let me update the features.json to mark all DBA features as complete and verify the implementation.
+
+> **Edit** `artifacts/auh-sys-dba/features.json`
+> Replace: `{
+  "features": [
+    {
+      "id": "dba-001",
+      "name": "Base Model with Au...`
+
+---
+
+**Completed** in 21 turns (cost: $0.3151)
