@@ -1,0 +1,50 @@
+[
+  {
+    "id": "policy-mgmt",
+    "name": "Policy Management",
+    "description": "Full policy lifecycle: quote, bind, issue, endorse, renew, cancel",
+    "priority": "high"
+  },
+  {
+    "id": "claim-processing",
+    "name": "Claim Processing",
+    "description": "FNOL through settlement/denial workflow",
+    "priority": "high"
+  },
+  {
+    "id": "underwriting",
+    "name": "Underwriting Engine",
+    "description": "Risk assessment, eligibility, premium calculation",
+    "priority": "high"
+  },
+  {
+    "id": "coverage-mgmt",
+    "name": "Coverage Management",
+    "description": "Coverage types, limits, deductibles, aggregate limits",
+    "priority": "high"
+  },
+  {
+    "id": "insured-mgmt",
+    "name": "Insured Management",
+    "description": "Individual and organization insured profiles",
+    "priority": "high"
+  },
+  {
+    "id": "endorsement",
+    "name": "Policy Endorsement",
+    "description": "Mid-term policy modifications with re-rating",
+    "priority": "medium"
+  },
+  {
+    "id": "audit-trail",
+    "name": "Audit Trail",
+    "description": "Complete change history for policies and claims",
+    "priority": "high"
+  },
+  {
+    "id": "reporting",
+    "name": "Insurance Reporting",
+    "description": "Premium reports, claims reports, loss ratios",
+    "priority": "medium"
+  }
+]
