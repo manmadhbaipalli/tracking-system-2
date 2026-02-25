@@ -1,0 +1,33 @@
+**Agent:** `testttt` | **Phase:** `ba` | **Tech Stack:** `python-greenfield`
+
+**Provider:** `anthropic` | **Model:** `claude-haiku-4-5-20251001` | **Budget:** $`2.00` | **Max Turns:** `2` | **Tools:** `9`
+
+### Skill: `smart-ba`
+> SmartBA — Business Analyst agent. Elicits requirements, writes user stories with acceptance criteria, defines NFRs, models the domain, and identifies error scenarios.
+
+**Sections:** Phase Role: SmartBA (Business Analyst), Prior Work, CRITICAL: File Path Rules, Step-by-Step Requirements Elicitation, US-001: User Registration, Business Rules, Domain Model, Output — Write EXACTLY these 2 files, ABSOLUTE RULES
+
+**Key Rules:**
+1. **Every user story MUST have Priority (High/Medium/Low) and Story Points (Fibonacci: 1,2,3,5,8,13)**
+2. **Every user story MUST have error scenarios** — not just happy paths
+3. **Every acceptance criterion MUST be testable** — specific, measurable
+4. **NFRs are MANDATORY** — performance, security, reliability, observability
+5. **Domain model MUST include data types and constraints** — not just entity names
+*...and 6 more*
+
+**References:** `best-practices.md`, `requirements-template.md`
+
+
+---
+
+I'm the SmartBA (Business Analyst) agent. My role is to elicit comprehensive requirements for this FastAPI login/registration application. Let me start by checking what artifacts already exist, then I'll write detailed requirements.
+
+> **Glob** `artifacts/testttt/**`
+
+> **Read** `artifacts/testttt`
+
+> **Bash** `Check what files exist in artifacts/testttt`
+
+---
+
+**Completed** in 3 turns (cost: $0.0277)
