@@ -1,0 +1,15 @@
+**Agent:** `mark01` | **Phase:** `legal` | **Tech Stack:** `greenfield`
+
+**Provider:** `anthropic` | **Model:** `claude-sonnet-4-6` | **Budget:** $`2.00` | **Max Turns:** `20` | **Tools:** `7`
+
+### Skill: none (hardcoded fallback)
+> Using built-in phase prompt — no skill file matched for this phase/tech stack.
+
+---
+
+Invalid API key · Fix external API key
+
+**Error:** Invalid API key · Fix external API key
+
+**Exception:** Command failed with exit code 1 (exit code: 1)
+Error output: Check stderr output for details
