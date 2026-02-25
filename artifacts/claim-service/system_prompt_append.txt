@@ -244,7 +244,6 @@ Create `artifacts/claim-service/implementation.md` documenting:
 7. **100% of features.json must be `"done"`.** Check every single entry.
 8. **Do NOT write test files.** SmartQA handles testing.
 9. **Do NOT break existing code.** SmartDBA's models and SmartAPI's routers must still import after your changes.
-10. **Use relative paths only.** Never `/C:/...` or `/c/...`.
 11. **Use `datetime.now(timezone.utc)`** — never `datetime.utcnow()` (deprecated in Python 3.12+).
 
 
@@ -888,6 +887,21 @@ async def get_current_user_id(
 ```
 
 **IMPORTANT:** Always use `datetime.now(timezone.utc)` — never `datetime.utcnow()` (deprecated in Python 3.12+).
+
+
+---
+
+## Reference: Common Rules
+
+## Common Rules (All Phases)
+
+These rules apply to EVERY agent regardless of phase:
+
+1. **Use relative paths only** -- NEVER use absolute paths like `/C:/...` or `/c/...`. Your CWD is the project root.
+2. **Write complete code** -- no stubs, no TODOs, no `pass`, no `throw new UnsupportedOperationException()`. Every method body must have a real implementation.
+3. **No fabricated output** -- if your phase requires running tests, builds, or commands, actually RUN them. Do not invent results.
+4. **No unnecessary files** -- only create files your phase explicitly requires. No README, ARCHITECTURE.md, diagrams, or extras unless the task description requests them.
+5. **Artifacts go in `artifacts/claim-service/`** -- all phase output documents (reports, specs, features.json) go in the task artifact directory.
 
 
 ## Cost & Scope Rules
