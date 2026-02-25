@@ -1,0 +1,314 @@
+[
+  {
+    "id": "policy-quote-creation",
+    "name": "Policy Quote Creation",
+    "description": "Create insurance quotes with premium calculation, coverage selection, and quote number generation",
+    "priority": "high",
+    "storyPoints": 8,
+    "relatedStories": ["US-001"]
+  },
+  {
+    "id": "policy-bind",
+    "name": "Policy Binding",
+    "description": "Convert quotes to binding policies with effective dates and policy number assignment",
+    "priority": "high",
+    "storyPoints": 5,
+    "relatedStories": ["US-002"]
+  },
+  {
+    "id": "policy-issuance",
+    "name": "Policy Issuance",
+    "description": "Approve and issue policies with automated document generation (declarations, coverage pages)",
+    "priority": "high",
+    "storyPoints": 5,
+    "relatedStories": ["US-003"]
+  },
+  {
+    "id": "policy-search-retrieval",
+    "name": "Policy Search & Retrieval",
+    "description": "Search policies by number, insured name, type, location; retrieve details within 3-5 seconds",
+    "priority": "high",
+    "storyPoints": 8,
+    "relatedStories": ["US-004", "US-005"]
+  },
+  {
+    "id": "policy-detail-view",
+    "name": "Policy Detail View",
+    "description": "Display complete policy details: insured, coverages, vehicle/location info, linked claims; WCAG compliant",
+    "priority": "high",
+    "storyPoints": 5,
+    "relatedStories": ["US-005"]
+  },
+  {
+    "id": "policy-endorsement",
+    "name": "Policy Endorsement",
+    "description": "Add, remove, or modify coverages mid-term with pro-rata premium adjustments and audit tracking",
+    "priority": "high",
+    "storyPoints": 8,
+    "relatedStories": ["US-006"]
+  },
+  {
+    "id": "policy-renewal",
+    "name": "Policy Renewal",
+    "description": "Generate renewal quotes, track renewal status, auto-expire policies, send renewal notices",
+    "priority": "high",
+    "storyPoints": 8,
+    "relatedStories": ["US-007"]
+  },
+  {
+    "id": "policy-cancellation",
+    "name": "Policy Cancellation",
+    "description": "Cancel policies with 30-day notice, pro-rata refund calculation, and regulatory compliance",
+    "priority": "medium",
+    "storyPoints": 5,
+    "relatedStories": ["US-008"]
+  },
+  {
+    "id": "claim-filing-fnol",
+    "name": "Claim Filing (FNOL)",
+    "description": "File First Notice of Loss with coverage verification, reserve estimation, claimant tracking",
+    "priority": "high",
+    "storyPoints": 8,
+    "relatedStories": ["US-009"]
+  },
+  {
+    "id": "claim-search-history",
+    "name": "Claim Search & History",
+    "description": "Search and retrieve claim history by claim number, policy, insured; sort/filter by status and date",
+    "priority": "high",
+    "storyPoints": 5,
+    "relatedStories": ["US-010"]
+  },
+  {
+    "id": "claim-investigation",
+    "name": "Claim Investigation & Adjustment",
+    "description": "Investigate claims, gather documentation, request additional info, determine reserve adjustments",
+    "priority": "high",
+    "storyPoints": 13,
+    "relatedStories": ["US-011"]
+  },
+  {
+    "id": "claim-settlement-denial",
+    "name": "Claim Settlement & Denial",
+    "description": "Approve claims with settlement amounts or deny with reason codes and denial notices",
+    "priority": "high",
+    "storyPoints": 8,
+    "relatedStories": ["US-012"]
+  },
+  {
+    "id": "claim-reopening",
+    "name": "Claim Reopening",
+    "description": "Reopen closed/settled/denied claims with new evidence, re-evaluation, and reserve adjustments",
+    "priority": "medium",
+    "storyPoints": 5,
+    "relatedStories": ["US-013"]
+  },
+  {
+    "id": "claim-level-policy-data",
+    "name": "Claim-Level Policy Data Management",
+    "description": "Add/modify policy info at claim level for unverified policies; track changes separately with visual indicators",
+    "priority": "high",
+    "storyPoints": 8,
+    "relatedStories": ["US-014"]
+  },
+  {
+    "id": "subrogation-recovery",
+    "name": "Subrogation & Recovery Tracking",
+    "description": "Identify, track, and manage subrogation cases; record third-party recoveries and apply to claims",
+    "priority": "medium",
+    "storyPoints": 8,
+    "relatedStories": ["US-015"]
+  },
+  {
+    "id": "scheduled-payments",
+    "name": "Scheduled Payments Management",
+    "description": "Create and manage structured settlements, periodic payment schedules with payment tracking",
+    "priority": "medium",
+    "storyPoints": 8,
+    "relatedStories": ["US-016"]
+  },
+  {
+    "id": "payment-method-config",
+    "name": "Payment Method Configuration",
+    "description": "Configure ACH, Wire, Card, Stripe Connect, Global Payouts; set routing rules and limits",
+    "priority": "high",
+    "storyPoints": 8,
+    "relatedStories": ["US-017"]
+  },
+  {
+    "id": "payee-onboarding",
+    "name": "Payee Onboarding & KYC",
+    "description": "Onboard vendors/claimants with KYC verification, bank account verification, tax ID collection",
+    "priority": "high",
+    "storyPoints": 13,
+    "relatedStories": ["US-018"]
+  },
+  {
+    "id": "payment-creation",
+    "name": "Payment Creation",
+    "description": "Create payments with multiple payee support, deductions, reserve allocation, eroding flags",
+    "priority": "high",
+    "storyPoints": 8,
+    "relatedStories": ["US-019"]
+  },
+  {
+    "id": "payment-approval",
+    "name": "Payment Approval Workflow",
+    "description": "Review and approve payments based on amount thresholds before processing",
+    "priority": "high",
+    "storyPoints": 5,
+    "relatedStories": ["US-020"]
+  },
+  {
+    "id": "payment-processing",
+    "name": "Payment Processing & Disbursement",
+    "description": "Process approved payments via ACH, Wire, Card, Stripe, or Global Payouts with confirmation numbers",
+    "priority": "high",
+    "storyPoints": 13,
+    "relatedStories": ["US-021"]
+  },
+  {
+    "id": "payment-reversal-void",
+    "name": "Payment Reversal, Void & Reissue",
+    "description": "Reverse/void/reissue erroneous payments with credit memos and reserve restoration",
+    "priority": "medium",
+    "storyPoints": 8,
+    "relatedStories": ["US-022"]
+  },
+  {
+    "id": "tax-withholding-1099",
+    "name": "Tax Withholding & 1099 Reporting",
+    "description": "Apply income tax withholding, track tax reportable amounts, generate annual 1099 reports",
+    "priority": "medium",
+    "storyPoints": 8,
+    "relatedStories": ["US-023"]
+  },
+  {
+    "id": "reserve-allocation",
+    "name": "Reserve & Payment Allocation",
+    "description": "Allocate payments to multiple reserve lines with balance tracking and eroding flags",
+    "priority": "high",
+    "storyPoints": 8,
+    "relatedStories": ["US-024"]
+  },
+  {
+    "id": "joint-payee-payments",
+    "name": "Joint Payee Payment Management",
+    "description": "Split payments between multiple joint payees with flexible portion allocation",
+    "priority": "medium",
+    "storyPoints": 8,
+    "relatedStories": ["US-025"]
+  },
+  {
+    "id": "estimate-integration",
+    "name": "External Estimate Integration",
+    "description": "Import and parse Xactimate/XactAnalysis estimates; create reserve lines and payment items",
+    "priority": "medium",
+    "storyPoints": 13,
+    "relatedStories": ["US-026"]
+  },
+  {
+    "id": "payment-document-attachment",
+    "name": "Payment Document Attachment",
+    "description": "Attach supporting documents (PDF, images) to payment records for audit purposes",
+    "priority": "medium",
+    "storyPoints": 5,
+    "relatedStories": ["US-027"]
+  },
+  {
+    "id": "edi-remittance",
+    "name": "EDI/EOB Remittance to Medical Providers",
+    "description": "Generate EDI 835 remittances with CPT/ICD mappings; support EOB statements and bill review integration",
+    "priority": "low",
+    "storyPoints": 13,
+    "relatedStories": ["US-028"]
+  },
+  {
+    "id": "payment-routing-rules",
+    "name": "Payment Routing Rules Configuration",
+    "description": "Configure dynamic routing rules based on payee type, claim type, amount, location",
+    "priority": "medium",
+    "storyPoints": 8,
+    "relatedStories": ["US-029"]
+  },
+  {
+    "id": "audit-trail",
+    "name": "Audit Trail & Compliance Logging",
+    "description": "Comprehensive audit logs for policies, claims, payments; 7-year retention; masked PII",
+    "priority": "high",
+    "storyPoints": 8,
+    "relatedStories": ["US-030"]
+  },
+  {
+    "id": "rbac",
+    "name": "Role-Based Access Control",
+    "description": "Define and enforce roles (Agent, Underwriter, Claims Adjuster, Finance, Admin); permission-based access",
+    "priority": "high",
+    "storyPoints": 8,
+    "relatedStories": ["US-031"]
+  },
+  {
+    "id": "encryption-pii-protection",
+    "name": "Data Encryption & PII Protection",
+    "description": "At-rest and in-transit encryption; SSN/account masking; key management; HTTPS/TLS enforcement",
+    "priority": "high",
+    "storyPoints": 13,
+    "relatedStories": ["US-032"]
+  },
+  {
+    "id": "payment-gateway-integration",
+    "name": "Payment Gateway Integration",
+    "description": "Integrate with Stripe Connect, Global Payouts, ACH provider, Wire service; error handling & retry logic",
+    "priority": "high",
+    "storyPoints": 13,
+    "relatedStories": ["US-033"]
+  },
+  {
+    "id": "bank-account-ach-wire",
+    "name": "Bank Account & ACH/Wire Processing",
+    "description": "Configure company bank accounts, generate NACHA ACH files, create wire transfer instructions",
+    "priority": "high",
+    "storyPoints": 8,
+    "relatedStories": ["US-034"]
+  },
+  {
+    "id": "external-data-integration",
+    "name": "External Data Source Integration",
+    "description": "Integrate with litigation data, tax ID verification, accounting system, agency markets, document mgmt",
+    "priority": "medium",
+    "storyPoints": 8,
+    "relatedStories": ["US-035"]
+  },
+  {
+    "id": "regulatory-reporting",
+    "name": "Regulatory Compliance Reporting",
+    "description": "Generate premium reports, claims reports, loss ratio reports, cancellation reports, data retention verification",
+    "priority": "medium",
+    "storyPoints": 8,
+    "relatedStories": ["US-036"]
+  },
+  {
+    "id": "performance-optimization",
+    "name": "Performance Optimization",
+    "description": "Ensure policy search < 3s, detail view < 5s, claim retrieval < 5s, payment processing < 5s",
+    "priority": "high",
+    "storyPoints": 5,
+    "relatedStories": []
+  },
+  {
+    "id": "accessibility-wcag",
+    "name": "WCAG AA Accessibility Compliance",
+    "description": "Ensure all UI compliant with WCAG 2.1 Level AA; keyboard navigation; screen reader support",
+    "priority": "high",
+    "storyPoints": 8,
+    "relatedStories": []
+  },
+  {
+    "id": "error-handling",
+    "name": "Error Handling & User Messaging",
+    "description": "Consistent error messages; graceful degradation; retry logic; system unavailability messaging",
+    "priority": "medium",
+    "storyPoints": 5,
+    "relatedStories": []
+  }
+]
