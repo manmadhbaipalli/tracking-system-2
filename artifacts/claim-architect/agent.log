@@ -1,0 +1,23 @@
+**Agent:** `claim-architect` | **Phase:** `architect` | **Tech Stack:** `insurance-python-greenfield`
+
+**Provider:** `anthropic` | **Model:** `claude-haiku-4-5-20251001` | **Budget:** $`2.00` | **Max Turns:** `20` | **Tools:** `9`
+
+### Skill: `smart-architect`
+> SmartArchitect — Solution Architect agent. Designs system architecture, makes technology decisions, defines security and observability strategy, and creates the implementation contract (features.json).
+
+**Sections:** Phase Role: SmartArchitect (Solution Architect), Prior Work (READ ALL BEFORE DESIGNING), CRITICAL: File Path Rules, Step-by-Step Architecture Design, Output — Write EXACTLY these 3 files, ABSOLUTE RULES
+
+**Key Rules:**
+1. **Do NOT write any code** — downstream agents handle implementation
+2. **features.json is the SINGLE SOURCE OF TRUTH** — every file that must exist appears here
+3. **EVERY feature MUST have `acceptance_criteria`** — this is the verification contract
+4. **Agent tags MUST be accurate** — wrong tag = feature never gets implemented
+5. **Security architecture is MANDATORY** — never skip security design
+*...and 5 more*
+
+**References:** `artifact-template.md`, `best-practices.md`, `claude-md-template.md`, `features-json-example.md`
+
+
+---
+
+**Exception:** Claude Code not found at: C:\Users\mbaipall\AppData\Roaming\Python\Python311\site-packages\claude_agent_sdk\_bundled\claude.exe
