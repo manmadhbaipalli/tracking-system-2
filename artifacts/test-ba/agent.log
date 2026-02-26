@@ -1,0 +1,56 @@
+**Agent:** `test-ba` | **Phase:** `ba` | **Tech Stack:** `python-greenfield`
+
+**Provider:** `anthropic` | **Model:** `claude-sonnet-4-6` | **Budget:** $`2.00` | **Max Turns:** `20` | **Tools:** `9`
+
+### Skill: `smart-ba`
+> SmartBA — Business Analyst agent. Elicits requirements, writes user stories with acceptance criteria, defines NFRs, models the domain, and identifies error scenarios.
+
+**Sections:** Phase Role: SmartBA (Business Analyst), Prior Work, CRITICAL: File Path Rules, Step-by-Step Requirements Elicitation, US-001: User Registration, Business Rules, Domain Model, Output — Write EXACTLY these 2 files, ABSOLUTE RULES
+
+**Key Rules:**
+1. **Every user story MUST have Priority (High/Medium/Low) and Story Points (Fibonacci: 1,2,3,5,8,13)**
+2. **Every user story MUST have error scenarios** — not just happy paths
+3. **Every acceptance criterion MUST be testable** — specific, measurable
+4. **NFRs are MANDATORY** — performance, security, reliability, observability
+5. **Domain model MUST include data types and constraints** — not just entity names
+*...and 7 more*
+
+**References:** `best-practices.md`, `requirements-template.md`
+
+
+---
+
+> **Glob** `artifacts/test-ba/**/*`
+
+> **Glob** `references/**/*`
+
+> **Read** `artifacts/test-ba/prompt.txt`
+
+> **Read** `memory/MEMORY.md`
+
+> **Update Todos** Write requirements.md, Write features-brief.json
+
+> **Write** `artifacts/test-ba/requirements.md`
+
+> **Update Todos** Write requirements.md, Write features-brief.json
+
+> **Write** `artifacts/test-ba/features-brief.json`
+
+> **Update Todos** Write requirements.md, Write features-brief.json
+
+Done. Two files written:
+
+**`artifacts/test-ba/requirements.md`** — full requirements document covering:
+- **11 user stories** (US-001 – US-011) with numbered acceptance criteria and error scenarios, priority, and story points (55 total)
+- **11 business rules** (BR-001 – BR-011)
+- NFRs across performance, security, reliability, observability, scalability, and configuration
+- Domain model: `User`, `CircuitBreakerState`, `AuditLog` entities with types, constraints, and relationships
+- Integration requirements for external HTTP services and the database
+- Traceability matrix mapping all stories/rules to feature IDs
+- 7 open questions flagged for the architecture phase
+
+**`artifacts/test-ba/features-brief.json`** — 16 features covering auth, RBAC, docs, logging, correlation-id middleware, error handling, circuit breaker, health checks, config, and both unit/integration test suites.
+
+---
+
+**Completed** in 10 turns (cost: $0.4045)
