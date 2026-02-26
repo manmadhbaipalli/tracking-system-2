@@ -1,0 +1,41 @@
+You are an autonomous coding agent. A previous attempt at task auth-service failed CI.
+
+## Task
+**auth-service**
+Generate simple python fastapi application
+
+## CI Failure Output
+```
+
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    from app.main import app; print('Boot OK')
+    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "F:\workspaces\claude-code-agents\workspace\auth-service-agent-1\app\main.py", line 8, in <module>
+    from app.database import engine
+  File "F:\workspaces\claude-code-agents\workspace\auth-service-agent-1\app\database.py", line 6, in <module>
+    engine = create_async_engine(
+        settings.database_url,
+        echo=settings.debug,
+        connect_args={"check_same_thread": False} if "sqlite" in settings.database_url else {},
+    )
+  File "C:\Users\mbaipall\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\ext\asyncio\engine.py", line 120, in create_async_engine
+    sync_engine = _create_engine(url, **kw)
+  File "<string>", line 2, in create_engine
+  File "C:\Users\mbaipall\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\util\deprecations.py", line 281, in warned
+    return fn(*args, **kwargs)  # type: ignore[no-any-return]
+  File "C:\Users\mbaipall\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\engine\create.py", line 599, in create_engine
+    dbapi = dbapi_meth(**dbapi_args)
+  File "C:\Users\mbaipall\AppData\Roaming\Python\Python313\site-packages\sqlalchemy\dialects\sqlite\aiosqlite.py", line 374, in import_dbapi
+    __import__("aiosqlite"), __import__("sqlite3")
+    ~~~~~~~~~~^^^^^^^^^^^^^
+ModuleNotFoundError: No module named 'aiosqlite'
+
+```
+
+## Instructions
+1. Read the failing test output carefully.
+2. Identify the root cause.
+3. Fix the code. Only modify files in your assigned scope.
+4. Run the tests again to verify the fix.
+5. Update `artifacts/auth-service/findings.md` with what went wrong and how you fixed it.
