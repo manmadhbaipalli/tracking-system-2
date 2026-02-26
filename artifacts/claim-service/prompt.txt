@@ -99,7 +99,7 @@ Audit & Compliance
 
 Technology
 **********
-1.Python, FastApi - backend
+1. Python, FastApi - backend
 
 ## File Constraints
 You may ONLY modify these files (other files are locked by other agents working in parallel):
