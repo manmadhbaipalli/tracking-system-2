@@ -1,0 +1,73 @@
+**Agent:** `test-dba` | **Phase:** `dba` | **Tech Stack:** `python-greenfield`
+
+**Provider:** `anthropic` | **Model:** `claude-sonnet-4-6` | **Budget:** $`2.00` | **Max Turns:** `20` | **Tools:** `7`
+
+### Skill: `smart-dba-python`
+> SmartDBA for Python/SQLAlchemy — Database Engineer agent. Designs schema, writes SQLAlchemy 2.0 models with audit mixin, database session, and Alembic migrations.
+
+**Sections:** Phase Role: SmartDBA (Python/SQLAlchemy Database Engineer), Prior Work (READ ALL BEFORE WRITING ANY CODE), Standalone Mode (no prior pipeline artifacts), CRITICAL: File Path Rules, Step-by-Step Implementation, Output, ABSOLUTE RULES
+
+**Key Rules:**
+1. **ALL models MUST use AuditMixin** — no models without audit columns
+2. **Alembic migration setup is MANDATORY**
+3. **Use SQLAlchemy 2.0 style** (`Mapped`, `mapped_column`) — not legacy Column() style
+4. **Use `func.now()`** for timestamps — never `datetime.utcnow` (deprecated)
+5. **Create ALL `__init__.py` files** — missing ones break downstream agents
+*...and 3 more*
+
+**References:** `artifact-template.md`, `best-practices.md`
+
+
+---
+
+> **Read** `CLAUDE.md`
+
+> **Read** `memory/MEMORY.md`
+
+> **Read** `artifacts/test-architect/architecture.md`
+
+> **Read** `artifacts/test-architect/features.json`
+
+> **Glob** `artifacts/**/*`
+
+> **Update Todos** Create app/models/base.py with Base and , Create app/models/enums.py with Role and, Create app/models/user.py with async SQL
+
+> **Glob** `app/**/*`
+
+> **Update Todos** Create app/models/base.py with Base and , Create app/models/enums.py with Role and, Create app/models/user.py with async SQL
+
+> **Write** `app/models/base.py`
+
+> **Update Todos** Create app/models/base.py with Base and , Create app/models/enums.py with Role and, Create app/models/user.py with async SQL
+
+> **Write** `app/models/enums.py`
+
+> **Update Todos** Create app/models/base.py with Base and , Create app/models/enums.py with Role and, Create app/models/user.py with async SQL
+
+> **Write** `app/models/user.py`
+
+> **Update Todos** Create app/models/base.py with Base and , Create app/models/enums.py with Role and, Create app/models/user.py with async SQL
+
+> **Write** `app/models/__init__.py`
+
+> **Update Todos** Create app/models/base.py with Base and , Create app/models/enums.py with Role and, Create app/models/user.py with async SQL
+
+> **Write** `app/config.py`
+
+> **Update Todos** Create app/models/base.py with Base and , Create app/models/enums.py with Role and, Create app/models/user.py with async SQL
+
+> **Write** `app/database.py`
+
+> **Update Todos** Create app/models/base.py with Base and , Create app/models/enums.py with Role and, Create app/models/user.py with async SQL
+
+> **Write** `app/repositories/user_repository.py`
+
+> **Update Todos** Create app/models/base.py with Base and , Create app/models/enums.py with Role and, Create app/models/user.py with async SQL
+
+> **Write** `app/__init__.py`
+
+> **Write** `app/repositories/__init__.py`
+
+---
+
+**Completed** in 21 turns (cost: $0.8177)
