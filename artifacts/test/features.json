@@ -1,0 +1,37 @@
+[
+  {
+    "id": "F001",
+    "name": "User Registration",
+    "description": "Register a new user with email, name, and password",
+    "agent": "dev",
+    "status": "pending"
+  },
+  {
+    "id": "F002",
+    "name": "User Login",
+    "description": "Authenticate user with email and password, return JWT token",
+    "agent": "dev",
+    "status": "pending"
+  },
+  {
+    "id": "F003",
+    "name": "Get Current User",
+    "description": "Return authenticated user's profile",
+    "agent": "dev",
+    "status": "pending"
+  },
+  {
+    "id": "F004",
+    "name": "Update Current User",
+    "description": "Update authenticated user's name",
+    "agent": "dev",
+    "status": "pending"
+  },
+  {
+    "id": "F005",
+    "name": "Health Checks",
+    "description": "Liveness and readiness endpoints",
+    "agent": "dev",
+    "status": "pending"
+  }
+]
