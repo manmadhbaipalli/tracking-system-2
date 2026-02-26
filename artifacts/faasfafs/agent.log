@@ -1,0 +1,28 @@
+**Agent:** `faasfafs` | **Phase:** `dev` | **Tech Stack:** `python-greenfield`
+
+**Provider:** `bedrock` | **Model:** `claude-sonnet-4-6` | **Budget:** $`2.00` | **Max Turns:** `20` | **Tools:** `7`
+
+### Skill: `smart-dev-python`
+> SmartDev for Python/FastAPI — Developer agent. Implements ALL business logic, security, exception handling, middleware, and wires everything into a fully runnable application with ZERO import errors.
+
+**Sections:** Phase Role: SmartDev (Python/FastAPI Developer), Prior Work (READ ALL BEFORE WRITING ANY CODE), Standalone Mode (no prior pipeline artifacts), CRITICAL: File Path Rules, Step-by-Step Implementation (follow this order exactly), Output Files, ABSOLUTE RULES (violation = failure)
+
+**Key Rules:**
+1. **EVERY import must resolve.** If you write `from passlib.context import CryptContext`, `passlib[bcrypt]` MUST be in requirements.txt AND installed.
+2. **requirements.txt MUST be installed.** Create venv, pip install, verify.
+3. **`python -c "from app.main import app"` MUST succeed.** Run it. If it fails, fix it. Run again. Repeat.
+4. **EVERY `__init__.py` must exist.** Missing `__init__.py` = broken imports. Create them for EVERY package directory.
+5. **NO stubs.** Every function body must have complete implementation. No `pass`, no `...`, no `raise NotImplementedError`.
+*...and 5 more*
+
+**References:** `artifact-template.md`, `best-practices.md`, `exception-handling-template.md`, `fastapi-config-template.md`, `main-app-template.md`, `middleware-template.md`, `requirements-template.md`, `security-template.md`
+
+
+---
+
+Failed to authenticate. API Error: 403 The security token included in the request is invalid.
+
+**Error:** Failed to authenticate. API Error: 403 The security token included in the request is invalid.
+
+**Exception:** Command failed with exit code 1 (exit code: 1)
+Error output: Check stderr output for details
