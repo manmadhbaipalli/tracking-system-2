@@ -1,0 +1,91 @@
+**Agent:** `test-apidesign` | **Phase:** `apidesign` | **Tech Stack:** `python-greenfield`
+
+**Provider:** `anthropic` | **Model:** `claude-sonnet-4-6` | **Budget:** $`2.00` | **Max Turns:** `20` | **Tools:** `7`
+
+### Skill: `smart-api-python`
+> SmartAPI for Python/FastAPI — API Designer agent. Designs REST endpoints, writes FastAPI routers, Pydantic schemas with validation, and OpenAPI configuration.
+
+**Sections:** Phase Role: SmartAPI (Python/FastAPI API Designer), Prior Work (READ ALL BEFORE WRITING ANY CODE), Standalone Mode (no prior pipeline artifacts), CRITICAL: File Path Rules, Step-by-Step Implementation, Output Files, ABSOLUTE RULES
+
+**Key Rules:**
+1. **Pydantic v2 ONLY** — `model_config`, NOT `class Config`
+2. **Validation on EVERY request field** — `Field()`, `EmailStr`, validators
+3. **Use `PageResponse[T]` for ALL list endpoints** — never return raw `list[T]`
+4. **ErrorResponse format for ALL errors** — consistent error contract
+5. **`response_model` + `summary` on EVERY endpoint** — complete Swagger docs
+*...and 7 more*
+
+**References:** `api-code-templates.md`, `artifact-template.md`, `best-practices.md`
+
+
+---
+
+> **Read** `CLAUDE.md`
+
+> **Read** `artifacts/test-dba/architecture.md`
+
+> **Read** `artifacts/test-dba/features.json`
+
+> **Glob** `app/**/*.py`
+
+> **Glob** `artifacts/**/*`
+
+> **Read** `app/models/user.py`
+
+> **Read** `app/models/enums.py`
+
+> **Read** `artifacts/test-architect/architecture.md`
+
+> **Read** `artifacts/test-architect/features.json`
+
+Now let me read the repository and database files to understand the existing code.
+
+> **Read** `app/repositories/user_repository.py`
+
+> **Read** `app/models/base.py`
+
+> **Read** `app/database.py`
+
+Now I have a complete picture. Let me check the config file and then implement all the API layer files.
+
+> **Read** `app/config.py`
+
+Now I have everything I need. Let me implement all the API layer files.
+
+> **Update Todos** Write api-design.md artifact, Create app/schemas/common.py, Create app/schemas/auth.py
+
+> **Write** `artifacts/test-apidesign/api-design.md`
+
+> **Update Todos** Write api-design.md artifact, Create app/schemas/common.py, Create app/schemas/auth.py
+
+Now let me create all the schema files in parallel:
+
+> **Write** `app/schemas/common.py`
+
+> **Update Todos** Write api-design.md artifact, Create app/schemas/common.py, Create app/schemas/auth.py
+
+> **Write** `app/schemas/user.py`
+
+> **Write** `app/schemas/auth.py`
+
+> **Write** `app/schemas/health.py`
+
+> **Write** `app/schemas/__init__.py`
+
+> **Update Todos** Write api-design.md artifact, Create app/schemas/common.py, Create app/schemas/auth.py
+
+Now let me create all three routers in parallel:
+
+> **Write** `app/routers/auth.py`
+
+> **Write** `app/routers/users.py`
+
+> **Write** `app/routers/health.py`
+
+> **Write** `app/routers/__init__.py`
+
+> **Update Todos** Write api-design.md artifact, Create app/schemas/common.py, Create app/schemas/auth.py
+
+---
+
+**Completed** in 21 turns (cost: $1.0727)
