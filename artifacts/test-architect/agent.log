@@ -1,0 +1,82 @@
+**Agent:** `test-architect` | **Phase:** `architect` | **Tech Stack:** `python-greenfield`
+
+**Provider:** `anthropic` | **Model:** `claude-sonnet-4-6` | **Budget:** $`2.00` | **Max Turns:** `20` | **Tools:** `9`
+
+### Skill: `smart-architect`
+> SmartArchitect — Solution Architect agent. Designs system architecture, makes technology decisions, defines security and observability strategy, and creates the implementation contract (features.json).
+
+**Sections:** Phase Role: SmartArchitect (Solution Architect), Prior Work (READ ALL BEFORE DESIGNING), CRITICAL: File Path Rules, Step-by-Step Architecture Design, Output — Write EXACTLY these 3 files, ABSOLUTE RULES
+
+**Key Rules:**
+1. **Do NOT write any code** — downstream agents handle implementation
+2. **features.json is the SINGLE SOURCE OF TRUTH** — every file that must exist appears here
+3. **EVERY feature MUST have `acceptance_criteria`** — this is the verification contract
+4. **Agent tags MUST be accurate** — wrong tag = feature never gets implemented
+5. **Security architecture is MANDATORY** — never skip security design
+*...and 5 more*
+
+**References:** `artifact-template.md`, `best-practices.md`, `claude-md-template.md`, `features-json-example.md`
+
+
+---
+
+> **Read** `artifacts/test-ba/requirements.md`
+
+> **Read** `artifacts/test-ba/features-brief.json`
+
+> **Glob** `CLAUDE.md`
+
+> **Glob** `artifacts/test-architect/**`
+
+Now I have all the information needed. Let me create the three required output files.
+
+> **Update Todos** Write CLAUDE.md, Write artifacts/test-architect/architect, Write artifacts/test-architect/features.
+
+> **Write** `CLAUDE.md`
+
+> **Update Todos** Write CLAUDE.md, Write artifacts/test-architect/architect, Write artifacts/test-architect/features.
+
+> **Write** `artifacts/test-architect/architecture.md`
+
+> **Update Todos** Write CLAUDE.md, Write artifacts/test-architect/architect, Write artifacts/test-architect/features.
+
+> **Write** `artifacts/test-architect/features.json`
+
+> **Update Todos** Write CLAUDE.md, Write artifacts/test-architect/architect, Write artifacts/test-architect/features.
+
+Architecture design complete. Here's a summary of what was produced:
+
+---
+
+## Outputs
+
+### 1. `CLAUDE.md` (project root)
+Project standards for all downstream agents:
+- **Python 3.12 + FastAPI 0.110+** with async SQLAlchemy 2.x
+- Full directory layout with purpose annotations
+- Build/test/run/lint commands
+- Conventions: error format, pagination envelope, JWT auth, logging rules
+
+### 2. `artifacts/test-architect/architecture.md`
+Complete architecture document including:
+- **Layered Monolith** — Router → Service → Repository → Database
+- Full component diagram and data flow
+- **PlantUML sequence diagrams** for registration, login, circuit breaker state machine, and correlation ID propagation
+- Security: JWT HS256, BCrypt rounds=12, RBAC with access matrix, OWASP Top 10 mitigations
+- Observability: structured JSON logging, contextvar-based correlation ID, `/health/live` + `/health/ready`
+- 12-Factor configuration with all 11 env vars defined
+- Error hierarchy: `AppException → AuthException, ForbiddenException, NotFoundException, ConflictException, CircuitBreakerOpenException`
+- DB schema for `users` table with Alembic migrations
+
+### 3. `artifacts/test-architect/features.json` — 25 features
+| Layer | Files | Agent |
+|-------|-------|-------|
+| Entities, repositories, migrations, DB session | 6 files | `dba` |
+| Routers, schemas (auth/user/common/health), OpenAPI | 7 files | `apidesign` |
+| Services, security, circuit breaker, middleware, exception handling, config, main, requirements | 12 files | `dev` |
+
+Every feature has a specific, testable `acceptance_criteria`.
+
+---
+
+**Completed** in 12 turns (cost: $0.7682)

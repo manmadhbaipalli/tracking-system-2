@@ -1,0 +1,202 @@
+[
+  {
+    "id": "db-enums",
+    "file": "app/models/enums.py",
+    "description": "Python enums for Role (USER, ADMIN) and CircuitBreakerState (CLOSED, OPEN, HALF_OPEN) used by ORM and business logic",
+    "acceptance_criteria": "Role enum has USER and ADMIN members; CircuitBreakerState has CLOSED, OPEN, HALF_OPEN members; both importable without errors",
+    "agent": "dba",
+    "status": "pending"
+  },
+  {
+    "id": "db-user-model",
+    "file": "app/models/user.py",
+    "description": "SQLAlchemy async ORM model for User entity with id, email, password_hash, name, role, active, created_at, updated_at columns",
+    "acceptance_criteria": "User model maps to 'users' table; email has unique index; created_at and updated_at default to UTC now(); role column uses Role enum; password_hash is never exposed via repr",
+    "agent": "dba",
+    "status": "pending"
+  },
+  {
+    "id": "db-user-repository",
+    "file": "app/repositories/user_repository.py",
+    "description": "Async SQLAlchemy repository for User CRUD: get_by_id, get_by_email (case-insensitive), create, list_paginated (with total count)",
+    "acceptance_criteria": "get_by_email uses case-insensitive comparison via lower(); create returns persisted User; list_paginated returns (items, total) for pagination; all methods are async",
+    "agent": "dba",
+    "status": "pending"
+  },
+  {
+    "id": "db-database",
+    "file": "app/database.py",
+    "description": "SQLAlchemy async engine and session factory; get_db() async generator for FastAPI dependency injection; reads DATABASE_URL from config",
+    "acceptance_criteria": "AsyncEngine created from DATABASE_URL; AsyncSessionLocal factory configured; get_db() yields AsyncSession and closes it on completion; DeclarativeBase exported for model inheritance",
+    "agent": "dba",
+    "status": "pending"
+  },
+  {
+    "id": "db-migration-env",
+    "file": "alembic/env.py",
+    "description": "Alembic async migration environment configured to use SQLAlchemy async engine and app models metadata",
+    "acceptance_criteria": "alembic upgrade head runs without error; env.py imports app metadata; async migration runner used; DATABASE_URL read from environment",
+    "agent": "dba",
+    "status": "pending"
+  },
+  {
+    "id": "db-migration-initial",
+    "file": "alembic/versions/001_create_users_table.py",
+    "description": "Initial Alembic migration creating the users table with all columns, constraints, and indexes",
+    "acceptance_criteria": "Migration creates users table with id (PK), email (unique), password_hash, name, role (enum), active (bool), created_at, updated_at; downgrade drops table",
+    "agent": "dba",
+    "status": "pending"
+  },
+  {
+    "id": "api-auth-schemas",
+    "file": "app/schemas/auth.py",
+    "description": "Pydantic v2 schemas for auth endpoints: RegisterRequest (email, password, name), LoginRequest (email, password), TokenResponse (access_token, token_type, expires_in)",
+    "acceptance_criteria": "RegisterRequest validates email via EmailStr and password min_length=8; LoginRequest accepts email+password; TokenResponse includes access_token, token_type='bearer', expires_in; schemas include OpenAPI examples",
+    "agent": "apidesign",
+    "status": "pending"
+  },
+  {
+    "id": "api-user-schemas",
+    "file": "app/schemas/user.py",
+    "description": "Pydantic v2 schemas for user endpoints: UserResponse (id, email, name, role, active, created_at, updated_at); UserListResponse wrapping PageResponse",
+    "acceptance_criteria": "UserResponse never includes password_hash; all fields typed correctly; created_at/updated_at serialized as ISO 8601; UserListResponse uses PageResponse envelope",
+    "agent": "apidesign",
+    "status": "pending"
+  },
+  {
+    "id": "api-common-schemas",
+    "file": "app/schemas/common.py",
+    "description": "Shared Pydantic v2 schemas: PageResponse (items, total, page, page_size), ErrorResponse ({error: {code, message, correlation_id}}), ValidationErrorResponse with per-field details",
+    "acceptance_criteria": "PageResponse is generic (PageResponse[T]); ErrorResponse matches spec format exactly; ValidationErrorResponse includes details list with field+message; all schemas used consistently across routers",
+    "agent": "apidesign",
+    "status": "pending"
+  },
+  {
+    "id": "api-health-schemas",
+    "file": "app/schemas/health.py",
+    "description": "Pydantic v2 schemas for health endpoints: LivenessResponse, ReadinessResponse (status, database, circuit_breakers), CircuitBreakerStatusResponse",
+    "acceptance_criteria": "LivenessResponse has status field; ReadinessResponse includes database status and dict of circuit breaker states; schemas documented in OpenAPI",
+    "agent": "apidesign",
+    "status": "pending"
+  },
+  {
+    "id": "api-auth-router",
+    "file": "app/routers/auth.py",
+    "description": "FastAPI router for POST /auth/register (201 + JWT) and POST /auth/login (200 + JWT); tagged 'auth'; OAuth2PasswordRequestForm for login",
+    "acceptance_criteria": "POST /auth/register returns 201 with TokenResponse and user profile on success; POST /auth/login returns 200 TokenResponse; both endpoints have response_model, status_codes, and OpenAPI examples; login uses OAuth2PasswordRequestForm for Swagger UI compatibility",
+    "agent": "apidesign",
+    "status": "pending"
+  },
+  {
+    "id": "api-users-router",
+    "file": "app/routers/users.py",
+    "description": "FastAPI router for GET /users/me (USER+ADMIN) and GET /users (ADMIN only, paginated); tagged 'users'",
+    "acceptance_criteria": "GET /users/me returns UserResponse for authenticated user; GET /users returns PageResponse[UserResponse] with page/page_size query params (default 20, max 100); admin-only endpoint returns 403 for non-admin; both endpoints documented in Swagger",
+    "agent": "apidesign",
+    "status": "pending"
+  },
+  {
+    "id": "api-health-router",
+    "file": "app/routers/health.py",
+    "description": "FastAPI router for GET /health/live, GET /health/ready, GET /health/circuit-breakers; no authentication required; tagged 'health'",
+    "acceptance_criteria": "GET /health/live returns 200 {status: ok} always; GET /health/ready returns 200 when DB ok and 503 when DB unavailable; GET /health/circuit-breakers returns all circuit breaker states; all endpoints excluded from auth",
+    "agent": "apidesign",
+    "status": "pending"
+  },
+  {
+    "id": "dev-config",
+    "file": "app/config.py",
+    "description": "Pydantic BaseSettings class loading all env vars: DATABASE_URL, SECRET_KEY, ACCESS_TOKEN_EXPIRE_MINUTES, BCRYPT_ROUNDS, CORS_ORIGINS, LOG_LEVEL, APP_ENV, DOCS_ENABLED, CB_FAILURE_THRESHOLD, CB_OPEN_DURATION_SECONDS, DB_POOL_SIZE",
+    "acceptance_criteria": "Settings class validates all fields; SECRET_KEY has no default (required); numeric fields have sensible defaults; APP_ENV defaults to 'development'; get_settings() cached singleton; app fails at startup if required vars missing",
+    "agent": "dev",
+    "status": "pending"
+  },
+  {
+    "id": "dev-exceptions",
+    "file": "app/exceptions.py",
+    "description": "Custom exception hierarchy: AppException (base), AuthException (401), ForbiddenException (403), NotFoundException (404), ConflictException (409), CircuitBreakerOpenException (503)",
+    "acceptance_criteria": "Each exception stores message and optional detail; each subclass has predefined status_code and error_code class attributes; CircuitBreakerOpenException includes circuit_name attribute",
+    "agent": "dev",
+    "status": "pending"
+  },
+  {
+    "id": "dev-exception-handlers",
+    "file": "app/exception_handlers.py",
+    "description": "FastAPI exception handler functions for AppException, RequestValidationError, and generic Exception; registered on the FastAPI app instance",
+    "acceptance_criteria": "AppException handler returns ErrorResponse with correct status code, code, message, correlation_id; 5xx handlers log stack trace at ERROR but never include it in response; ValidationError handler returns per-field details; all responses include X-Correlation-ID header",
+    "agent": "dev",
+    "status": "pending"
+  },
+  {
+    "id": "dev-security",
+    "file": "app/core/security.py",
+    "description": "JWT encode/decode using python-jose (HS256); bcrypt password hashing and verification via passlib; create_access_token(), verify_token(), hash_password(), verify_password() functions",
+    "acceptance_criteria": "create_access_token encodes sub, email, role, exp; verify_token raises AuthException on invalid/expired token; hash_password uses bcrypt with configurable rounds; verify_password returns bool; no secrets hardcoded",
+    "agent": "dev",
+    "status": "pending"
+  },
+  {
+    "id": "dev-circuit-breaker",
+    "file": "app/core/circuit_breaker.py",
+    "description": "CircuitBreaker class with CLOSED/OPEN/HALF_OPEN state machine; configurable failure_threshold and open_duration; call() async context manager; global registry of named breakers; state exposed via get_all_states()",
+    "acceptance_criteria": "CLOSED→OPEN after failure_threshold consecutive failures; OPEN→HALF_OPEN after open_duration seconds; HALF_OPEN→CLOSED on success or HALF_OPEN→OPEN on failure; CircuitBreakerOpenException raised when OPEN; state changes logged at WARNING; get_all_states() returns dict of all named breakers",
+    "agent": "dev",
+    "status": "pending"
+  },
+  {
+    "id": "dev-dependencies",
+    "file": "app/core/dependencies.py",
+    "description": "FastAPI dependency functions: get_current_user() (validates JWT, loads user from DB), require_admin() (checks ADMIN role); OAuth2PasswordBearer scheme definition",
+    "acceptance_criteria": "get_current_user raises AuthException(401) for missing/invalid/expired token; get_current_user raises ForbiddenException(403) for inactive user; require_admin raises ForbiddenException(403) for non-ADMIN role; both usable with Depends()",
+    "agent": "dev",
+    "status": "pending"
+  },
+  {
+    "id": "dev-correlation-middleware",
+    "file": "app/middleware/correlation_id.py",
+    "description": "Starlette middleware that reads X-Correlation-ID request header or generates UUID v4; stores in contextvar; adds X-Correlation-ID to response headers",
+    "acceptance_criteria": "Correlation ID is UUID v4 format; persists in contextvar for entire request lifetime; X-Correlation-ID present in every response header; get_correlation_id() helper function for use in logging and exception handlers",
+    "agent": "dev",
+    "status": "pending"
+  },
+  {
+    "id": "dev-logging-middleware",
+    "file": "app/middleware/logging_middleware.py",
+    "description": "Starlette middleware that logs request (method, path, client IP) at INFO on arrival and response (method, path, status_code, latency_ms, correlation_id) at INFO on completion",
+    "acceptance_criteria": "Every request produces two log entries (request + response); latency calculated correctly; correlation_id included in both entries; passwords and Authorization header values never logged",
+    "agent": "dev",
+    "status": "pending"
+  },
+  {
+    "id": "dev-auth-service",
+    "file": "app/services/auth_service.py",
+    "description": "AuthService with register() and login() async methods; uses UserRepository, security.py, and circuit_breaker wrapping DB calls",
+    "acceptance_criteria": "register raises ConflictException on duplicate email; register hashes password before storing; login raises AuthException(401) for unknown email or wrong password (same message for both); login raises ForbiddenException(403) for inactive user; JWT created with correct claims; DB calls wrapped in circuit breaker",
+    "agent": "dev",
+    "status": "pending"
+  },
+  {
+    "id": "dev-user-service",
+    "file": "app/services/user_service.py",
+    "description": "UserService with get_profile() and list_users() async methods; uses UserRepository with circuit breaker wrapping",
+    "acceptance_criteria": "get_profile returns UserResponse for given user_id; list_users returns PageResponse with correct pagination (page, page_size, total); page_size capped at 100; DB calls wrapped in circuit breaker",
+    "agent": "dev",
+    "status": "pending"
+  },
+  {
+    "id": "dev-main",
+    "file": "app/main.py",
+    "description": "FastAPI application factory: creates app instance, registers middleware (CORS, correlation ID, logging), includes routers, registers exception handlers, configures lifespan (startup/shutdown logging, DB connection check)",
+    "acceptance_criteria": "App starts with correct title/version from config; all middleware registered in correct order; all routers included; all exception handlers registered; /docs and /redoc disabled when DOCS_ENABLED=false; startup logs INFO; shutdown logs INFO; OAuth2 scheme configured for Swagger UI",
+    "agent": "dev",
+    "status": "pending"
+  },
+  {
+    "id": "dev-requirements",
+    "file": "requirements.txt",
+    "description": "Pinned Python dependencies: fastapi, uvicorn[standard], sqlalchemy[asyncio], asyncpg, aiosqlite, alembic, python-jose[cryptography], passlib[bcrypt], pydantic[email], pydantic-settings, python-multipart, python-json-logger, pytest, pytest-asyncio, httpx, pytest-cov",
+    "acceptance_criteria": "All imports in app/ resolve without error after pip install -r requirements.txt; versions pinned to avoid breaking changes; both prod and dev/test dependencies included",
+    "agent": "dev",
+    "status": "pending"
+  }
+]
