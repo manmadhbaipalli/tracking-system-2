@@ -1,0 +1,67 @@
+**Agent:** `test-1` | **Phase:** `doc` | **Tech Stack:** `python-greenfield`
+
+**Provider:** `anthropic` | **Model:** `claude-sonnet-4-6` | **Budget:** $`2.00` | **Max Turns:** `20` | **Tools:** `9`
+
+### Skill: `smart-doc`
+> SmartDoc — Reverse Engineering agent. Reads an existing codebase and generates complete functional spec, technical spec, and project standards for migration or understanding.
+
+**Sections:** Phase Role: SmartDoc (Reverse Engineering), CRITICAL: File Path Rules, Step-by-Step Reverse Engineering Process, Output — Write EXACTLY these 3 files, Tech Stack, Project Structure, Commands, Conventions, Dependencies, ABSOLUTE RULES
+
+**Key Rules:**
+1. **Read EVERY source file** — missing modules = missing features
+2. **Be PRECISE about data types, constraints, and validation** — vague specs produce buggy rebuilds
+3. **Document IMPLICIT business rules** — the ones hidden in if-statements and error handlers
+4. **Complete the endpoint catalog** — every endpoint, every field, every status code
+5. **Security audit is MANDATORY** — flag issues so the rebuild can fix them
+*...and 3 more*
+
+**References:** `artifact-template.md`, `best-practices.md`
+
+
+---
+
+> **Read** `C:\Users\mdrao\.claude\projects\C--Manmadh-genai-claude-code-agents-workspace\memory\MEMORY.md`
+
+> **Bash** `List current directory contents`
+
+> **Bash** `List workspace and artifacts directory`
+
+> **Bash** `List app and artifacts/test-1 directories`
+
+> **Read** `artifacts/test-1/prompt.txt`
+
+> **Read** `app/pom.xml`
+
+> **Bash** `Find all Java source files`
+
+> **Read** `app/src/main/java/com/example/Calculator.java`
+
+> **Read** `app/src/main/java/com/example/Main.java`
+
+> **Read** `app/src/test/java/com/example/CalculatorTest.java`
+
+> **Update Todos** Create Python calculator app mirroring t
+
+> **Write** `calculator.py`
+
+> **Write** `main.py`
+
+> **Write** `test_calculator.py`
+
+> **Update Todos** Create Python calculator app mirroring t
+
+Created a simple Python calculator app mirroring the existing Java app:
+
+- **`calculator.py`** — `Calculator` class with `add`, `subtract`, `multiply`, `divide`, and `calculate` methods; raises `ZeroDivisionError` on divide-by-zero and `ValueError` for unknown operators
+- **`main.py`** — interactive REPL loop accepting expressions like `5 + 3`, printing results to 4 decimal places, exits on `exit`
+- **`test_calculator.py`** — pytest test suite covering all operations, edge cases (divide by zero, unknown operator, negative numbers)
+
+Run with:
+```bash
+python main.py       # interactive calculator
+pytest test_calculator.py  # run tests
+```
+
+---
+
+**Completed** in 16 turns (cost: $0.3293)
