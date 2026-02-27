@@ -1,0 +1,73 @@
+**Agent:** `test` | **Phase:** `doc` | **Tech Stack:** `java-greenfield`
+
+**Provider:** `anthropic` | **Model:** `claude-sonnet-4-6` | **Budget:** $`2.00` | **Max Turns:** `20` | **Tools:** `9`
+
+### Skill: `smart-doc`
+> SmartDoc — Reverse Engineering agent. Reads an existing codebase and generates complete functional spec, technical spec, and project standards for migration or understanding.
+
+**Sections:** Phase Role: SmartDoc (Reverse Engineering), CRITICAL: File Path Rules, Step-by-Step Reverse Engineering Process, Output — Write EXACTLY these 3 files, Tech Stack, Project Structure, Commands, Conventions, Dependencies, ABSOLUTE RULES
+
+**Key Rules:**
+1. **Read EVERY source file** — missing modules = missing features
+2. **Be PRECISE about data types, constraints, and validation** — vague specs produce buggy rebuilds
+3. **Document IMPLICIT business rules** — the ones hidden in if-statements and error handlers
+4. **Complete the endpoint catalog** — every endpoint, every field, every status code
+5. **Security audit is MANDATORY** — flag issues so the rebuild can fix them
+*...and 3 more*
+
+**References:** `artifact-template.md`, `best-practices.md`
+
+
+---
+
+> **Read** `C:\Users\mdrao\.claude\projects\C--Manmadh-genai-claude-code-agents-workspace\memory\MEMORY.md`
+
+> **Bash** `Check workspace directory contents`
+
+> **Bash** `List current directory contents`
+
+> **Update Todos** Create simple Java application with main
+
+> **Write** `app/src/main/java/com/example/Main.java`
+
+> **Write** `app/src/main/java/com/example/Calculator.java`
+
+> **Write** `app/src/test/java/com/example/CalculatorTest.java`
+
+> **Write** `app/pom.xml`
+
+> **Update Todos** Create simple Java application with main
+
+Generated a simple Java calculator application with the following structure:
+
+```
+app/
+├── pom.xml
+└── src/
+    ├── main/java/com/example/
+    │   ├── Main.java          # Entry point - interactive CLI loop
+    │   └── Calculator.java    # Business logic - arithmetic operations
+    └── test/java/com/example/
+        └── CalculatorTest.java # JUnit 5 tests
+```
+
+**What it does:**
+- Interactive CLI calculator supporting `+`, `-`, `*`, `/`
+- Parses expressions like `5 + 3` or `10 / 2`
+- Handles errors: division by zero, unknown operators, bad input
+- Type `exit` to quit
+
+**Build & Run:**
+```bash
+cd app
+mvn compile                          # Compile
+mvn test                             # Run tests
+mvn package                          # Build JAR
+java -jar target/simple-java-app-1.0.0.jar  # Run
+```
+
+**Tech Stack:** Java 17, Maven 3, JUnit 5.10.1
+
+---
+
+**Completed** in 10 turns (cost: $0.2699)
