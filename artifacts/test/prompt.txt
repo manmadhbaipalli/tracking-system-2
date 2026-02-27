@@ -1,8 +1,8 @@
 ## Task: test
-**TEST**
+**test**
 
 ## Description
-Generate simple java applicaiton for user
+create test python app
 
 ## File Constraints
 You may ONLY modify these files (other files are locked by other agents working in parallel):
