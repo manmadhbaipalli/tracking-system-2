@@ -2,7 +2,7 @@
 **test**
 
 ## Description
-create samples java app
+writte simple java app
 
 ## File Constraints
 You may ONLY modify these files (other files are locked by other agents working in parallel):
