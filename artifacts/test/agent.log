@@ -1,6 +1,6 @@
 **Agent:** `test` | **Phase:** `dev` | **Tech Stack:** `java-greenfield`
 
-**Provider:** `bedrock` | **Model:** `claude-sonnet-4-6` | **Budget:** $`2.00` | **Max Turns:** `20` | **Tools:** `7`
+**Provider:** `bedrock` | **Model:** `us.anthropic.claude-sonnet-4-5-20250929-v1:0` | **Budget:** $`2.00` | **Max Turns:** `20` | **Tools:** `7`
 
 ### Skill: `smart-dev-java`
 > SmartDev for Java/Spring — Developer agent. Implements ALL business logic, security, exception handling, middleware, build configuration, and wires everything into a fully compilable, fully executable application with ZERO errors.
@@ -24,5 +24,4 @@ Failed to authenticate. API Error: 403 The security token included in the reques
 
 **Error:** Failed to authenticate. API Error: 403 The security token included in the request is invalid.
 
-**Exception:** Command failed with exit code 1 (exit code: 1)
-Error output: Check stderr output for details
+> **Auth Error** — AWS session token is expired or invalid. Update `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, and `AWS_SESSION_TOKEN` in `.env` then restart the agent.
