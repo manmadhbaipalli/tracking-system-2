@@ -1,0 +1,27 @@
+**Agent:** `2` | **Phase:** `dev` | **Tech Stack:** `java-greenfield`
+
+**Provider:** `bedrock` | **Model:** `us.anthropic.claude-sonnet-4-5-20250929-v1:0` | **Budget:** $`2.00` | **Max Turns:** `20` | **Tools:** `7`
+
+### Skill: `smart-dev-java`
+> SmartDev for Java/Spring — Developer agent. Implements ALL business logic, security, exception handling, middleware, build configuration, and wires everything into a fully compilable, fully executable application with ZERO errors.
+
+**Sections:** Phase Role: SmartDev (Java/Spring Boot Developer), Prior Work (READ ALL BEFORE WRITING ANY CODE), Standalone Mode (no prior pipeline artifacts), CRITICAL: File Path Rules, Step-by-Step Implementation (follow this order exactly), Output Files, ABSOLUTE RULES (violation = failure)
+
+**Key Rules:**
+1. **EVERY import must resolve.** If you write `import io.jsonwebtoken.Jwts`, the `jjwt-api` dependency MUST be in pom.xml.
+2. **EVERY bean must be wirable.** If a constructor takes `UserRepository`, that interface must exist and be annotated `@Repository`.
+3. **`mvn compile -q` MUST succeed.** Run it. If it fails, fix it. Run again. Repeat.
+4. **NO stubs.** Every method body must have complete implementation.
+5. **NO TODOs.** Every `// TODO` means you did not finish.
+*...and 4 more*
+
+**References:** `artifact-template.md`, `best-practices.md`, `exception-handling-template.md`, `logging-template.md`, `pom-template.md`, `security-template.md`, `spring-config-template.md`
+
+
+---
+
+Failed to authenticate. API Error: 403 The security token included in the request is expired
+
+**Error:** Failed to authenticate. API Error: 403 The security token included in the request is expired
+
+> **Auth Error** — AWS session token is expired or invalid. Update `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, and `AWS_SESSION_TOKEN` in `.env` then restart the agent.
