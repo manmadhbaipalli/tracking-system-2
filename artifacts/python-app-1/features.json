@@ -1,0 +1,95 @@
+[
+  {
+    "id": "F001",
+    "name": "User Registration",
+    "description": "Allow new users to register with email, password, and name",
+    "agent": "dev",
+    "status": "pending",
+    "acceptance_criteria": [
+      "Validate email format and uniqueness",
+      "Hash password with bcrypt",
+      "Return 201 with user profile on success",
+      "Return 409 if email already exists",
+      "Return 400 for validation errors"
+    ]
+  },
+  {
+    "id": "F002",
+    "name": "User Login",
+    "description": "Authenticate user and return JWT access token",
+    "agent": "dev",
+    "status": "pending",
+    "acceptance_criteria": [
+      "Validate email and password",
+      "Return JWT token on successful authentication",
+      "Return 401 for invalid credentials",
+      "Token contains user_id in sub claim"
+    ]
+  },
+  {
+    "id": "F003",
+    "name": "Get Current User",
+    "description": "Protected endpoint to retrieve current authenticated user profile",
+    "agent": "dev",
+    "status": "pending",
+    "acceptance_criteria": [
+      "Require valid JWT token",
+      "Return user profile without password",
+      "Return 401 if token is missing or invalid",
+      "Return 404 if user not found"
+    ]
+  },
+  {
+    "id": "F004",
+    "name": "Health Checks",
+    "description": "Liveness and readiness endpoints for monitoring",
+    "agent": "dev",
+    "status": "pending",
+    "acceptance_criteria": [
+      "GET /health/live returns 200",
+      "GET /health/ready checks database connectivity",
+      "Return 503 if database is unreachable"
+    ]
+  },
+  {
+    "id": "F005",
+    "name": "Exception Handling",
+    "description": "Consistent error responses for all error scenarios",
+    "agent": "dev",
+    "status": "pending",
+    "acceptance_criteria": [
+      "All errors return JSON with status, error, message",
+      "Validation errors include field-level details",
+      "500 errors do not expose stack traces"
+    ]
+  },
+  {
+    "id": "F006",
+    "name": "Request Logging",
+    "description": "Log all HTTP requests with method, path, status, duration",
+    "agent": "dev",
+    "status": "pending",
+    "acceptance_criteria": [
+      "Log format includes correlation ID",
+      "Log duration in milliseconds",
+      "No sensitive data in logs"
+    ]
+  },
+  {
+    "id": "F007",
+    "name": "Test Coverage",
+    "description": "Comprehensive test suite for all authentication endpoints",
+    "agent": "dev",
+    "status": "pending",
+    "acceptance_criteria": [
+      "Test successful registration",
+      "Test duplicate email registration",
+      "Test successful login",
+      "Test invalid credentials login",
+      "Test get current user with valid token",
+      "Test get current user without token",
+      "Test get current user with invalid token",
+      "Test health endpoints"
+    ]
+  }
+]
