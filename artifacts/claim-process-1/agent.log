@@ -1,0 +1,97 @@
+**Agent:** `claim-process-1` | **Phase:** `dev` | **Tech Stack:** `insurance-python-greenfield`
+
+**Provider:** `bedrock` | **Model:** `us.anthropic.claude-sonnet-4-5-20250929-v1:0` | **Budget:** $`2.00` | **Max Turns:** `20` | **Tools:** `7`
+
+### Skill: `smart-dev-python`
+> SmartDev for Python/FastAPI — Developer agent. Implements ALL business logic, security, exception handling, middleware, and wires everything into a fully runnable application with ZERO import errors.
+
+**Sections:** Phase Role: SmartDev (Python/FastAPI Developer), Prior Work (READ ALL BEFORE WRITING ANY CODE), Standalone Mode (no prior pipeline artifacts), CRITICAL: File Path Rules, Step-by-Step Implementation (follow this order exactly), Output Files, ABSOLUTE RULES (violation = failure)
+
+**Key Rules:**
+1. **EVERY import must resolve.** If you write `from passlib.context import CryptContext`, `passlib[bcrypt]` MUST be in requirements.txt AND installed.
+2. **requirements.txt MUST be installed.** Create venv, pip install, verify.
+3. **`python -c "from app.main import app"` MUST succeed.** Run it. If it fails, fix it. Run again. Repeat.
+4. **EVERY `__init__.py` must exist.** Missing `__init__.py` = broken imports. Create them for EVERY package directory.
+5. **NO stubs.** Every function body must have complete implementation. No `pass`, no `...`, no `raise NotImplementedError`.
+*...and 5 more*
+
+**References:** `artifact-template.md`, `best-practices.md`, `exception-handling-template.md`, `fastapi-config-template.md`, `main-app-template.md`, `middleware-template.md`, `requirements-template.md`, `security-template.md`
+
+
+---
+
+I'll implement this comprehensive Policy, Claims, and Payments platform following the SmartDev workflow. Let me start by exploring the current state and creating the necessary artifacts.
+
+> **Bash** `Check artifacts directory`
+
+> **Glob** `app/**/*.py`
+
+> **Read** `CLAUDE.md`
+
+Good! I can see the code structure already exists. Let me read the existing files to understand what's been implemented.
+
+> **Read** `requirements.txt`
+
+> **Read** `app/main.py`
+
+> **Read** `app/config.py`
+
+> **Read** `app/database.py`
+
+> **Read** `app/security.py`
+
+> **Read** `app/services/policy_service.py`
+
+> **Read** `app/services/claim_service.py`
+
+> **Read** `app/services/payment_service.py`
+
+> **Read** `app/exceptions.py`
+
+> **Read** `app/middleware.py`
+
+> **Read** `app/models/base.py`
+
+Good! The code structure is already in place. Now let me verify the virtual environment and dependencies are installed, then test imports.
+
+> **Bash** `Check if virtual environment exists`
+
+> **Bash** `Create virtual environment`
+
+> **Bash** `Install dependencies from requirements.txt`
+
+Perfect! Dependencies installed successfully. Now let me verify all imports work:
+
+> **Bash** `Verify app imports successfully`
+
+> **Bash** `Verify app imports successfully`
+
+Excellent! All imports work successfully. Now let me read a few more key files to fully understand the implementation, then create the documentation artifacts.
+
+> **Read** `app/models/policy.py`
+
+> **Read** `app/models/claim.py`
+
+> **Read** `app/models/payment.py`
+
+> **Read** `app/routers/policy.py`
+
+Now let me create the required documentation artifacts. First, the architecture document:
+
+> **Write** `artifacts/claim-process-1/architecture.md`
+
+Now let me create the features.json file:
+
+> **Write** `artifacts/claim-process-1/features.json`
+
+Now let me create the implementation documentation:
+
+Now let me create the implementation documentation:
+
+> **Write** `artifacts/claim-process-1/implementation.md`
+
+Failed to authenticate. API Error: 403 The security token included in the request is expired
+
+**Error:** Failed to authenticate. API Error: 403 The security token included in the request is expired
+
+> **Auth Error** — AWS session token is expired or invalid. Update `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, and `AWS_SESSION_TOKEN` in `.env` then restart the agent.

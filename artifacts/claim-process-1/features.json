@@ -1,0 +1,625 @@
+{
+  "features": [
+    {
+      "id": "AUTH-001",
+      "name": "User Authentication",
+      "description": "JWT-based authentication with login and token management",
+      "agent": "dev",
+      "status": "done",
+      "priority": "critical",
+      "module": "Authentication"
+    },
+    {
+      "id": "AUTH-002",
+      "name": "Role-Based Access Control",
+      "description": "User roles and permissions enforcement",
+      "agent": "dev",
+      "status": "done",
+      "priority": "critical",
+      "module": "Authentication"
+    },
+    {
+      "id": "POLICY-001",
+      "name": "Policy Creation",
+      "description": "Create new insurance policies with complete details",
+      "agent": "dev",
+      "status": "done",
+      "priority": "high",
+      "module": "Policy Management"
+    },
+    {
+      "id": "POLICY-002",
+      "name": "Policy Retrieval",
+      "description": "Get policy details by ID",
+      "agent": "dev",
+      "status": "done",
+      "priority": "high",
+      "module": "Policy Management"
+    },
+    {
+      "id": "POLICY-003",
+      "name": "Policy Update",
+      "description": "Update existing policy information",
+      "agent": "dev",
+      "status": "done",
+      "priority": "high",
+      "module": "Policy Management"
+    },
+    {
+      "id": "POLICY-004",
+      "name": "Policy Search - Multi-criteria",
+      "description": "Search policies by policy number, insured name, organization, type, location, SSN/TIN",
+      "agent": "dev",
+      "status": "done",
+      "priority": "high",
+      "module": "Policy Management"
+    },
+    {
+      "id": "POLICY-005",
+      "name": "Policy Search - Partial Matching",
+      "description": "Support partial/fuzzy matching for names and addresses",
+      "agent": "dev",
+      "status": "done",
+      "priority": "medium",
+      "module": "Policy Management"
+    },
+    {
+      "id": "POLICY-006",
+      "name": "SSN/TIN Masking",
+      "description": "Mask SSN/TIN in responses showing only last 4 digits",
+      "agent": "dev",
+      "status": "done",
+      "priority": "critical",
+      "module": "Policy Management"
+    },
+    {
+      "id": "POLICY-007",
+      "name": "SSN/TIN Encryption",
+      "description": "Encrypt SSN/TIN at rest in database",
+      "agent": "dev",
+      "status": "done",
+      "priority": "critical",
+      "module": "Policy Management"
+    },
+    {
+      "id": "POLICY-008",
+      "name": "Policy Details Display",
+      "description": "Display complete policy information including vehicle, location, and coverage details",
+      "agent": "dev",
+      "status": "done",
+      "priority": "high",
+      "module": "Policy Management"
+    },
+    {
+      "id": "POLICY-009",
+      "name": "Search Results Pagination",
+      "description": "Paginated policy search results with configurable page size",
+      "agent": "dev",
+      "status": "done",
+      "priority": "medium",
+      "module": "Policy Management"
+    },
+    {
+      "id": "CLAIM-001",
+      "name": "Claim Creation",
+      "description": "Create new claims linked to policies",
+      "agent": "dev",
+      "status": "done",
+      "priority": "high",
+      "module": "Claims Management"
+    },
+    {
+      "id": "CLAIM-002",
+      "name": "Claim Retrieval",
+      "description": "Get claim details by ID",
+      "agent": "dev",
+      "status": "done",
+      "priority": "high",
+      "module": "Claims Management"
+    },
+    {
+      "id": "CLAIM-003",
+      "name": "Claim Update",
+      "description": "Update existing claim information",
+      "agent": "dev",
+      "status": "done",
+      "priority": "high",
+      "module": "Claims Management"
+    },
+    {
+      "id": "CLAIM-004",
+      "name": "Claim Search",
+      "description": "Search claims by claim number, policy, status, date range",
+      "agent": "dev",
+      "status": "done",
+      "priority": "high",
+      "module": "Claims Management"
+    },
+    {
+      "id": "CLAIM-005",
+      "name": "Claim History by Policy",
+      "description": "Get list of all claims for a specific policy",
+      "agent": "dev",
+      "status": "done",
+      "priority": "high",
+      "module": "Claims Management"
+    },
+    {
+      "id": "CLAIM-006",
+      "name": "Claim History Sorting",
+      "description": "Sort claims by loss date (most recent first)",
+      "agent": "dev",
+      "status": "done",
+      "priority": "medium",
+      "module": "Claims Management"
+    },
+    {
+      "id": "CLAIM-007",
+      "name": "Claim Status Filter",
+      "description": "Filter claims by status (Open, Closed, Paid, Denied)",
+      "agent": "dev",
+      "status": "done",
+      "priority": "medium",
+      "module": "Claims Management"
+    },
+    {
+      "id": "CLAIM-008",
+      "name": "Claim-Level Policy Data",
+      "description": "Add/edit policy information at claim level for unverified policies",
+      "agent": "dev",
+      "status": "done",
+      "priority": "high",
+      "module": "Claims Management"
+    },
+    {
+      "id": "CLAIM-009",
+      "name": "Claim Policy Data Tracking",
+      "description": "Track claim-level policy changes separately from original policy data",
+      "agent": "dev",
+      "status": "done",
+      "priority": "high",
+      "module": "Claims Management"
+    },
+    {
+      "id": "CLAIM-010",
+      "name": "Injury Incident Details",
+      "description": "Store and manage injury incident information",
+      "agent": "dev",
+      "status": "done",
+      "priority": "medium",
+      "module": "Claims Management"
+    },
+    {
+      "id": "CLAIM-011",
+      "name": "Coding Information",
+      "description": "Store CPT/ICD coding information for claims",
+      "agent": "dev",
+      "status": "done",
+      "priority": "medium",
+      "module": "Claims Management"
+    },
+    {
+      "id": "CLAIM-012",
+      "name": "Carrier Involvement Tracking",
+      "description": "Track other carrier information and involvement",
+      "agent": "dev",
+      "status": "done",
+      "priority": "medium",
+      "module": "Claims Management"
+    },
+    {
+      "id": "CLAIM-013",
+      "name": "Subrogation Referral",
+      "description": "Refer claims to subrogation with tracking",
+      "agent": "dev",
+      "status": "done",
+      "priority": "medium",
+      "module": "Claims Management"
+    },
+    {
+      "id": "CLAIM-014",
+      "name": "Scheduled Payments Management",
+      "description": "Manage scheduled payment information (type, amount, balance, recipient)",
+      "agent": "dev",
+      "status": "done",
+      "priority": "medium",
+      "module": "Claims Management"
+    },
+    {
+      "id": "PAYMENT-001",
+      "name": "Payment Creation",
+      "description": "Create new payments linked to claims and policies",
+      "agent": "dev",
+      "status": "done",
+      "priority": "high",
+      "module": "Payments"
+    },
+    {
+      "id": "PAYMENT-002",
+      "name": "Payment Retrieval",
+      "description": "Get payment details by ID",
+      "agent": "dev",
+      "status": "done",
+      "priority": "high",
+      "module": "Payments"
+    },
+    {
+      "id": "PAYMENT-003",
+      "name": "Payment Update",
+      "description": "Update pending/draft payment information",
+      "agent": "dev",
+      "status": "done",
+      "priority": "high",
+      "module": "Payments"
+    },
+    {
+      "id": "PAYMENT-004",
+      "name": "Payment Search",
+      "description": "Search payments by number, claim, policy, status, method",
+      "agent": "dev",
+      "status": "done",
+      "priority": "high",
+      "module": "Payments"
+    },
+    {
+      "id": "PAYMENT-005",
+      "name": "Multiple Payment Methods",
+      "description": "Support ACH, wire, credit/debit card, Stripe Connect, global payouts",
+      "agent": "dev",
+      "status": "done",
+      "priority": "high",
+      "module": "Payments"
+    },
+    {
+      "id": "PAYMENT-006",
+      "name": "Payment Void",
+      "description": "Void payments with reason tracking",
+      "agent": "dev",
+      "status": "done",
+      "priority": "high",
+      "module": "Payments"
+    },
+    {
+      "id": "PAYMENT-007",
+      "name": "Payment Reversal",
+      "description": "Reverse payments with reason tracking",
+      "agent": "dev",
+      "status": "done",
+      "priority": "high",
+      "module": "Payments"
+    },
+    {
+      "id": "PAYMENT-008",
+      "name": "Payment Reissue",
+      "description": "Reissue void or reversed payments",
+      "agent": "dev",
+      "status": "done",
+      "priority": "high",
+      "module": "Payments"
+    },
+    {
+      "id": "PAYMENT-009",
+      "name": "Reserve Line Allocation",
+      "description": "Allocate payments across multiple reserve lines",
+      "agent": "dev",
+      "status": "done",
+      "priority": "medium",
+      "module": "Payments"
+    },
+    {
+      "id": "PAYMENT-010",
+      "name": "Eroding/Non-Eroding Designation",
+      "description": "Designate payments as eroding or non-eroding against reserves",
+      "agent": "dev",
+      "status": "done",
+      "priority": "medium",
+      "module": "Payments"
+    },
+    {
+      "id": "PAYMENT-011",
+      "name": "Tax Reporting",
+      "description": "Mark payments as tax reportable and capture tax ID numbers",
+      "agent": "dev",
+      "status": "done",
+      "priority": "high",
+      "module": "Payments"
+    },
+    {
+      "id": "PAYMENT-012",
+      "name": "Tax ID Encryption",
+      "description": "Encrypt tax ID numbers at rest",
+      "agent": "dev",
+      "status": "done",
+      "priority": "critical",
+      "module": "Payments"
+    },
+    {
+      "id": "PAYMENT-013",
+      "name": "Multiple Payment Details",
+      "description": "Add multiple payees/portions per payment (joint payees)",
+      "agent": "dev",
+      "status": "done",
+      "priority": "high",
+      "module": "Payments"
+    },
+    {
+      "id": "PAYMENT-014",
+      "name": "Payment Detail Management",
+      "description": "Add and remove payment details/payees",
+      "agent": "dev",
+      "status": "done",
+      "priority": "high",
+      "module": "Payments"
+    },
+    {
+      "id": "PAYMENT-015",
+      "name": "Banking Information Storage",
+      "description": "Store encrypted banking details for EFT/wire transfers",
+      "agent": "dev",
+      "status": "done",
+      "priority": "critical",
+      "module": "Payments"
+    },
+    {
+      "id": "PAYMENT-016",
+      "name": "Payment Deductions",
+      "description": "Support deductions with amounts and reasons",
+      "agent": "dev",
+      "status": "done",
+      "priority": "medium",
+      "module": "Payments"
+    },
+    {
+      "id": "PAYMENT-017",
+      "name": "Positive/Negative/Zero Amounts",
+      "description": "Allow payments with positive, negative, or zero amounts",
+      "agent": "dev",
+      "status": "done",
+      "priority": "medium",
+      "module": "Payments"
+    },
+    {
+      "id": "VENDOR-001",
+      "name": "Vendor Onboarding",
+      "description": "Onboard vendors and claimants with contact information",
+      "agent": "dev",
+      "status": "done",
+      "priority": "medium",
+      "module": "Vendor Management"
+    },
+    {
+      "id": "VENDOR-002",
+      "name": "KYC Verification",
+      "description": "Track KYC/identity verification status for vendors",
+      "agent": "dev",
+      "status": "done",
+      "priority": "high",
+      "module": "Vendor Management"
+    },
+    {
+      "id": "VENDOR-003",
+      "name": "Payment Method Verification",
+      "description": "Verify and store vendor payment methods",
+      "agent": "dev",
+      "status": "done",
+      "priority": "high",
+      "module": "Vendor Management"
+    },
+    {
+      "id": "SECURITY-001",
+      "name": "Password Hashing",
+      "description": "Bcrypt-based password hashing",
+      "agent": "dev",
+      "status": "done",
+      "priority": "critical",
+      "module": "Security"
+    },
+    {
+      "id": "SECURITY-002",
+      "name": "JWT Token Generation",
+      "description": "Generate JWT access tokens with expiration",
+      "agent": "dev",
+      "status": "done",
+      "priority": "critical",
+      "module": "Security"
+    },
+    {
+      "id": "SECURITY-003",
+      "name": "JWT Token Validation",
+      "description": "Validate JWT tokens on protected endpoints",
+      "agent": "dev",
+      "status": "done",
+      "priority": "critical",
+      "module": "Security"
+    },
+    {
+      "id": "SECURITY-004",
+      "name": "Sensitive Data Encryption",
+      "description": "Fernet-based encryption for SSN/TIN and banking info",
+      "agent": "dev",
+      "status": "done",
+      "priority": "critical",
+      "module": "Security"
+    },
+    {
+      "id": "SECURITY-005",
+      "name": "PCI-DSS Compliance",
+      "description": "Encrypt payment data, no logging of sensitive info",
+      "agent": "dev",
+      "status": "done",
+      "priority": "critical",
+      "module": "Security"
+    },
+    {
+      "id": "AUDIT-001",
+      "name": "Audit Trail Logging",
+      "description": "Log all create/update/delete actions with user and timestamp",
+      "agent": "dev",
+      "status": "done",
+      "priority": "high",
+      "module": "Audit"
+    },
+    {
+      "id": "AUDIT-002",
+      "name": "Change Tracking",
+      "description": "Track field-level changes in audit logs",
+      "agent": "dev",
+      "status": "done",
+      "priority": "high",
+      "module": "Audit"
+    },
+    {
+      "id": "AUDIT-003",
+      "name": "Immutable Audit Logs",
+      "description": "Audit logs cannot be modified or deleted",
+      "agent": "dev",
+      "status": "done",
+      "priority": "critical",
+      "module": "Audit"
+    },
+    {
+      "id": "MIDDLEWARE-001",
+      "name": "Correlation ID Middleware",
+      "description": "Generate and propagate correlation IDs for request tracing",
+      "agent": "dev",
+      "status": "done",
+      "priority": "medium",
+      "module": "Infrastructure"
+    },
+    {
+      "id": "MIDDLEWARE-002",
+      "name": "Request Logging Middleware",
+      "description": "Log all requests with method, path, status, duration",
+      "agent": "dev",
+      "status": "done",
+      "priority": "medium",
+      "module": "Infrastructure"
+    },
+    {
+      "id": "MIDDLEWARE-003",
+      "name": "CORS Configuration",
+      "description": "Configure CORS for allowed origins",
+      "agent": "dev",
+      "status": "done",
+      "priority": "high",
+      "module": "Infrastructure"
+    },
+    {
+      "id": "ERROR-001",
+      "name": "Custom Exception Hierarchy",
+      "description": "Typed exceptions for different error conditions",
+      "agent": "dev",
+      "status": "done",
+      "priority": "high",
+      "module": "Error Handling"
+    },
+    {
+      "id": "ERROR-002",
+      "name": "Global Exception Handler",
+      "description": "Consistent error response format",
+      "agent": "dev",
+      "status": "done",
+      "priority": "high",
+      "module": "Error Handling"
+    },
+    {
+      "id": "ERROR-003",
+      "name": "Error Messages",
+      "description": "User-friendly error messages per BRD requirements",
+      "agent": "dev",
+      "status": "done",
+      "priority": "medium",
+      "module": "Error Handling"
+    },
+    {
+      "id": "HEALTH-001",
+      "name": "Liveness Probe",
+      "description": "Health check endpoint for app liveness",
+      "agent": "dev",
+      "status": "done",
+      "priority": "medium",
+      "module": "Infrastructure"
+    },
+    {
+      "id": "HEALTH-002",
+      "name": "Readiness Probe",
+      "description": "Health check endpoint including database connectivity",
+      "agent": "dev",
+      "status": "done",
+      "priority": "medium",
+      "module": "Infrastructure"
+    },
+    {
+      "id": "API-001",
+      "name": "OpenAPI Documentation",
+      "description": "Auto-generated API documentation at /docs",
+      "agent": "dev",
+      "status": "done",
+      "priority": "medium",
+      "module": "API"
+    },
+    {
+      "id": "API-002",
+      "name": "Pydantic Schemas",
+      "description": "Request/response validation with Pydantic",
+      "agent": "dev",
+      "status": "done",
+      "priority": "high",
+      "module": "API"
+    },
+    {
+      "id": "API-003",
+      "name": "Pagination Support",
+      "description": "Consistent pagination across search endpoints",
+      "agent": "dev",
+      "status": "done",
+      "priority": "medium",
+      "module": "API"
+    },
+    {
+      "id": "CONFIG-001",
+      "name": "Environment Configuration",
+      "description": "Pydantic Settings with environment variable support",
+      "agent": "dev",
+      "status": "done",
+      "priority": "high",
+      "module": "Configuration"
+    },
+    {
+      "id": "CONFIG-002",
+      "name": "Configuration Validation",
+      "description": "Validate configuration on startup",
+      "agent": "dev",
+      "status": "done",
+      "priority": "high",
+      "module": "Configuration"
+    },
+    {
+      "id": "DATABASE-001",
+      "name": "Async SQLAlchemy",
+      "description": "Async database operations with SQLAlchemy 2.0",
+      "agent": "dev",
+      "status": "done",
+      "priority": "high",
+      "module": "Database"
+    },
+    {
+      "id": "DATABASE-002",
+      "name": "Database Session Management",
+      "description": "Per-request database sessions with dependency injection",
+      "agent": "dev",
+      "status": "done",
+      "priority": "high",
+      "module": "Database"
+    },
+    {
+      "id": "DATABASE-003",
+      "name": "Auto Table Creation",
+      "description": "Automatic table creation in development mode",
+      "agent": "dev",
+      "status": "done",
+      "priority": "medium",
+      "module": "Database"
+    }
+  ]
+}
