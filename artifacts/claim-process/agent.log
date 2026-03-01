@@ -1,0 +1,166 @@
+**Agent:** `claim-process` | **Phase:** `dev` | **Tech Stack:** `insurance-python-greenfield`
+
+**Provider:** `bedrock` | **Model:** `us.anthropic.claude-sonnet-4-5-20250929-v1:0` | **Budget:** $`2.00` | **Max Turns:** `20` | **Tools:** `7`
+
+### Skill: `smart-dev-python`
+> SmartDev for Python/FastAPI — Developer agent. Implements ALL business logic, security, exception handling, middleware, and wires everything into a fully runnable application with ZERO import errors.
+
+**Sections:** Phase Role: SmartDev (Python/FastAPI Developer), Prior Work (READ ALL BEFORE WRITING ANY CODE), Standalone Mode (no prior pipeline artifacts), CRITICAL: File Path Rules, Step-by-Step Implementation (follow this order exactly), Output Files, ABSOLUTE RULES (violation = failure)
+
+**Key Rules:**
+1. **EVERY import must resolve.** If you write `from passlib.context import CryptContext`, `passlib[bcrypt]` MUST be in requirements.txt AND installed.
+2. **requirements.txt MUST be installed.** Create venv, pip install, verify.
+3. **`python -c "from app.main import app"` MUST succeed.** Run it. If it fails, fix it. Run again. Repeat.
+4. **EVERY `__init__.py` must exist.** Missing `__init__.py` = broken imports. Create them for EVERY package directory.
+5. **NO stubs.** Every function body must have complete implementation. No `pass`, no `...`, no `raise NotImplementedError`.
+*...and 5 more*
+
+**References:** `artifact-template.md`, `best-practices.md`, `exception-handling-template.md`, `fastapi-config-template.md`, `main-app-template.md`, `middleware-template.md`, `requirements-template.md`, `security-template.md`
+
+
+---
+
+I'll implement the complete FastAPI application for the integrated policy, claims, and payments platform. Let me start by checking what prior work exists from other agents.
+
+> **Read** `CLAUDE.md`
+
+> **Read** `artifacts/claim-process/features.json`
+
+> **Read** `artifacts/claim-process/architecture.md`
+
+> **Glob** `app/models/*.py`
+
+> **Glob** `app/routers/*.py`
+
+> **Glob** `app/schemas/*.py`
+
+I'm in standalone mode (no prior pipeline artifacts). I'll create the missing upstream artifacts first, then implement the full application.
+
+> **Write** `CLAUDE.md`
+
+> **Bash** `Create artifacts directory`
+
+> **Write** `artifacts/claim-process/architecture.md`
+
+> **Write** `artifacts/claim-process/features.json`
+
+Now I'll implement the complete application. Starting with **Step 1: Create requirements.txt**.
+
+> **Write** `requirements.txt`
+
+**Step 2: Create virtual environment and install dependencies**.
+
+> **Bash** `Create virtual environment`
+
+> **Bash** `Install dependencies in virtual environment`
+
+Perfect! Dependencies installed. Now I'll create the application structure and implement all components. Let me create the directory structure first.
+
+> **Bash** `Create application directory structure`
+
+Now I'll implement **Step 3-7**: Configuration, Database, Exceptions, Security, and Middleware.
+
+> **Write** `app/config.py`
+
+> **Write** `app/database.py`
+
+> **Write** `app/exceptions.py`
+
+> **Write** `app/security.py`
+
+> **Write** `app/middleware.py`
+
+Now I'll create all the data models (**Step 8 preparation** - creating models before services).
+
+> **Write** `app/models/base.py`
+
+> **Write** `app/models/user.py`
+
+> **Write** `app/models/policy.py`
+
+> **Write** `app/models/claim.py`
+
+> **Write** `app/models/payment.py`
+
+> **Write** `app/models/vendor.py`
+
+> **Write** `app/models/audit_log.py`
+
+> **Write** `app/models/document.py`
+
+Now I'll create the Pydantic schemas for request/response models.
+
+> **Write** `app/schemas/auth.py`
+
+> **Write** `app/schemas/policy.py`
+
+> **Write** `app/schemas/claim.py`
+
+> **Write** `app/schemas/payment.py`
+
+> **Write** `app/schemas/vendor.py`
+
+> **Write** `app/schemas/common.py`
+
+Now I'll create all service modules **(Step 8: Implement ALL Service Classes)**.
+
+> **Write** `app/services/auth_service.py`
+
+> **Write** `app/services/audit_service.py`
+
+> **Write** `app/services/policy_service.py`
+
+> **Write** `app/services/claim_service.py`
+
+> **Write** `app/services/payment_service.py`
+
+> **Write** `app/services/vendor_service.py`
+
+Now I'll create all the API routers.
+
+> **Write** `app/routers/auth.py`
+
+> **Write** `app/routers/policy.py`
+
+> **Write** `app/routers/claim.py`
+
+> **Write** `app/routers/payment.py`
+
+> **Write** `app/routers/vendor.py`
+
+Now I'll create **Step 9: Application Entry Point (app/main.py)**.
+
+> **Write** `app/main.py`
+
+Now **Step 10: Create ALL __init__.py files** (CRITICAL for imports).
+
+> **Write** `app/__init__.py`
+
+> **Write** `app/models/__init__.py`
+
+> **Write** `app/schemas/__init__.py`
+
+> **Write** `app/routers/__init__.py`
+
+> **Write** `app/services/__init__.py`
+
+Now **Step 11: Verify ALL Imports** (CRITICAL - must pass).
+
+> **Bash** `Verify all imports work correctly`
+
+Excellent! Imports verified. Now **Step 12: Verify Application Starts**.
+
+> **Bash** `Test application startup`
+
+Perfect! Application starts successfully. Now **Step 13: Update features.json** - mark ALL features as done.
+
+> **Read** `artifacts/claim-process/features.json`
+
+> **Edit** `artifacts/claim-process/features.json`
+> Replace: `      "status": "pending",...`
+
+Failed to authenticate. API Error: 403 The security token included in the request is expired
+
+**Error:** Failed to authenticate. API Error: 403 The security token included in the request is expired
+
+> **Auth Error** — AWS session token is expired or invalid. Update `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, and `AWS_SESSION_TOKEN` in `.env` then restart the agent.
