@@ -1,0 +1,206 @@
+{
+  "project": "Integrated Policy, Claims, and Payments Platform",
+  "features": [
+    {
+      "id": "F001",
+      "name": "User Authentication & Authorization",
+      "description": "JWT-based authentication with role-based access control",
+      "agent": "dev",
+      "status": "done",
+      "components": [
+        "User registration with email and password",
+        "Password hashing with bcrypt",
+        "JWT token generation and validation",
+        "Role-based access control (admin, adjuster, agent)",
+        "Current user retrieval endpoint"
+      ]
+    },
+    {
+      "id": "F002",
+      "name": "Policy Management",
+      "description": "Complete policy lifecycle management with search and CRUD operations",
+      "agent": "dev",
+      "status": "done",
+      "components": [
+        "Create new policies with complete details",
+        "Search policies by multiple criteria (policy number, name, location, SSN/TIN, etc.)",
+        "Retrieve policy details with masked SSN/TIN",
+        "Update policy information",
+        "Support for vehicle details and coverage information",
+        "Pagination support for search results",
+        "Audit logging for all policy actions"
+      ]
+    },
+    {
+      "id": "F003",
+      "name": "Claims Management",
+      "description": "Comprehensive claims processing and tracking linked to policies",
+      "agent": "dev",
+      "status": "done",
+      "components": [
+        "Create claims linked to policies",
+        "Search claims with filters (claim number, policy, status, loss date range)",
+        "Retrieve claim details",
+        "Update claim information",
+        "Claim-level policy data for unverified policies",
+        "Subrogation referral management",
+        "Scheduled payment tracking",
+        "Injury incident and coding information support",
+        "Carrier involvement tracking",
+        "Claims history sorted by loss date (most recent first)",
+        "Status filtering (open, closed, paid, denied)",
+        "Audit logging for all claim actions"
+      ]
+    },
+    {
+      "id": "F004",
+      "name": "Payment & Disbursement Management",
+      "description": "Full payment lifecycle with multiple payment methods and security",
+      "agent": "dev",
+      "status": "done",
+      "components": [
+        "Create payments linked to claims and policies",
+        "Multiple payment methods (ACH, wire, card, Stripe, global payout)",
+        "Payment lifecycle (pending, approved, issued, void, reversed)",
+        "Void payment with reason tracking",
+        "Reverse payment with reason tracking",
+        "Reissue payment (for void/reversed payments)",
+        "Reserve line allocation support",
+        "Tax reportable designation with encrypted tax ID",
+        "Eroding/non-eroding payment types",
+        "Payment details (multiple payees per payment)",
+        "Deduction tracking per payee",
+        "Banking information encryption",
+        "Search payments with filters",
+        "Audit logging for all payment actions"
+      ]
+    },
+    {
+      "id": "F005",
+      "name": "Vendor Management",
+      "description": "Vendor/claimant onboarding with KYC and payment method verification",
+      "agent": "dev",
+      "status": "done",
+      "components": [
+        "Create vendor profiles",
+        "Vendor types (contractor, medical_provider, attorney)",
+        "KYC status tracking (pending, verified, failed)",
+        "Payment method verification",
+        "Encrypted tax ID and banking information",
+        "Stripe account integration support",
+        "List all vendors",
+        "Update vendor information"
+      ]
+    },
+    {
+      "id": "F006",
+      "name": "Security & Data Protection",
+      "description": "Comprehensive security measures for sensitive data",
+      "agent": "dev",
+      "status": "done",
+      "components": [
+        "Password hashing with bcrypt",
+        "JWT token authentication",
+        "SSN/TIN encryption at rest",
+        "SSN/TIN masking in responses (show only last 4 digits)",
+        "Tax ID number encryption",
+        "Banking information encryption",
+        "Fernet encryption for sensitive data",
+        "Bearer token authentication scheme"
+      ]
+    },
+    {
+      "id": "F007",
+      "name": "Audit Logging",
+      "description": "Comprehensive audit trail for all business operations",
+      "agent": "dev",
+      "status": "done",
+      "components": [
+        "Log all create/update/delete/view actions",
+        "Track entity type, entity ID, action, user ID",
+        "Record before/after values for changes",
+        "Timestamp all audit entries",
+        "IP address tracking support",
+        "Immutable audit log"
+      ]
+    },
+    {
+      "id": "F008",
+      "name": "Exception Handling",
+      "description": "Typed exception hierarchy with proper HTTP status codes",
+      "agent": "dev",
+      "status": "done",
+      "components": [
+        "AppException base class",
+        "NotFoundException (404)",
+        "ConflictException (409)",
+        "AuthException (401)",
+        "ForbiddenException (403)",
+        "ValidationException (400)",
+        "Centralized exception handler",
+        "Standardized error response format"
+      ]
+    },
+    {
+      "id": "F009",
+      "name": "Middleware & Observability",
+      "description": "Request logging and correlation ID tracking",
+      "agent": "dev",
+      "status": "done",
+      "components": [
+        "CorrelationIdMiddleware for request tracing",
+        "RequestLoggingMiddleware with duration tracking",
+        "CORS configuration",
+        "Structured logging",
+        "Request method, path, status code, and duration logging"
+      ]
+    },
+    {
+      "id": "F010",
+      "name": "Health Checks & Monitoring",
+      "description": "Liveness and readiness probes for container orchestration",
+      "agent": "dev",
+      "status": "done",
+      "components": [
+        "Liveness probe endpoint (/health/live)",
+        "Readiness probe with database connectivity check (/health/ready)",
+        "Root endpoint with service information",
+        "Graceful startup and shutdown with lifespan management"
+      ]
+    },
+    {
+      "id": "F011",
+      "name": "Database Management",
+      "description": "Async SQLAlchemy with SQLite for development",
+      "agent": "dev",
+      "status": "done",
+      "components": [
+        "Async SQLAlchemy engine",
+        "Async session management",
+        "SQLite database for development",
+        "Automatic table creation in development mode",
+        "PostgreSQL support via configuration"
+      ]
+    },
+    {
+      "id": "F012",
+      "name": "API Documentation",
+      "description": "Auto-generated OpenAPI/Swagger documentation",
+      "agent": "dev",
+      "status": "done",
+      "components": [
+        "OpenAPI schema generation",
+        "Swagger UI at /docs",
+        "ReDoc at /redoc",
+        "Request/response schema validation",
+        "Endpoint grouping by tags"
+      ]
+    }
+  ],
+  "summary": {
+    "total_features": 12,
+    "completed": 12,
+    "pending": 0,
+    "completion_rate": "100%"
+  }
+}

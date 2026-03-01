@@ -1,0 +1,187 @@
+**Agent:** `claim-services-2` | **Phase:** `dev` | **Tech Stack:** `insurance-python-greenfield`
+
+**Provider:** `bedrock` | **Model:** `us.anthropic.claude-sonnet-4-5-20250929-v1:0` | **Budget:** $`2.00` | **Max Turns:** `20` | **Tools:** `7`
+
+### Skill: `smart-dev-python`
+> SmartDev for Python/FastAPI — Developer agent. Implements ALL business logic, security, exception handling, middleware, and wires everything into a fully runnable application with ZERO import errors.
+
+**Sections:** Phase Role: SmartDev (Python/FastAPI Developer), Prior Work (READ ALL BEFORE WRITING ANY CODE), Standalone Mode (no prior pipeline artifacts), CRITICAL: File Path Rules, Step-by-Step Implementation (follow this order exactly), Output Files, ABSOLUTE RULES (violation = failure)
+
+**Key Rules:**
+1. **EVERY import must resolve.** If you write `from passlib.context import CryptContext`, `passlib[bcrypt]` MUST be in requirements.txt AND installed.
+2. **requirements.txt MUST be installed.** Create venv, pip install, verify.
+3. **`python -c "from app.main import app"` MUST succeed.** Run it. If it fails, fix it. Run again. Repeat.
+4. **EVERY `__init__.py` must exist.** Missing `__init__.py` = broken imports. Create them for EVERY package directory.
+5. **NO stubs.** Every function body must have complete implementation. No `pass`, no `...`, no `raise NotImplementedError`.
+*...and 5 more*
+
+**References:** `artifact-template.md`, `best-practices.md`, `exception-handling-template.md`, `fastapi-config-template.md`, `main-app-template.md`, `middleware-template.md`, `requirements-template.md`, `security-template.md`
+
+
+---
+
+I'll implement the SmartDev phase for this integrated policy, claims, and payments platform. Let me start by reading all prior work from SmartDBA and SmartAPI.
+
+> **Read** `CLAUDE.md`
+
+> **Read** `artifacts/claim-services-2/features.json`
+
+> **Read** `artifacts/claim-services-2/architecture.md`
+
+> **Glob** `app/models/*.py`
+
+> **Glob** `app/routers/*.py`
+
+> **Glob** `app/schemas/*.py`
+
+I see that SmartDBA and SmartAPI have already created models, routers, and schemas. However, the artifacts directory files (`features.json` and `architecture.md`) don't exist. Let me read the existing code to understand what's been implemented.
+
+> **Read** `app/models/base.py`
+
+> **Read** `app/models/user.py`
+
+> **Read** `app/models/policy.py`
+
+> **Read** `app/models/claim.py`
+
+> **Read** `app/models/payment.py`
+
+> **Read** `app/models/vendor.py`
+
+> **Read** `app/models/document.py`
+
+> **Read** `app/models/audit_log.py`
+
+Now let me read the routers and schemas to understand what APIs have been created:
+
+> **Read** `app/routers/auth.py`
+
+> **Read** `app/routers/policy.py`
+
+> **Read** `app/routers/claim.py`
+
+> **Read** `app/routers/payment.py`
+
+> **Read** `app/schemas/auth.py`
+
+> **Read** `app/schemas/policy.py`
+
+> **Read** `app/schemas/claim.py`
+
+> **Read** `app/schemas/payment.py`
+
+Let me check what core files already exist:
+
+> **Bash** `List all files in app directory`
+
+> **Glob** `app/services/*.py`
+
+> **Bash** `List Python files in app root`
+
+Good! Most of the infrastructure exists. Let me read the existing core files and services to see what's already implemented:
+
+> **Read** `app/config.py`
+
+> **Read** `app/database.py`
+
+> **Read** `app/exceptions.py`
+
+> **Read** `app/security.py`
+
+> **Read** `app/middleware.py`
+
+> **Read** `app/main.py`
+
+> **Read** `app/services/__init__.py`
+
+> **Read** `app/services/auth_service.py`
+
+Let me read the other service files to see their current state:
+
+> **Read** `app/services/policy_service.py`
+
+> **Read** `app/services/claim_service.py`
+
+> **Read** `app/services/payment_service.py`
+
+> **Read** `app/services/audit_service.py`
+
+> **Read** `app/services/vendor_service.py`
+
+> **Bash** `Check if requirements.txt exists`
+
+Perfect! I can see most of the infrastructure is already in place. Let me now check the remaining files and then create a todo list to complete the implementation:
+
+> **Read** `app/routers/vendor.py`
+
+> **Read** `app/schemas/vendor.py`
+
+> **Read** `app/schemas/common.py`
+
+> **Read** `app/models/__init__.py`
+
+> **Read** `app/routers/__init__.py`
+
+> **Read** `app/schemas/__init__.py`
+
+Excellent! The codebase is almost complete. Let me create a todo list and work through the remaining tasks:
+
+> **Update Todos** Fix database.py to use Base from models , Create virtual environment and install d, Verify all imports work (python -c 'from
+
+Now let me start fixing the issues. First, I'll fix the database.py file to properly use the Base from models:
+
+> **Update Todos** Fix database.py to use Base from models , Create virtual environment and install d, Verify all imports work (python -c 'from
+
+> **Edit** `app/database.py`
+> Replace: `from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sess...`
+
+> **Read** `app/database.py`
+
+> **Edit** `app/database.py`
+> Replace: `from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine, async_sess...`
+
+> **Update Todos** Fix database.py to use Base from models , Create virtual environment and install d, Verify all imports work (python -c 'from
+
+> **Bash** `Create Python virtual environment`
+
+> **Bash** `Install Python dependencies from requirements.txt`
+
+Perfect! Dependencies are installed. Now let me verify all imports work:
+
+> **Update Todos** Fix database.py to use Base from models , Create virtual environment and install d, Verify all imports work (python -c 'from
+
+> **Bash** `Verify all imports work correctly`
+
+> **Bash** `Verify all imports work correctly (simplified output)`
+
+Excellent! All imports work. Now let me test the application startup:
+
+> **Update Todos** Fix database.py to use Base from models , Create virtual environment and install d, Verify all imports work (python -c 'from
+
+> **Bash** `Test application startup with uvicorn (10 sec timeout)`
+
+Perfect! The application starts successfully. Now let me create the artifacts directory and documentation:
+
+> **Update Todos** Fix database.py to use Base from models , Create virtual environment and install d, Verify all imports work (python -c 'from
+
+> **Bash** `Create artifacts directory`
+
+Now let me create the features.json file documenting all implemented features:
+
+> **Write** `artifacts/claim-services-2/features.json`
+
+Now let me create the implementation documentation:
+
+> **Update Todos** Fix database.py to use Base from models , Create virtual environment and install d, Verify all imports work (python -c 'from
+
+> **Write** `artifacts/claim-services-2/implementation.md`
+
+Perfect! Let me mark all tasks as complete and do a final verification:
+
+> **Update Todos** Fix database.py to use Base from models , Create virtual environment and install d, Verify all imports work (python -c 'from
+
+> **Bash** `Final verification of all components`
+
+---
+
+**Completed** in 21 turns (cost: $1.5892)
