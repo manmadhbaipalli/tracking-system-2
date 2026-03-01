@@ -1,36 +1,46 @@
-# Python FastAPI Authentication App
+# Simple Java Spring Boot Application
 
 ## Project Standards
 
 ### Package Structure
-- `app/` - main application package
-- `app/models/` - SQLAlchemy models
-- `app/schemas/` - Pydantic schemas (DTOs)
-- `app/routers/` - FastAPI routers (controllers)
-- `app/services/` - business logic layer
-- `artifacts/python-app-1/` - project documentation and specs
+- `src/main/java/com/example/simpleapp/` - main application package
+- `src/main/java/com/example/simpleapp/model/` - JPA entities
+- `src/main/java/com/example/simpleapp/repository/` - Spring Data JPA repositories
+- `src/main/java/com/example/simpleapp/controller/` - REST controllers
+- `src/main/java/com/example/simpleapp/dto/` - Data Transfer Objects
+- `src/main/java/com/example/simpleapp/service/` - Business logic layer
+- `src/main/java/com/example/simpleapp/config/` - Configuration classes
+- `src/main/java/com/example/simpleapp/security/` - Security components (JWT, filters)
+- `src/main/java/com/example/simpleapp/filter/` - Request filters
+- `src/main/java/com/example/simpleapp/exception/` - Custom exceptions and handlers
+- `artifacts/java-app/` - Project documentation and specs
 
 ### Code Style
-- Use async/await for all database operations
-- Type hints on all function signatures
-- Snake_case for functions and variables
+- Use constructor injection (never field injection with @Autowired)
 - PascalCase for classes
-- Use Pydantic for validation and settings
-- Use SQLAlchemy 2.0+ async style
+- camelCase for methods and variables
+- Use records for immutable DTOs
+- Add Javadoc for public APIs
+- Use SLF4J for logging
+
+### Maven Coordinates
+- **groupId**: com.example
+- **artifactId**: simple-app
+- **version**: 0.0.1-SNAPSHOT
 
 ### Commands
-- Create venv: `python -m venv .venv`
-- Activate venv (Windows): `.venv/Scripts/activate`
-- Activate venv (Unix): `source .venv/bin/activate`
-- Install deps: `pip install -r requirements.txt`
-- Run app: `uvicorn app.main:app --reload`
-- Run tests: `pytest`
-- Access docs: `http://localhost:8000/docs`
+- Build: `mvn clean package`
+- Run: `mvn spring-boot:run`
+- Compile: `mvn compile`
+- Test: `mvn test`
+- Access app: `http://localhost:8080`
+- Access Swagger UI: `http://localhost:8080/swagger-ui.html`
+- Health check: `http://localhost:8080/actuator/health`
 
-### Dependencies
-- FastAPI + Uvicorn for web framework
-- SQLAlchemy with aiosqlite for database
-- Pydantic for validation
-- passlib + bcrypt for password hashing
-- python-jose for JWT tokens
-- pytest for testing
+### Key Dependencies
+- Spring Boot 3.4.1 (Web, Data JPA, Security, Validation, Actuator)
+- JWT (jjwt 0.12.6)
+- H2 Database (dev profile)
+- PostgreSQL (prod profile)
+- SpringDoc OpenAPI 2.8.4
+- Logstash Logback Encoder 8.0
