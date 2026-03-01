@@ -1,0 +1,14 @@
+**Agent:** `m-market-digitization` | **Phase:** `sales` | **Tech Stack:** `greenfield`
+
+**Provider:** `bedrock` | **Model:** `us.anthropic.claude-sonnet-4-5-20250929-v1:0` | **Budget:** $`2.00` | **Max Turns:** `20` | **Tools:** `7`
+
+### Skill: none (hardcoded fallback)
+> Using built-in phase prompt — no skill file matched for this phase/tech stack.
+
+---
+
+Failed to authenticate. API Error: 403 The security token included in the request is expired
+
+**Error:** Failed to authenticate. API Error: 403 The security token included in the request is expired
+
+> **Auth Error** — AWS session token is expired or invalid. Update `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, and `AWS_SESSION_TOKEN` in `.env` then restart the agent.
