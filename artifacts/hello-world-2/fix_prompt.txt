@@ -1,0 +1,38 @@
+You are an autonomous coding agent. A previous attempt at task hello-world-2 failed CI.
+
+## Task
+**Hello World 2**
+Create Hello World 2 in python !
+
+
+## CI Failure Output
+```
+
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    from app.main import app; print('Boot OK')
+    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/kalpesh/Documents/1 GenAI/5. SmartSDLC-Agent-Skills/claude-code-agents/workspace/app/main.py", line 8, in <module>
+    from app.database import engine
+  File "/Users/kalpesh/Documents/1 GenAI/5. SmartSDLC-Agent-Skills/claude-code-agents/workspace/app/database.py", line 4, in <module>
+    engine = create_async_engine(settings.database_url, echo=settings.debug)
+  File "/Users/kalpesh/Documents/1 GenAI/5. SmartSDLC-Agent-Skills/claude-code-agents/.venv/lib/python3.13/site-packages/sqlalchemy/ext/asyncio/engine.py", line 120, in create_async_engine
+    sync_engine = _create_engine(url, **kw)
+  File "<string>", line 2, in create_engine
+  File "/Users/kalpesh/Documents/1 GenAI/5. SmartSDLC-Agent-Skills/claude-code-agents/.venv/lib/python3.13/site-packages/sqlalchemy/util/deprecations.py", line 281, in warned
+    return fn(*args, **kwargs)  # type: ignore[no-any-return]
+  File "/Users/kalpesh/Documents/1 GenAI/5. SmartSDLC-Agent-Skills/claude-code-agents/.venv/lib/python3.13/site-packages/sqlalchemy/engine/create.py", line 617, in create_engine
+    dbapi = dbapi_meth(**dbapi_args)
+  File "/Users/kalpesh/Documents/1 GenAI/5. SmartSDLC-Agent-Skills/claude-code-agents/.venv/lib/python3.13/site-packages/sqlalchemy/dialects/sqlite/aiosqlite.py", line 449, in import_dbapi
+    __import__("aiosqlite"), __import__("sqlite3")
+    ~~~~~~~~~~^^^^^^^^^^^^^
+ModuleNotFoundError: No module named 'aiosqlite'
+
+```
+
+## Instructions
+1. Read the failing test output carefully.
+2. Identify the root cause.
+3. Fix the code. Only modify files in your assigned scope.
+4. Run the tests again to verify the fix.
+5. Update `artifacts/hello-world-2/findings.md` with what went wrong and how you fixed it.
