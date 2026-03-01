@@ -1,6 +1,6 @@
 **Agent:** `python-app` | **Phase:** `dev` | **Tech Stack:** `python-greenfield`
 
-**Provider:** `bedrock` | **Model:** `claude-sonnet-4-6` | **Budget:** $`2.00` | **Max Turns:** `20` | **Tools:** `7`
+**Provider:** `bedrock` | **Model:** `us.anthropic.claude-sonnet-4-5-20250929-v1:0` | **Budget:** $`2.00` | **Max Turns:** `20` | **Tools:** `7`
 
 ### Skill: `smart-dev-python`
 > SmartDev for Python/FastAPI — Developer agent. Implements ALL business logic, security, exception handling, middleware, and wires everything into a fully runnable application with ZERO import errors.
@@ -20,8 +20,8 @@
 
 ---
 
-> **Retry 1/3** — CLI launch failed, retrying...
+Failed to authenticate. API Error: 403 The security token included in the request is expired
 
-> **Retry 2/3** — CLI launch failed, retrying...
+**Error:** Failed to authenticate. API Error: 403 The security token included in the request is expired
 
-**Exception:** Claude Code not found at: F:\workspaces\claude-code-agents\.venv\Lib\site-packages\claude_agent_sdk\_bundled\claude.exe
+> **Auth Error** — AWS session token is expired or invalid. Update `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, and `AWS_SESSION_TOKEN` in `.env` then restart the agent.
