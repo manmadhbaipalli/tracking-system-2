@@ -1,0 +1,12 @@
+> **Retry 1/3** — CLI launch failed, retrying...
+
+> **Retry 2/3** — CLI launch failed, retrying...
+
+**Exception:** Claude Code not found. Install with:
+  npm install -g @anthropic-ai/claude-code
+
+If already installed locally, try:
+  export PATH="$HOME/node_modules/.bin:$PATH"
+
+Or provide the path via ClaudeAgentOptions:
+  ClaudeAgentOptions(cli_path='/path/to/claude')
