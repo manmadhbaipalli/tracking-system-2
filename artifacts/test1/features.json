@@ -1,0 +1,346 @@
+{
+  "project": "Integrated Policy, Claims, and Payments Platform",
+  "description": "A comprehensive insurance platform for managing policies, claims, payments, and vendors",
+  "features": [
+    {
+      "id": "AUTH-001",
+      "name": "User Registration",
+      "description": "Users can register with email and password",
+      "agent": "dev",
+      "status": "done",
+      "endpoints": ["POST /auth/register"],
+      "implementation": "app/services/auth_service.py, app/routers/auth.py"
+    },
+    {
+      "id": "AUTH-002",
+      "name": "User Login",
+      "description": "Users can login and receive JWT tokens for authentication",
+      "agent": "dev",
+      "status": "done",
+      "endpoints": ["POST /auth/login"],
+      "implementation": "app/services/auth_service.py, app/routers/auth.py"
+    },
+    {
+      "id": "AUTH-003",
+      "name": "Get Current User",
+      "description": "Authenticated users can retrieve their profile information",
+      "agent": "dev",
+      "status": "done",
+      "endpoints": ["GET /auth/me"],
+      "implementation": "app/services/auth_service.py, app/routers/auth.py"
+    },
+    {
+      "id": "POLICY-001",
+      "name": "Create Policy",
+      "description": "Create new insurance policies with comprehensive details",
+      "agent": "dev",
+      "status": "done",
+      "endpoints": ["POST /policies"],
+      "implementation": "app/services/policy_service.py, app/routers/policy.py"
+    },
+    {
+      "id": "POLICY-002",
+      "name": "Search Policies",
+      "description": "Search policies by number, insured name, organization, type, location with pagination",
+      "agent": "dev",
+      "status": "done",
+      "endpoints": ["GET /policies/search"],
+      "implementation": "app/services/policy_service.py, app/routers/policy.py"
+    },
+    {
+      "id": "POLICY-003",
+      "name": "Get Policy Details",
+      "description": "Retrieve detailed information about a specific policy",
+      "agent": "dev",
+      "status": "done",
+      "endpoints": ["GET /policies/{policy_id}"],
+      "implementation": "app/services/policy_service.py, app/routers/policy.py"
+    },
+    {
+      "id": "POLICY-004",
+      "name": "Update Policy",
+      "description": "Update existing policy information",
+      "agent": "dev",
+      "status": "done",
+      "endpoints": ["PUT /policies/{policy_id}"],
+      "implementation": "app/services/policy_service.py, app/routers/policy.py"
+    },
+    {
+      "id": "POLICY-005",
+      "name": "Get Policy Claims History",
+      "description": "Retrieve all claims associated with a policy with optional status filtering",
+      "agent": "dev",
+      "status": "done",
+      "endpoints": ["GET /policies/{policy_id}/claims"],
+      "implementation": "app/services/claim_service.py, app/routers/policy.py"
+    },
+    {
+      "id": "CLAIM-001",
+      "name": "Create Claim",
+      "description": "Create new insurance claims linked to policies",
+      "agent": "dev",
+      "status": "done",
+      "endpoints": ["POST /claims"],
+      "implementation": "app/services/claim_service.py, app/routers/claim.py"
+    },
+    {
+      "id": "CLAIM-002",
+      "name": "Search Claims",
+      "description": "Search claims by number, policy, status, loss date range with pagination",
+      "agent": "dev",
+      "status": "done",
+      "endpoints": ["GET /claims/search"],
+      "implementation": "app/services/claim_service.py, app/routers/claim.py"
+    },
+    {
+      "id": "CLAIM-003",
+      "name": "Get Claim Details",
+      "description": "Retrieve detailed information about a specific claim",
+      "agent": "dev",
+      "status": "done",
+      "endpoints": ["GET /claims/{claim_id}"],
+      "implementation": "app/services/claim_service.py, app/routers/claim.py"
+    },
+    {
+      "id": "CLAIM-004",
+      "name": "Update Claim",
+      "description": "Update existing claim information",
+      "agent": "dev",
+      "status": "done",
+      "endpoints": ["PUT /claims/{claim_id}"],
+      "implementation": "app/services/claim_service.py, app/routers/claim.py"
+    },
+    {
+      "id": "CLAIM-005",
+      "name": "Update Claim Policy Data",
+      "description": "Update claim-level policy data for unverified policies",
+      "agent": "dev",
+      "status": "done",
+      "endpoints": ["PUT /claims/{claim_id}/policy-data"],
+      "implementation": "app/services/claim_service.py, app/routers/claim.py"
+    },
+    {
+      "id": "CLAIM-006",
+      "name": "Refer Claim to Subrogation",
+      "description": "Refer a claim to the subrogation process",
+      "agent": "dev",
+      "status": "done",
+      "endpoints": ["POST /claims/{claim_id}/refer-subrogation"],
+      "implementation": "app/services/claim_service.py, app/routers/claim.py"
+    },
+    {
+      "id": "PAYMENT-001",
+      "name": "Create Payment",
+      "description": "Create new payments for claims and policies",
+      "agent": "dev",
+      "status": "done",
+      "endpoints": ["POST /payments"],
+      "implementation": "app/services/payment_service.py, app/routers/payment.py"
+    },
+    {
+      "id": "PAYMENT-002",
+      "name": "Search Payments",
+      "description": "Search payments by number, claim, policy, status, method with pagination",
+      "agent": "dev",
+      "status": "done",
+      "endpoints": ["GET /payments/search"],
+      "implementation": "app/services/payment_service.py, app/routers/payment.py"
+    },
+    {
+      "id": "PAYMENT-003",
+      "name": "Get Payment Details",
+      "description": "Retrieve detailed information about a specific payment",
+      "agent": "dev",
+      "status": "done",
+      "endpoints": ["GET /payments/{payment_id}"],
+      "implementation": "app/services/payment_service.py, app/routers/payment.py"
+    },
+    {
+      "id": "PAYMENT-004",
+      "name": "Update Payment",
+      "description": "Update existing payment information",
+      "agent": "dev",
+      "status": "done",
+      "endpoints": ["PUT /payments/{payment_id}"],
+      "implementation": "app/services/payment_service.py, app/routers/payment.py"
+    },
+    {
+      "id": "PAYMENT-005",
+      "name": "Void Payment",
+      "description": "Void a payment that was issued in error",
+      "agent": "dev",
+      "status": "done",
+      "endpoints": ["POST /payments/{payment_id}/void"],
+      "implementation": "app/services/payment_service.py, app/routers/payment.py"
+    },
+    {
+      "id": "PAYMENT-006",
+      "name": "Reverse Payment",
+      "description": "Reverse a payment that needs to be undone",
+      "agent": "dev",
+      "status": "done",
+      "endpoints": ["POST /payments/{payment_id}/reverse"],
+      "implementation": "app/services/payment_service.py, app/routers/payment.py"
+    },
+    {
+      "id": "PAYMENT-007",
+      "name": "Reissue Payment",
+      "description": "Reissue a payment that failed or needs to be resent",
+      "agent": "dev",
+      "status": "done",
+      "endpoints": ["POST /payments/{payment_id}/reissue"],
+      "implementation": "app/services/payment_service.py, app/routers/payment.py"
+    },
+    {
+      "id": "PAYMENT-008",
+      "name": "Add Payment Detail",
+      "description": "Add a payment detail (payee) to a payment",
+      "agent": "dev",
+      "status": "done",
+      "endpoints": ["POST /payments/{payment_id}/details"],
+      "implementation": "app/services/payment_service.py, app/routers/payment.py"
+    },
+    {
+      "id": "PAYMENT-009",
+      "name": "Remove Payment Detail",
+      "description": "Remove a payment detail from a payment",
+      "agent": "dev",
+      "status": "done",
+      "endpoints": ["DELETE /payments/{payment_id}/details/{detail_id}"],
+      "implementation": "app/services/payment_service.py, app/routers/payment.py"
+    },
+    {
+      "id": "PAYMENT-010",
+      "name": "Get Payment Details List",
+      "description": "Retrieve all payment details (payees) for a payment",
+      "agent": "dev",
+      "status": "done",
+      "endpoints": ["GET /payments/{payment_id}/details"],
+      "implementation": "app/services/payment_service.py, app/routers/payment.py"
+    },
+    {
+      "id": "VENDOR-001",
+      "name": "Create Vendor",
+      "description": "Onboard new vendors for payment processing",
+      "agent": "dev",
+      "status": "done",
+      "endpoints": ["POST /vendors"],
+      "implementation": "app/services/vendor_service.py, app/routers/vendor.py"
+    },
+    {
+      "id": "VENDOR-002",
+      "name": "List Vendors",
+      "description": "Retrieve a list of all vendors",
+      "agent": "dev",
+      "status": "done",
+      "endpoints": ["GET /vendors"],
+      "implementation": "app/services/vendor_service.py, app/routers/vendor.py"
+    },
+    {
+      "id": "VENDOR-003",
+      "name": "Get Vendor Details",
+      "description": "Retrieve detailed information about a specific vendor",
+      "agent": "dev",
+      "status": "done",
+      "endpoints": ["GET /vendors/{vendor_id}"],
+      "implementation": "app/services/vendor_service.py, app/routers/vendor.py"
+    },
+    {
+      "id": "VENDOR-004",
+      "name": "Update Vendor",
+      "description": "Update existing vendor information",
+      "agent": "dev",
+      "status": "done",
+      "endpoints": ["PUT /vendors/{vendor_id}"],
+      "implementation": "app/services/vendor_service.py, app/routers/vendor.py"
+    },
+    {
+      "id": "VENDOR-005",
+      "name": "Verify Vendor Payment Method",
+      "description": "Verify and activate a vendor's payment method",
+      "agent": "dev",
+      "status": "done",
+      "endpoints": ["POST /vendors/{vendor_id}/verify-payment-method"],
+      "implementation": "app/services/vendor_service.py, app/routers/vendor.py"
+    },
+    {
+      "id": "INFRA-001",
+      "name": "Health Checks",
+      "description": "Liveness and readiness probes for monitoring",
+      "agent": "dev",
+      "status": "done",
+      "endpoints": ["GET /health/live", "GET /health/ready"],
+      "implementation": "app/main.py"
+    },
+    {
+      "id": "INFRA-002",
+      "name": "CORS Middleware",
+      "description": "Cross-Origin Resource Sharing support",
+      "agent": "dev",
+      "status": "done",
+      "implementation": "app/main.py"
+    },
+    {
+      "id": "INFRA-003",
+      "name": "Request Logging Middleware",
+      "description": "Automatic logging of all HTTP requests with timing",
+      "agent": "dev",
+      "status": "done",
+      "implementation": "app/middleware.py"
+    },
+    {
+      "id": "INFRA-004",
+      "name": "Correlation ID Middleware",
+      "description": "Request correlation tracking across the system",
+      "agent": "dev",
+      "status": "done",
+      "implementation": "app/middleware.py"
+    },
+    {
+      "id": "INFRA-005",
+      "name": "Global Exception Handling",
+      "description": "Consistent error responses across all endpoints",
+      "agent": "dev",
+      "status": "done",
+      "implementation": "app/exceptions.py, app/main.py"
+    },
+    {
+      "id": "SECURITY-001",
+      "name": "JWT Authentication",
+      "description": "Token-based authentication with Bearer tokens",
+      "agent": "dev",
+      "status": "done",
+      "implementation": "app/security.py"
+    },
+    {
+      "id": "SECURITY-002",
+      "name": "Password Hashing",
+      "description": "Secure password storage with bcrypt",
+      "agent": "dev",
+      "status": "done",
+      "implementation": "app/security.py"
+    },
+    {
+      "id": "SECURITY-003",
+      "name": "Audit Logging",
+      "description": "Comprehensive audit trail for all operations",
+      "agent": "dev",
+      "status": "done",
+      "implementation": "app/services/audit_service.py"
+    }
+  ],
+  "technical_stack": {
+    "framework": "FastAPI 0.115+",
+    "database": "SQLAlchemy 2.0 with async support",
+    "database_driver": "aiosqlite (development), PostgreSQL (production)",
+    "authentication": "JWT with python-jose",
+    "password_hashing": "passlib with bcrypt",
+    "validation": "Pydantic v2"
+  },
+  "summary": {
+    "total_features": 37,
+    "completed_features": 37,
+    "pending_features": 0,
+    "completion_percentage": 100
+  }
+}
