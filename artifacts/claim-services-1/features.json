@@ -1,0 +1,292 @@
+{
+  "features": [
+    {
+      "id": "auth-001",
+      "name": "User Authentication",
+      "description": "JWT-based authentication with user registration and login",
+      "agent": "dev",
+      "status": "done",
+      "components": ["auth_service", "security", "User model", "auth router"]
+    },
+    {
+      "id": "policy-001",
+      "name": "Policy Management - Create",
+      "description": "Create new insurance policies with all required details",
+      "agent": "dev",
+      "status": "done",
+      "components": ["policy_service", "Policy model", "policy router"]
+    },
+    {
+      "id": "policy-002",
+      "name": "Policy Management - Retrieve",
+      "description": "Get policy details by ID with masked SSN/TIN",
+      "agent": "dev",
+      "status": "done",
+      "components": ["policy_service", "Policy model", "policy router"]
+    },
+    {
+      "id": "policy-003",
+      "name": "Policy Management - Update",
+      "description": "Update existing policy information with audit trail",
+      "agent": "dev",
+      "status": "done",
+      "components": ["policy_service", "Policy model", "policy router"]
+    },
+    {
+      "id": "policy-004",
+      "name": "Policy Search",
+      "description": "Search policies by multiple criteria with pagination",
+      "agent": "dev",
+      "status": "done",
+      "components": ["policy_service", "Policy model", "policy router"]
+    },
+    {
+      "id": "policy-005",
+      "name": "SSN/TIN Security",
+      "description": "Encrypt SSN/TIN at rest and mask in responses (show only last 4 digits)",
+      "agent": "dev",
+      "status": "done",
+      "components": ["security", "policy_service"]
+    },
+    {
+      "id": "claim-001",
+      "name": "Claims Management - Create",
+      "description": "Create new claims linked to policies",
+      "agent": "dev",
+      "status": "done",
+      "components": ["claim_service", "Claim model", "claim router"]
+    },
+    {
+      "id": "claim-002",
+      "name": "Claims Management - Retrieve",
+      "description": "Get claim details by ID",
+      "agent": "dev",
+      "status": "done",
+      "components": ["claim_service", "Claim model", "claim router"]
+    },
+    {
+      "id": "claim-003",
+      "name": "Claims Management - Update",
+      "description": "Update claim information with audit trail",
+      "agent": "dev",
+      "status": "done",
+      "components": ["claim_service", "Claim model", "claim router"]
+    },
+    {
+      "id": "claim-004",
+      "name": "Claim History",
+      "description": "Display claim history for a policy sorted by loss date",
+      "agent": "dev",
+      "status": "done",
+      "components": ["claim_service", "policy router"]
+    },
+    {
+      "id": "claim-005",
+      "name": "Claim Search",
+      "description": "Search claims with filters and pagination",
+      "agent": "dev",
+      "status": "done",
+      "components": ["claim_service", "claim router"]
+    },
+    {
+      "id": "claim-006",
+      "name": "Claim-Level Policy Data",
+      "description": "Add/edit policy information at claim level for unverified policies",
+      "agent": "dev",
+      "status": "done",
+      "components": ["claim_service", "Claim model", "claim router"]
+    },
+    {
+      "id": "claim-007",
+      "name": "Subrogation Referral",
+      "description": "Refer claims to subrogation with tracking",
+      "agent": "dev",
+      "status": "done",
+      "components": ["claim_service", "Claim model", "claim router"]
+    },
+    {
+      "id": "claim-008",
+      "name": "Scheduled Payments Management",
+      "description": "Manage scheduled payments for claims",
+      "agent": "dev",
+      "status": "done",
+      "components": ["claim_service", "Claim model"]
+    },
+    {
+      "id": "payment-001",
+      "name": "Payment Management - Create",
+      "description": "Create payments with multiple payment methods",
+      "agent": "dev",
+      "status": "done",
+      "components": ["payment_service", "Payment model", "payment router"]
+    },
+    {
+      "id": "payment-002",
+      "name": "Payment Management - Retrieve",
+      "description": "Get payment details by ID",
+      "agent": "dev",
+      "status": "done",
+      "components": ["payment_service", "Payment model", "payment router"]
+    },
+    {
+      "id": "payment-003",
+      "name": "Payment Management - Update",
+      "description": "Update payment information with audit trail",
+      "agent": "dev",
+      "status": "done",
+      "components": ["payment_service", "Payment model", "payment router"]
+    },
+    {
+      "id": "payment-004",
+      "name": "Payment Lifecycle - Void",
+      "description": "Void payments with reason tracking",
+      "agent": "dev",
+      "status": "done",
+      "components": ["payment_service", "Payment model", "payment router"]
+    },
+    {
+      "id": "payment-005",
+      "name": "Payment Lifecycle - Reverse",
+      "description": "Reverse payments with reason tracking",
+      "agent": "dev",
+      "status": "done",
+      "components": ["payment_service", "Payment model", "payment router"]
+    },
+    {
+      "id": "payment-006",
+      "name": "Payment Lifecycle - Reissue",
+      "description": "Reissue void or reversed payments",
+      "agent": "dev",
+      "status": "done",
+      "components": ["payment_service", "Payment model", "payment router"]
+    },
+    {
+      "id": "payment-007",
+      "name": "Payment Details Management",
+      "description": "Add/remove payees and payment portions",
+      "agent": "dev",
+      "status": "done",
+      "components": ["payment_service", "PaymentDetail model", "payment router"]
+    },
+    {
+      "id": "payment-008",
+      "name": "Payment Search",
+      "description": "Search payments with filters and pagination",
+      "agent": "dev",
+      "status": "done",
+      "components": ["payment_service", "payment router"]
+    },
+    {
+      "id": "payment-009",
+      "name": "Tax Reporting",
+      "description": "Support tax reportable payments with tax ID capture",
+      "agent": "dev",
+      "status": "done",
+      "components": ["payment_service", "Payment model"]
+    },
+    {
+      "id": "payment-010",
+      "name": "Reserve Lines Allocation",
+      "description": "Allocate payments across multiple reserve lines",
+      "agent": "dev",
+      "status": "done",
+      "components": ["payment_service", "Payment model"]
+    },
+    {
+      "id": "vendor-001",
+      "name": "Vendor Management",
+      "description": "Onboard and manage vendors for payments",
+      "agent": "dev",
+      "status": "done",
+      "components": ["vendor_service", "Vendor model", "vendor router"]
+    },
+    {
+      "id": "audit-001",
+      "name": "Audit Trail",
+      "description": "Log all actions with user ID and timestamp",
+      "agent": "dev",
+      "status": "done",
+      "components": ["audit_service", "AuditLog model"]
+    },
+    {
+      "id": "security-001",
+      "name": "Data Encryption",
+      "description": "Encrypt sensitive data (SSN/TIN, banking info) at rest",
+      "agent": "dev",
+      "status": "done",
+      "components": ["security"]
+    },
+    {
+      "id": "security-002",
+      "name": "JWT Authentication",
+      "description": "JWT-based authentication with 60-minute expiration",
+      "agent": "dev",
+      "status": "done",
+      "components": ["security", "auth_service"]
+    },
+    {
+      "id": "security-003",
+      "name": "Password Hashing",
+      "description": "Bcrypt password hashing for user credentials",
+      "agent": "dev",
+      "status": "done",
+      "components": ["security"]
+    },
+    {
+      "id": "middleware-001",
+      "name": "CORS Middleware",
+      "description": "Configure CORS for allowed origins",
+      "agent": "dev",
+      "status": "done",
+      "components": ["middleware", "main"]
+    },
+    {
+      "id": "middleware-002",
+      "name": "Correlation ID Middleware",
+      "description": "Track requests with correlation IDs",
+      "agent": "dev",
+      "status": "done",
+      "components": ["middleware", "main"]
+    },
+    {
+      "id": "middleware-003",
+      "name": "Request Logging Middleware",
+      "description": "Log all requests with method, path, status, and duration",
+      "agent": "dev",
+      "status": "done",
+      "components": ["middleware", "main"]
+    },
+    {
+      "id": "exception-001",
+      "name": "Exception Handling",
+      "description": "Centralized exception handling with typed exceptions",
+      "agent": "dev",
+      "status": "done",
+      "components": ["exceptions", "main"]
+    },
+    {
+      "id": "health-001",
+      "name": "Health Check Endpoints",
+      "description": "Liveness and readiness probes",
+      "agent": "dev",
+      "status": "done",
+      "components": ["main"]
+    },
+    {
+      "id": "config-001",
+      "name": "Configuration Management",
+      "description": "Environment-based configuration with Pydantic Settings",
+      "agent": "dev",
+      "status": "done",
+      "components": ["config"]
+    },
+    {
+      "id": "database-001",
+      "name": "Database Setup",
+      "description": "Async SQLAlchemy with SQLite (dev) and PostgreSQL support",
+      "agent": "dev",
+      "status": "done",
+      "components": ["database", "models"]
+    }
+  ]
+}
