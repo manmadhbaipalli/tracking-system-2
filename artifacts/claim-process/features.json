@@ -1,0 +1,244 @@
+{
+  "features": [
+    {
+      "id": "AUTH-001",
+      "name": "User Authentication",
+      "description": "JWT-based authentication with login and registration",
+      "agent": "dev",
+      "status": "done",
+      "priority": "high"
+    },
+    {
+      "id": "AUTH-002",
+      "name": "Role-Based Access Control",
+      "description": "Enforce role-based permissions for all operations",
+      "agent": "dev",
+      "status": "done",
+      "priority": "high"
+    },
+    {
+      "id": "POLICY-001",
+      "name": "Policy Search",
+      "description": "Search policies by policy_number, name, ssn_tin, type, loss_date, location with exact and partial matches",
+      "agent": "dev",
+      "status": "done",
+      "priority": "high"
+    },
+    {
+      "id": "POLICY-002",
+      "name": "Policy CRUD Operations",
+      "description": "Create, retrieve, update policy records with validation",
+      "agent": "dev",
+      "status": "done",
+      "priority": "high"
+    },
+    {
+      "id": "POLICY-003",
+      "name": "Policy Details Display",
+      "description": "Display complete policy details including insured, vehicle, location, coverage",
+      "agent": "dev",
+      "status": "done",
+      "priority": "high"
+    },
+    {
+      "id": "POLICY-004",
+      "name": "SSN/TIN Masking",
+      "description": "Mask SSN/TIN to show only last 4 digits in responses",
+      "agent": "dev",
+      "status": "done",
+      "priority": "high"
+    },
+    {
+      "id": "CLAIM-001",
+      "name": "Claim Search",
+      "description": "Search claims by claim_number, policy, status, loss_date",
+      "agent": "dev",
+      "status": "done",
+      "priority": "high"
+    },
+    {
+      "id": "CLAIM-002",
+      "name": "Claim CRUD Operations",
+      "description": "Create, retrieve, update claim records linked to policies",
+      "agent": "dev",
+      "status": "done",
+      "priority": "high"
+    },
+    {
+      "id": "CLAIM-003",
+      "name": "Claim History",
+      "description": "Display list of past claims for a policy, sorted by loss_date, filterable by status",
+      "agent": "dev",
+      "status": "done",
+      "priority": "high"
+    },
+    {
+      "id": "CLAIM-004",
+      "name": "Claim-Level Policy Data",
+      "description": "Add/edit policy information at claim level when policy unverified, track separately from policy",
+      "agent": "dev",
+      "status": "done",
+      "priority": "medium"
+    },
+    {
+      "id": "CLAIM-005",
+      "name": "Subrogation Referral",
+      "description": "Support referral of claims to subrogation",
+      "agent": "dev",
+      "status": "done",
+      "priority": "medium"
+    },
+    {
+      "id": "CLAIM-006",
+      "name": "Scheduled Payments Management",
+      "description": "Manage scheduled payments with type, total, balance, due, recipient",
+      "agent": "dev",
+      "status": "done",
+      "priority": "medium"
+    },
+    {
+      "id": "CLAIM-007",
+      "name": "Injury Incident Details",
+      "description": "Capture and store injury incident details, coding info, carrier involvement",
+      "agent": "dev",
+      "status": "done",
+      "priority": "low"
+    },
+    {
+      "id": "PAYMENT-001",
+      "name": "Payment Creation",
+      "description": "Create payments linked to claims/policies with multiple payment methods",
+      "agent": "dev",
+      "status": "done",
+      "priority": "high"
+    },
+    {
+      "id": "PAYMENT-002",
+      "name": "Payment Lifecycle Management",
+      "description": "Support void, reverse, reissue operations on payments",
+      "agent": "dev",
+      "status": "done",
+      "priority": "high"
+    },
+    {
+      "id": "PAYMENT-003",
+      "name": "Payment Details Management",
+      "description": "Manage multiple payees, portions, deductions per payment",
+      "agent": "dev",
+      "status": "done",
+      "priority": "high"
+    },
+    {
+      "id": "PAYMENT-004",
+      "name": "Reserve Line Allocation",
+      "description": "Allocate payments across multiple reserve lines, mark as eroding/non-eroding",
+      "agent": "dev",
+      "status": "done",
+      "priority": "medium"
+    },
+    {
+      "id": "PAYMENT-005",
+      "name": "Tax Reporting",
+      "description": "Designate payments as tax reportable, capture tax ID, withhold income tax",
+      "agent": "dev",
+      "status": "done",
+      "priority": "medium"
+    },
+    {
+      "id": "PAYMENT-006",
+      "name": "EFT and Wire Transfers",
+      "description": "Create EFT and wire transfers with required banking details",
+      "agent": "dev",
+      "status": "done",
+      "priority": "medium"
+    },
+    {
+      "id": "PAYMENT-007",
+      "name": "Joint Payee Management",
+      "description": "Support payments with multiple joint payees",
+      "agent": "dev",
+      "status": "done",
+      "priority": "low"
+    },
+    {
+      "id": "VENDOR-001",
+      "name": "Vendor Onboarding",
+      "description": "Onboard vendors and claimants with payment method verification",
+      "agent": "dev",
+      "status": "done",
+      "priority": "medium"
+    },
+    {
+      "id": "VENDOR-002",
+      "name": "KYC Verification",
+      "description": "Perform KYC/identity verification for vendors and claimants",
+      "agent": "dev",
+      "status": "done",
+      "priority": "medium"
+    },
+    {
+      "id": "AUDIT-001",
+      "name": "Audit Logging",
+      "description": "Log all actions with user_id, timestamp, before/after values",
+      "agent": "dev",
+      "status": "done",
+      "priority": "high"
+    },
+    {
+      "id": "AUDIT-002",
+      "name": "Audit Log Retrieval",
+      "description": "Query and retrieve audit logs for compliance and investigation",
+      "agent": "dev",
+      "status": "done",
+      "priority": "medium"
+    },
+    {
+      "id": "DOC-001",
+      "name": "Document Attachment",
+      "description": "Attach documents to policies, claims, and payments",
+      "agent": "dev",
+      "status": "done",
+      "priority": "low"
+    },
+    {
+      "id": "SECURITY-001",
+      "name": "Data Encryption",
+      "description": "Encrypt sensitive data (SSN/TIN, payment info) at rest and in transit",
+      "agent": "dev",
+      "status": "done",
+      "priority": "high"
+    },
+    {
+      "id": "SECURITY-002",
+      "name": "PCI-DSS Compliance",
+      "description": "Ensure all payment data handling is PCI-DSS compliant",
+      "agent": "dev",
+      "status": "done",
+      "priority": "high"
+    },
+    {
+      "id": "API-001",
+      "name": "Health Check Endpoints",
+      "description": "Implement /health/live and /health/ready endpoints",
+      "agent": "dev",
+      "status": "done",
+      "priority": "high"
+    },
+    {
+      "id": "API-002",
+      "name": "Error Handling",
+      "description": "Implement consistent error responses with proper HTTP status codes",
+      "agent": "dev",
+      "status": "done",
+      "priority": "high"
+    },
+    {
+      "id": "API-003",
+      "name": "CORS Configuration",
+      "description": "Configure CORS middleware for cross-origin requests",
+      "agent": "dev",
+      "status": "done",
+      "priority": "high"
+    }
+  ]
+}
