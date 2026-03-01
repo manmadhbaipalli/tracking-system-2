@@ -1,0 +1,44 @@
+You are an autonomous coding agent. A previous attempt at task test failed CI.
+
+## Task
+**test**
+Gnerate simple python app
+
+## CI Failure Output
+```
+
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+    from app.main import app; print('Boot OK')
+    ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/kalpesh/Documents/1 GenAI/5. SmartSDLC-Agent-Skills/claude-code-agents/workspace/app/main.py", line 3, in <module>
+    from fastapi import FastAPI
+  File "/Users/kalpesh/Documents/1 GenAI/5. SmartSDLC-Agent-Skills/claude-code-agents/.venv/lib/python3.13/site-packages/fastapi/__init__.py", line 7, in <module>
+    from .applications import FastAPI as FastAPI
+  File "/Users/kalpesh/Documents/1 GenAI/5. SmartSDLC-Agent-Skills/claude-code-agents/.venv/lib/python3.13/site-packages/fastapi/applications.py", line 10, in <module>
+    from fastapi import routing
+  File "/Users/kalpesh/Documents/1 GenAI/5. SmartSDLC-Agent-Skills/claude-code-agents/.venv/lib/python3.13/site-packages/fastapi/routing.py", line 31, in <module>
+    import anyio
+  File "/Users/kalpesh/Documents/1 GenAI/5. SmartSDLC-Agent-Skills/claude-code-agents/.venv/lib/python3.13/site-packages/anyio/__init__.py", line 26, in <module>
+    from ._core._fileio import AsyncFile as AsyncFile
+  File "/Users/kalpesh/Documents/1 GenAI/5. SmartSDLC-Agent-Skills/claude-code-agents/.venv/lib/python3.13/site-packages/anyio/_core/_fileio.py", line 27, in <module>
+    from .. import to_thread
+  File "/Users/kalpesh/Documents/1 GenAI/5. SmartSDLC-Agent-Skills/claude-code-agents/.venv/lib/python3.13/site-packages/anyio/to_thread.py", line 14, in <module>
+    from .abc import CapacityLimiter
+  File "/Users/kalpesh/Documents/1 GenAI/5. SmartSDLC-Agent-Skills/claude-code-agents/.venv/lib/python3.13/site-packages/anyio/abc/__init__.py", line 4, in <module>
+    from ._resources import AsyncResource as AsyncResource
+  File "/Users/kalpesh/Documents/1 GenAI/5. SmartSDLC-Agent-Skills/claude-code-agents/.venv/lib/python3.13/site-packages/anyio/abc/_resources.py", line 10, in <module>
+    class AsyncResource(metaclass=ABCMeta):
+    ...<22 lines>...
+            """Close the resource."""
+  File "<frozen abc>", line 106, in __new__
+KeyboardInterrupt
+
+```
+
+## Instructions
+1. Read the failing test output carefully.
+2. Identify the root cause.
+3. Fix the code. Only modify files in your assigned scope.
+4. Run the tests again to verify the fix.
+5. Update `artifacts/test/findings.md` with what went wrong and how you fixed it.
