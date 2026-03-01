@@ -1,0 +1,67 @@
+**Agent:** `222222` | **Phase:** `dev` | **Tech Stack:** `java-greenfield`
+
+**Provider:** `bedrock` | **Model:** `us.anthropic.claude-sonnet-4-5-20250929-v1:0` | **Budget:** $`2.00` | **Max Turns:** `20` | **Tools:** `7`
+
+### Skill: `smart-dev-java`
+> SmartDev for Java/Spring — Developer agent. Implements ALL business logic, security, exception handling, middleware, build configuration, and wires everything into a fully compilable, fully executable application with ZERO errors.
+
+**Sections:** Phase Role: SmartDev (Java/Spring Boot Developer), Prior Work (READ ALL BEFORE WRITING ANY CODE), Standalone Mode (no prior pipeline artifacts), CRITICAL: File Path Rules, Step-by-Step Implementation (follow this order exactly), Output Files, ABSOLUTE RULES (violation = failure)
+
+**Key Rules:**
+1. **EVERY import must resolve.** If you write `import io.jsonwebtoken.Jwts`, the `jjwt-api` dependency MUST be in pom.xml.
+2. **EVERY bean must be wirable.** If a constructor takes `UserRepository`, that interface must exist and be annotated `@Repository`.
+3. **`mvn compile -q` MUST succeed.** Run it. If it fails, fix it. Run again. Repeat.
+4. **NO stubs.** Every method body must have complete implementation.
+5. **NO TODOs.** Every `// TODO` means you did not finish.
+*...and 4 more*
+
+**References:** `artifact-template.md`, `best-practices.md`, `exception-handling-template.md`, `logging-template.md`, `pom-template.md`, `security-template.md`, `spring-config-template.md`
+
+
+---
+
+I'll help you implement a Java/Spring Boot application. Let me first check what artifacts and files already exist to determine if I'm working in standalone mode or building on prior agent work.
+
+> **Read** `CLAUDE.md`
+
+> **Bash** `Check artifacts directory`
+
+> **Bash** `Check for existing Java files`
+
+> **Read** `artifacts/222222/prompt.txt`
+
+> **Glob** `**/*.java`
+
+> **Glob** `**/pom.xml`
+
+Let me check the existing Java application structure:
+
+> **Read** `app/pom.xml`
+
+> **Read** `app/src/main/java/com/example/Main.java`
+
+> **Read** `app/src/main/java/com/example/Calculator.java`
+
+> **Bash** `Check for any existing artifacts`
+
+I found an existing simple Java calculator application. However, the task description "java app" is very vague, and there are no pipeline artifacts (features.json, architecture.md, or prior agent outputs).
+
+Let me first verify the existing app compiles:
+
+> **Bash** `Compile existing Java app`
+
+> **Bash** `Check Java availability`
+
+> **Bash** `Check Gradle availability`
+
+I found an existing simple Java calculator console application, but the task description "java app" is too vague for me to proceed confidently. I need clarification on what you'd like me to do:
+
+> **AskUserQuestion** {"questions": [{"question": "What would you like me to do with this Java application?", "header": "Scope", "multiSelect": false, "options": [{"label":
+
+I need your input to proceed correctly. The existing codebase has a simple console calculator, but as the SmartDev agent for Spring Boot, I'm equipped to build full enterprise REST APIs with authentication, database integration, security, and observability.
+
+Please let me know which direction you'd like me to take so I can deliver the right solution for your needs.
+
+---
+
+**Completed** in 15 turns (cost: $0.2487)
